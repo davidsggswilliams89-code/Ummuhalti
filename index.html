@@ -15,10 +15,7 @@
       padding:8px; display:flex; align-items:center; z-index:2000;
     }
 
-    .marquee-text {
-      animation:move 10s linear infinite;
-      white-space:nowrap;
-    }
+    .marquee-text { animation:move 10s linear infinite; white-space:nowrap; }
 
     @keyframes move {
       from{transform:translateX(100%);}
@@ -45,7 +42,7 @@
     .view { display:none; }
     .active { display:block; }
 
-    /* NORMAL CAROUSEL */
+    /* CAROUSEL */
     .carousel {
       display:flex;
       overflow-x:auto;
@@ -58,32 +55,11 @@
       background:white;
       border-radius:12px;
       padding:10px;
-    }
-
-    /* ===== KAFTAN SLIDER ===== */
-    .slider-container {
-      margin:10px;
-      background:white;
-      border-radius:12px;
-      overflow:hidden;
       position:relative;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
     }
 
-    .slider {
-      display:flex;
-      transition:transform 0.4s ease;
-    }
-
-    .slide {
-      min-width:100%;
-      position:relative;
-    }
-
-    .slide img {
-      width:100%;
-      height:260px;
-      object-fit:cover;
-    }
+    img { width:100%; border-radius:10px; }
 
     /* NEW BADGE */
     .new-badge {
@@ -98,44 +74,34 @@
       font-weight:bold;
     }
 
-    /* BOTTOM INFO */
-    .slide-bottom {
-      position:absolute;
-      bottom:0;
-      width:100%;
-      background:rgba(0,0,0,0.6);
+    /* PRICE */
+    .price {
+      background:#111;
       color:white;
-      padding:10px;
       text-align:center;
-    }
-
-    .slide-bottom button {
-      background:#25D366;
-      border:none;
-      color:white;
-      padding:8px 12px;
-      border-radius:20px;
+      padding:8px;
+      border-radius:10px;
       margin-top:5px;
+      font-weight:bold;
     }
 
-    /* DOTS */
-    .dots {
-      text-align:center;
-      padding:5px;
-    }
-
-    .dot {
-      display:inline-block;
-      width:8px;
-      height:8px;
-      background:#ccc;
-      margin:3px;
-      border-radius:50%;
-    }
-
-    .active-dot {
+    /* BUY BUTTON */
+    .buy-btn {
       background:#25D366;
+      color:white;
+      border:none;
+      width:100%;
+      padding:12px;
+      margin-top:8px;
+      border-radius:25px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
     }
+
+    .buy-btn img { width:18px; }
 
     /* ADMIN */
     .admin {
@@ -180,6 +146,7 @@
       width:50px;
       height:50px;
       object-fit:cover;
+      border-radius:5px;
     }
 
     .delete-btn {
@@ -227,7 +194,7 @@
   <h2>Admin Panel</h2>
 
   <input id="aName" placeholder="Product Name">
-  <input id="aPrice" placeholder="Price">
+  <input id="aPrice" placeholder="Price (e.g 5000)">
 
   <select id="aCategory">
     <option>Kaftan</option>
@@ -239,11 +206,13 @@
 
   <button class="btn" onclick="uploadImage()">Upload Image</button>
   <p id="uploadStatus">No image selected</p>
-  <img id="preview" style="width:100%; display:none;">
+  <img id="preview" style="width:100%; display:none; border-radius:10px;">
 
   <button class="btn" onclick="addProduct()">Add Product</button>
 
   <hr>
+
+  <h3>Select Category</h3>
 
   <select id="filterCategory" onchange="loadAdmin()">
     <option value="all">All</option>
@@ -283,6 +252,7 @@ function uploadImage(){
 
 /* ADD PRODUCT */
 function addProduct(){
+
   if(!uploadedImage) return alert("Upload image");
 
   let p = {
@@ -294,49 +264,47 @@ function addProduct(){
   };
 
   products.unshift(p);
+
   localStorage.setItem("products", JSON.stringify(products));
 
   uploadedImage="";
   preview.style.display="none";
+  uploadStatus.innerText="No image selected";
+
   showView("all");
+  loadAdmin();
 }
 
-/* NORMAL CAROUSEL */
+/* CAROUSEL */
 function createCarousel(list){
   let html='<div class="carousel">';
-  list.forEach(p=>{
-    html+=`
-    <div class="card">
-      <img src="${p.image}">
-      <h3>${p.name}</h3>
-      <div class="price">₦${p.price}</div>
-    </div>`;
-  });
-  html+='</div>';
-  return html;
-}
-
-/* KAFTAN SLIDER */
-function createSlider(list, id){
-
-  let html = `<div class="slider-container">
-    <div class="slider" id="${id}">`;
 
   list.forEach(p=>{
+
     let isNew = (Date.now() - p.date) < (24*60*60*1000);
 
     html+=`
-      <div class="slide">
+      <div class="card">
+
         ${isNew ? '<div class="new-badge">NEW</div>' : ''}
+
         <img src="${p.image}">
-        <div class="slide-bottom">
-          ${p.name}<br>₦${p.price}
-          <br><button onclick="buyNow('${p.name}','${p.price}','${p.image}')">Buy</button>
-        </div>
+        <h3>${p.name}</h3>
+
+        <div class="price">₦${p.price}</div>
+
+        <button class="buy-btn"
+        onclick="buyNow('${p.name}','${p.price}','${p.image}')">
+
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+          Buy Now
+
+        </button>
+
       </div>`;
   });
 
-  html += `</div><div class="dots" id="dots-${id}"></div></div>`;
+  html+='</div>';
   return html;
 }
 
@@ -352,74 +320,38 @@ function showView(type){
   let box=document.getElementById(type+"View");
   box.classList.add("active");
 
+  /* 🔥 KAFTAN DOUBLE CAROUSEL */
   if(type==="kaftan"){
 
-    let mid = Math.ceil(data.length/2);
+    let mid = Math.ceil(data.length / 2);
+    let top = data.slice(0,mid);
+    let bottom = data.slice(mid);
 
     box.innerHTML =
-      createSlider(data.slice(0,mid),"s1") +
-      createSlider(data.slice(mid),"s2");
-
-    initSwipe("s1");
-    initSwipe("s2");
+      createCarousel(top) +
+      createCarousel(bottom);
 
   } else {
     box.innerHTML = createCarousel(data);
   }
 }
 
-/* SWIPE */
-function initSwipe(id){
-  let slider=document.getElementById(id);
-  let index=0;
-
-  let startX=0;
-
-  slider.addEventListener("touchstart",e=>{
-    startX=e.touches[0].clientX;
-  });
-
-  slider.addEventListener("touchend",e=>{
-    let endX=e.changedTouches[0].clientX;
-
-    if(startX-endX>50) index++;
-    if(endX-startX>50) index--;
-
-    let total=slider.children.length;
-    if(index<0) index=0;
-    if(index>=total) index=total-1;
-
-    slider.style.transform=`translateX(-${index*100}%)`;
-    updateDots(id,index,total);
-  });
-
-  createDots(id,slider.children.length);
-}
-
-/* DOTS */
-function createDots(id,total){
-  let box=document.getElementById("dots-"+id);
-  box.innerHTML="";
-  for(let i=0;i<total;i++){
-    box.innerHTML+=`<span class="dot"></span>`;
-  }
-}
-
-function updateDots(id,index,total){
-  let dots=document.querySelectorAll("#dots-"+id+" .dot");
-  dots.forEach(d=>d.classList.remove("active-dot"));
-  if(dots[index]) dots[index].classList.add("active-dot");
-}
-
 /* BUY */
-function buyNow(name,price,image){
-  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${image}`;
+function buyNow(name, price, image){
+
+  let msg=`Hello, I want to order:
+
+Product: ${name}
+Price: ₦${price}
+
+${image}`;
+
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
 /* ADMIN */
 function openAdmin(){
-  if(prompt("Password")==="1234"){
+  if(prompt("Password:")==="1234"){
     adminPanel.style.display="block";
     loadAdmin();
   }
@@ -429,24 +361,41 @@ function closeAdmin(){
   adminPanel.style.display="none";
 }
 
-function loadAdmin(){
-  let box=document.getElementById("adminList");
-  box.innerHTML="";
-  products.forEach((p,i)=>{
-    box.innerHTML+=`
-    <div class="admin-item">
-      <img src="${p.image}">
-      <div>${p.name}</div>
-      <button class="delete-btn" onclick="deleteProduct(${i})">Delete</button>
-    </div>`;
-  });
+/* DELETE */
+function deleteProduct(i){
+  if(confirm("Delete?")){
+    products.splice(i,1);
+    localStorage.setItem("products", JSON.stringify(products));
+    loadAdmin();
+    showView("all");
+  }
 }
 
-function deleteProduct(i){
-  products.splice(i,1);
-  localStorage.setItem("products",JSON.stringify(products));
-  loadAdmin();
-  showView("all");
+/* ADMIN LIST */
+function loadAdmin(){
+
+  let cat = filterCategory.value;
+
+  let list = (cat==="all")
+    ? products
+    : products.filter(p=>p.category===cat);
+
+  let box=document.getElementById("adminList");
+  box.innerHTML="";
+
+  list.forEach((p,i)=>{
+    box.innerHTML+=`
+      <div class="admin-item">
+        <img src="${p.image}">
+        <div style="flex:1;">
+          <b>${p.name}</b><br>
+          <small>${p.category}</small>
+        </div>
+        <button class="delete-btn" onclick="deleteProduct(${i})">
+          Delete
+        </button>
+      </div>`;
+  });
 }
 
 /* INIT */
