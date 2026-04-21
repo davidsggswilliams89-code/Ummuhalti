@@ -35,10 +35,22 @@
 
     .hero {
       text-align: center;
-      padding: 100px 20px 30px;
+      padding: 100px 20px 20px;
       background: white;
     }
 
+    /* FILTER */
+    .filter-box {
+      text-align: center;
+      padding: 10px;
+    }
+
+    select {
+      padding: 8px;
+      width: 60%;
+    }
+
+    /* CAROUSEL */
     .carousel {
       display: flex;
       overflow-x: auto;
@@ -208,7 +220,17 @@
 <!-- HERO -->
 <div class="hero">
   <h1>Ummuhalti Collection</h1>
-  <p>Shop via WhatsApp easily</p>
+  <p>Shop by Category</p>
+</div>
+
+<!-- FILTER -->
+<div class="filter-box">
+  <select id="filter" onchange="filterProducts()">
+    <option value="all">All Categories</option>
+    <option value="Kaftan">Kaftan</option>
+    <option value="Shirt">Shirt</option>
+    <option value="Luxury">Luxury</option>
+  </select>
 </div>
 
 <!-- PRODUCTS -->
@@ -233,6 +255,7 @@
   <input id="aName" placeholder="Product Name">
   <input id="aCode" placeholder="Product Code">
   <input id="aPrice" placeholder="Price">
+  <input id="aCategory" placeholder="Category (Kaftan/Shirt/Luxury)">
   <input type="file" id="aImage">
 
   <button class="btn" onclick="addProduct()">Upload Product</button>
@@ -252,27 +275,29 @@
 const CLOUD_NAME = "db92r6j9z";
 const UPLOAD_PRESET = "ummuhalti";
 
-let products = JSON.parse(localStorage.getItem("products")) || [
-  {name:"Kaftan Royal", code:"UMM-001", price:"₦5000", image:"https://via.placeholder.com/400"},
-  {name:"Kaftan Premium", code:"UMM-002", price:"₦5500", image:"https://via.placeholder.com/400"}
-];
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
-function display(){
+function display(list = products){
+
   let box = document.getElementById("productList");
   let dots = document.getElementById("dots");
 
   box.innerHTML = "";
   dots.innerHTML = "";
 
-  products.forEach((p,i)=>{
+  list.forEach((p,i)=>{
+
     box.innerHTML += `
       <div class="card">
+
         <div class="img-box" onclick="openModal(${i})">
           <img src="${p.image}">
         </div>
 
         <div class="price">${p.price}</div>
+
         <h3>${p.name}</h3>
+        <p>Category: ${p.category || "None"}</p>
         <p>${p.code}</p>
 
         <button class="buy-btn"
@@ -280,6 +305,7 @@ function display(){
           <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
           Buy Now
         </button>
+
       </div>
     `;
 
@@ -289,10 +315,10 @@ function display(){
   loadAdminList();
 }
 
+/* BUY NOW */
 function buyNow(name, code, price, image){
 
-  let msg =
-`Hello, I want to order:
+  let msg = `Hello, I want to order:
 
 Product: ${name}
 Code: ${code}
@@ -303,9 +329,20 @@ ${image}`;
 
   let phone = "2349114738932";
 
-  let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+  window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(msg), "_blank");
+}
 
-  window.open(url, "_blank");
+/* FILTER */
+function filterProducts(){
+
+  let value = document.getElementById("filter").value;
+
+  if(value === "all"){
+    display(products);
+  } else {
+    let filtered = products.filter(p => p.category === value);
+    display(filtered);
+  }
 }
 
 /* MODAL */
@@ -340,6 +377,7 @@ function addProduct(){
   let name = aName.value;
   let code = aCode.value;
   let price = aPrice.value;
+  let category = aCategory.value;
   let file = aImage.files[0];
 
   let formData = new FormData();
@@ -357,6 +395,7 @@ function addProduct(){
       name,
       code,
       price,
+      category,
       image: data.secure_url
     });
 
