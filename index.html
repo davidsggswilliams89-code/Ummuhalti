@@ -128,4 +128,131 @@
       padding: 12px;
       border-radius: 50%;
       text-decoration: none;
-      font-size: 20
+      font-size: 20px;
+    }
+
+    .checkout {
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>Ummuhalti</div>
+  <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</div>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+  <a href="#home">Home</a>
+  <a href="#products">Products</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <h1>Ummuhalti Collection</h1>
+  <p>Quality fashion, order easily via WhatsApp</p>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="products">
+  <h3>Products</h3>
+  <div class="grid" id="productList"></div>
+</section>
+
+<button class="btn checkout" onclick="checkout()">Checkout on WhatsApp</button>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <h3>About Us</h3>
+  <p>We provide quality fashion at affordable prices. Fast delivery and trusted service.</p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <h3>Contact</h3>
+  <button class="btn" onclick="contact()">Chat on WhatsApp</button>
+</section>
+
+<!-- FLOAT BUTTON -->
+<a href="https://wa.me/2348012345678" class="whatsapp">💬</a>
+
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [
+  {
+    name:"Kaftan",
+    code:"UMM-001",
+    price:"₦5000",
+    image:"kaftan.jpg"
+  }
+];
+
+let cart = [];
+
+function displayProducts(){
+  let box = document.getElementById("productList");
+  box.innerHTML = "";
+
+  products.forEach(p=>{
+    box.innerHTML += `
+      <div class="card">
+        <div class="img-box">
+          <img src="${p.image}">
+          <div class="price">${p.price}</div>
+        </div>
+        <h4>${p.name}</h4>
+        <p>${p.code}</p>
+        <button class="btn" onclick="addToCart('${p.name}','${p.code}','${p.price}')">
+          Add to Cart
+        </button>
+      </div>
+    `;
+  });
+}
+
+function addToCart(name,code,price){
+  cart.push({name,code,price});
+  alert("Added to cart");
+}
+
+function checkout(){
+  if(cart.length === 0){
+    alert("Cart is empty");
+    return;
+  }
+
+  let msg = "Hello, I want to order:\n\n";
+
+  cart.forEach(item=>{
+    msg += `Product: ${item.name}\nCode: ${item.code}\nPrice: ${item.price}\n\n`;
+  });
+
+  window.open(`https://wa.me/2348012345678?text=${encodeURIComponent(msg)}`);
+}
+
+function contact(){
+  window.open("https://wa.me/2348012345678");
+}
+
+function toggleMenu(){
+  let menu = document.getElementById("menu");
+  menu.classList.toggle("show");
+}
+
+/* Auto close menu */
+document.querySelectorAll('.menu a').forEach(link=>{
+  link.onclick = ()=>{
+    document.getElementById("menu").classList.remove("show");
+  }
+});
+
+displayProducts();
+</script>
+
+</body>
+</html>
