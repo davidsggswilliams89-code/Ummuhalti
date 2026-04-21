@@ -29,8 +29,9 @@
     .header a {
       color: white;
       text-decoration: none;
-      margin-left: 15px;
+      margin-left: 10px;
       font-size: 14px;
+      cursor: pointer;
     }
 
     .menu-icon {
@@ -38,38 +39,10 @@
       cursor: pointer;
     }
 
-    /* MENU */
-    .menu {
-      display: none;
-      flex-direction: column;
-      background: #222;
-      position: fixed;
-      top: 50px;
-      width: 100%;
-      z-index: 999;
-    }
-
-    .menu a {
-      color: white;
-      padding: 10px;
-      text-decoration: none;
-      border-bottom: 1px solid #333;
-    }
-
-    .show {
-      display: flex;
-    }
-
-    /* HERO */
     .hero {
       text-align: center;
-      padding: 100px 20px 60px;
+      padding: 100px 20px 40px;
       background: white;
-    }
-
-    /* PRODUCTS */
-    .products {
-      padding: 10px;
     }
 
     /* CAROUSEL */
@@ -78,7 +51,7 @@
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       gap: 15px;
-      padding-bottom: 10px;
+      padding: 10px;
     }
 
     .carousel::-webkit-scrollbar {
@@ -93,24 +66,20 @@
       padding: 10px;
     }
 
-    .img-box {
-      position: relative;
-    }
-
     .img-box img {
       width: 100%;
       border-radius: 10px;
     }
 
     .price {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
       background: rgba(0,0,0,0.7);
       color: white;
       text-align: center;
       padding: 5px;
       font-weight: bold;
+      border-radius: 5px;
+      margin-top: -30px;
+      position: relative;
     }
 
     .btn {
@@ -121,7 +90,6 @@
       width: 100%;
       margin-top: 5px;
       border-radius: 5px;
-      font-size: 14px;
     }
 
     .section {
@@ -130,10 +98,26 @@
       padding: 15px;
     }
 
-    html {
-      scroll-behavior: smooth;
+    /* DOTS */
+    .dots {
+      text-align: center;
+      margin-top: 5px;
     }
 
+    .dot {
+      height: 8px;
+      width: 8px;
+      margin: 0 3px;
+      background: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot.active {
+      background: #111;
+    }
+
+    /* WHATSAPP */
     .whatsapp {
       position: fixed;
       bottom: 20px;
@@ -143,33 +127,53 @@
       padding: 12px;
       border-radius: 50%;
       text-decoration: none;
-      font-size: 20px;
     }
 
-    .checkout {
-      margin: 10px;
+    /* MODAL (ZOOM PAGE) */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* DOTS */
-    .dots {
+    .modal-content {
+      background: white;
+      width: 90%;
+      padding: 15px;
+      border-radius: 10px;
       text-align: center;
-      margin-top: 10px;
     }
 
-    .dot {
-      height: 8px;
-      width: 8px;
-      margin: 0 4px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      transition: 0.3s;
+    .modal img {
+      width: 100%;
+      border-radius: 10px;
     }
 
-    .dot.active {
-      background-color: #111;
-      width: 10px;
-      height: 10px;
+    /* ADMIN PANEL */
+    .admin {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 3000;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
     }
   </style>
 </head>
@@ -181,141 +185,151 @@
   <div>Ummuhalti</div>
   <div>
     <a href="#products">Products</a>
+    <a onclick="openAdmin()">Admin</a>
   </div>
-  <div class="menu-icon" onclick="toggleMenu()">☰</div>
-</div>
-
-<!-- MENU -->
-<div class="menu" id="menu">
-  <a href="#home">Home</a>
-  <a href="#products">Products</a>
-  <a href="#about">About</a>
-  <a href="#contact">Contact</a>
 </div>
 
 <!-- HERO -->
-<section id="home" class="hero">
+<div class="hero">
   <h1>Ummuhalti Collection</h1>
-  <p>Quality fashion, order easily via WhatsApp</p>
-</section>
+  <p>Swipe & Shop Easily</p>
+</div>
 
 <!-- PRODUCTS -->
-<section id="products" class="products">
-  <h3>Products</h3>
-  <div class="carousel" id="productList"></div>
-  <div class="dots" id="dots"></div>
-</section>
+<div class="carousel" id="productList"></div>
+<div class="dots" id="dots"></div>
 
-<button class="btn checkout" onclick="checkout()">Checkout on WhatsApp</button>
+<!-- MODAL (ZOOM PAGE) -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <img id="mImg">
+    <h3 id="mName"></h3>
+    <p id="mCode"></p>
+    <p id="mPrice"></p>
+    <button class="btn" onclick="closeModal()">Close</button>
+  </div>
+</div>
 
-<!-- ABOUT -->
-<section id="about" class="section">
-  <h3>About Us</h3>
-  <p>We provide quality fashion at affordable prices. Fast delivery and trusted service.</p>
-</section>
+<!-- ADMIN DASHBOARD -->
+<div class="admin" id="adminPanel">
+  <h2>Admin Dashboard</h2>
+  <input id="aName" placeholder="Product Name">
+  <input id="aCode" placeholder="Product Code">
+  <input id="aPrice" placeholder="Price">
+  <input type="file" id="aImage">
 
-<!-- CONTACT -->
-<section id="contact" class="section">
-  <h3>Contact</h3>
-  <button class="btn" onclick="contact()">Chat on WhatsApp</button>
-</section>
+  <button class="btn" onclick="addProduct()">Add Product</button>
+  <button class="btn" style="background:red" onclick="closeAdmin()">Close</button>
+</div>
 
-<!-- FLOAT BUTTON -->
+<!-- WHATSAPP -->
 <a href="https://wa.me/2348012345678" class="whatsapp">💬</a>
 
 <script>
+
 let products = JSON.parse(localStorage.getItem("products")) || [
-  { name:"Kaftan Royal", code:"UMM-001", price:"₦5000", image:"kaftan.jpg" },
-  { name:"Kaftan Premium", code:"UMM-002", price:"₦5500", image:"kaftan.jpg" },
-  { name:"Kaftan Classic", code:"UMM-003", price:"₦6000", image:"kaftan.jpg" },
-  { name:"Kaftan Luxury", code:"UMM-004", price:"₦6500", image:"kaftan.jpg" },
-  { name:"Kaftan Elite", code:"UMM-005", price:"₦7000", image:"kaftan.jpg" },
-  { name:"Kaftan Supreme", code:"UMM-006", price:"₦7500", image:"kaftan.jpg" }
+  {name:"Kaftan Royal", code:"UMM-001", price:"₦5000", image:"kaftan.jpg"},
+  {name:"Kaftan Premium", code:"UMM-002", price:"₦5500", image:"kaftan.jpg"},
+  {name:"Kaftan Classic", code:"UMM-003", price:"₦6000", image:"kaftan.jpg"},
+  {name:"Kaftan Luxury", code:"UMM-004", price:"₦6500", image:"kaftan.jpg"},
+  {name:"Kaftan Elite", code:"UMM-005", price:"₦7000", image:"kaftan.jpg"},
+  {name:"Kaftan Supreme", code:"UMM-006", price:"₦7500", image:"kaftan.jpg"}
 ];
 
 let cart = [];
 
-function displayProducts(){
+function display(){
   let box = document.getElementById("productList");
-  let dotsBox = document.getElementById("dots");
+  let dots = document.getElementById("dots");
 
   box.innerHTML = "";
-  dotsBox.innerHTML = "";
+  dots.innerHTML = "";
 
-  products.forEach((p, index)=>{
+  products.forEach((p,i)=>{
     box.innerHTML += `
       <div class="card">
-        <div class="img-box">
+        <div class="img-box" onclick='openModal(${i})'>
           <img src="${p.image}">
-          <div class="price">${p.price}</div>
         </div>
-        <h4>${p.name}</h4>
+        <div class="price">${p.price}</div>
+        <h3>${p.name}</h3>
         <p>${p.code}</p>
-        <button class="btn" onclick="addToCart('${p.name}','${p.code}','${p.price}')">
+        <button class="btn" onclick="add('${p.name}','${p.code}','${p.price}')">
           Add to Cart
         </button>
       </div>
     `;
-
-    dotsBox.innerHTML += `<span class="dot"></span>`;
+    dots.innerHTML += `<span class="dot"></span>`;
   });
 
   updateDots(0);
 }
 
-/* DOT ACTIVE */
-function updateDots(activeIndex){
-  let dots = document.querySelectorAll(".dot");
-  dots.forEach((dot, i)=>{
-    dot.classList.remove("active");
-    if(i === activeIndex) dot.classList.add("active");
+function updateDots(i){
+  document.querySelectorAll(".dot").forEach((d,idx)=>{
+    d.classList.remove("active");
+    if(idx === i) d.classList.add("active");
   });
 }
 
-/* SCROLL DETECT */
-document.getElementById("productList").addEventListener("scroll", function(){
-  let scrollLeft = this.scrollLeft;
-  let cardWidth = this.offsetWidth * 0.85 + 15;
-  let index = Math.round(scrollLeft / cardWidth);
-  updateDots(index);
-});
+/* ZOOM PAGE */
+function openModal(i){
+  let p = products[i];
+  document.getElementById("mImg").src = p.image;
+  document.getElementById("mName").innerText = p.name;
+  document.getElementById("mCode").innerText = p.code;
+  document.getElementById("mPrice").innerText = p.price;
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal(){
+  document.getElementById("modal").style.display = "none";
+}
+
+/* ADMIN */
+function openAdmin(){
+  let pass = prompt("Enter Admin Password:");
+  if(pass === "1234"){
+    document.getElementById("adminPanel").style.display = "block";
+  } else {
+    alert("Wrong password");
+  }
+}
+
+function closeAdmin(){
+  document.getElementById("adminPanel").style.display = "none";
+}
+
+/* ADD PRODUCT */
+function addProduct(){
+  let name = document.getElementById("aName").value;
+  let code = document.getElementById("aCode").value;
+  let price = document.getElementById("aPrice").value;
+  let file = document.getElementById("aImage").files[0];
+
+  let reader = new FileReader();
+  reader.onload = function(){
+    let img = reader.result;
+
+    products.push({name, code, price, image: img});
+    localStorage.setItem("products", JSON.stringify(products));
+
+    display();
+    alert("Product Added!");
+    closeAdmin();
+  };
+
+  reader.readAsDataURL(file);
+}
 
 /* CART */
-function addToCart(name,code,price){
-  cart.push({name,code,price});
-  alert("Added to cart");
+function add(n,c,p){
+  cart.push({n,c,p});
+  alert("Added");
 }
 
-function checkout(){
-  if(cart.length === 0){
-    alert("Cart is empty");
-    return;
-  }
+display();
 
-  let msg = "Hello, I want to order:\n\n";
-
-  cart.forEach(item=>{
-    msg += `Product: ${item.name}\nCode: ${item.code}\nPrice: ${item.price}\n\n`;
-  });
-
-  window.open(`https://wa.me/2348012345678?text=${encodeURIComponent(msg)}`);
-}
-
-function contact(){
-  window.open("https://wa.me/2348012345678");
-}
-
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("show");
-}
-
-document.querySelectorAll('.menu a').forEach(link=>{
-  link.onclick = ()=>{
-    document.getElementById("menu").classList.remove("show");
-  }
-});
-
-displayProducts();
 </script>
 
 </body>
