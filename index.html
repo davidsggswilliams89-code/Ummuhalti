@@ -13,15 +13,24 @@
 
     /* HEADER */
     .header {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: #111;
       color: white;
-      padding: 10px;
+      padding: 12px 15px;
       z-index: 1000;
+    }
+
+    .header a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 14px;
     }
 
     .menu-icon {
@@ -34,6 +43,10 @@
       display: none;
       flex-direction: column;
       background: #222;
+      position: fixed;
+      top: 50px;
+      width: 100%;
+      z-index: 999;
     }
 
     .menu a {
@@ -50,29 +63,31 @@
     /* HERO */
     .hero {
       text-align: center;
-      padding: 60px 20px;
+      padding: 100px 20px 60px; /* space for fixed header */
       background: white;
     }
 
-    /* PRODUCTS */
+    /* PRODUCTS SECTION */
     .products {
       padding: 10px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr; /* Single column */
+    /* CAROUSEL */
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
       gap: 15px;
+      padding-bottom: 10px;
     }
 
-    /* OPTIONAL: 2 columns on larger screens */
-    @media(min-width: 600px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .carousel::-webkit-scrollbar {
+      display: none;
     }
 
     .card {
+      flex: 0 0 85%;
+      scroll-snap-align: center;
       background: white;
       border-radius: 10px;
       padding: 10px;
@@ -142,6 +157,11 @@
 <!-- HEADER -->
 <div class="header">
   <div>Ummuhalti</div>
+
+  <div>
+    <a href="#products">Products</a>
+  </div>
+
   <div class="menu-icon" onclick="toggleMenu()">☰</div>
 </div>
 
@@ -162,7 +182,7 @@
 <!-- PRODUCTS -->
 <section id="products" class="products">
   <h3>Products</h3>
-  <div class="grid" id="productList"></div>
+  <div class="carousel" id="productList"></div>
 </section>
 
 <button class="btn checkout" onclick="checkout()">Checkout on WhatsApp</button>
@@ -240,11 +260,9 @@ function contact(){
 }
 
 function toggleMenu(){
-  let menu = document.getElementById("menu");
-  menu.classList.toggle("show");
+  document.getElementById("menu").classList.toggle("show");
 }
 
-/* Auto close menu */
 document.querySelectorAll('.menu a').forEach(link=>{
   link.onclick = ()=>{
     document.getElementById("menu").classList.remove("show");
