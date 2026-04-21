@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html>
 <head>
   <title>Ummuhalti Collection</title>
@@ -31,11 +31,6 @@
       text-decoration: none;
       margin-left: 10px;
       font-size: 14px;
-      cursor: pointer;
-    }
-
-    .menu-icon {
-      font-size: 24px;
       cursor: pointer;
     }
 
@@ -78,8 +73,6 @@
       padding: 5px;
       font-weight: bold;
       border-radius: 5px;
-      margin-top: -30px;
-      position: relative;
     }
 
     .btn {
@@ -90,12 +83,6 @@
       width: 100%;
       margin-top: 5px;
       border-radius: 5px;
-    }
-
-    .section {
-      background: white;
-      margin-top: 10px;
-      padding: 15px;
     }
 
     /* DOTS */
@@ -117,6 +104,13 @@
       background: #111;
     }
 
+    /* SECTION */
+    .section {
+      background: white;
+      margin-top: 10px;
+      padding: 15px;
+    }
+
     /* WHATSAPP */
     .whatsapp {
       position: fixed;
@@ -129,7 +123,7 @@
       text-decoration: none;
     }
 
-    /* MODAL (ZOOM PAGE) */
+    /* MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -138,16 +132,16 @@
       width: 100%;
       height: 100%;
       background: rgba(0,0,0,0.8);
-      z-index: 2000;
       justify-content: center;
       align-items: center;
+      z-index: 2000;
     }
 
     .modal-content {
       background: white;
-      width: 90%;
       padding: 15px;
       border-radius: 10px;
+      width: 90%;
       text-align: center;
     }
 
@@ -156,7 +150,7 @@
       border-radius: 10px;
     }
 
-    /* ADMIN PANEL */
+    /* ADMIN */
     .admin {
       display: none;
       position: fixed;
@@ -174,6 +168,23 @@
       width: 100%;
       padding: 10px;
       margin: 5px 0;
+    }
+
+    .admin-item{
+      display:flex;
+      justify-content:space-between;
+      padding:10px;
+      background:#eee;
+      margin:5px 0;
+      border-radius:5px;
+    }
+
+    .admin-item button{
+      background:red;
+      color:white;
+      border:none;
+      padding:5px 10px;
+      border-radius:5px;
     }
   </style>
 </head>
@@ -199,7 +210,7 @@
 <div class="carousel" id="productList"></div>
 <div class="dots" id="dots"></div>
 
-<!-- MODAL (ZOOM PAGE) -->
+<!-- MODAL -->
 <div class="modal" id="modal" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
     <img id="mImg">
@@ -210,15 +221,21 @@
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
+<!-- ADMIN -->
 <div class="admin" id="adminPanel">
   <h2>Admin Dashboard</h2>
+
   <input id="aName" placeholder="Product Name">
   <input id="aCode" placeholder="Product Code">
   <input id="aPrice" placeholder="Price">
   <input type="file" id="aImage">
 
   <button class="btn" onclick="addProduct()">Add Product</button>
+
+  <hr>
+  <h3>Delete Products</h3>
+  <div id="adminList"></div>
+
   <button class="btn" style="background:red" onclick="closeAdmin()">Close</button>
 </div>
 
@@ -248,7 +265,7 @@ function display(){
   products.forEach((p,i)=>{
     box.innerHTML += `
       <div class="card">
-        <div class="img-box" onclick='openModal(${i})'>
+        <div class="img-box" onclick="openModal(${i})">
           <img src="${p.image}">
         </div>
         <div class="price">${p.price}</div>
@@ -259,12 +276,15 @@ function display(){
         </button>
       </div>
     `;
+
     dots.innerHTML += `<span class="dot"></span>`;
   });
 
   updateDots(0);
+  loadAdminList();
 }
 
+/* DOTS */
 function updateDots(i){
   document.querySelectorAll(".dot").forEach((d,idx)=>{
     d.classList.remove("active");
@@ -272,7 +292,7 @@ function updateDots(i){
   });
 }
 
-/* ZOOM PAGE */
+/* MODAL */
 function openModal(i){
   let p = products[i];
   document.getElementById("mImg").src = p.image;
@@ -288,12 +308,10 @@ function closeModal(){
 
 /* ADMIN */
 function openAdmin(){
-  let pass = prompt("Enter Admin Password:");
+  let pass = prompt("Enter Password:");
   if(pass === "1234"){
     document.getElementById("adminPanel").style.display = "block";
-  } else {
-    alert("Wrong password");
-  }
+  } else alert("Wrong password");
 }
 
 function closeAdmin(){
@@ -302,24 +320,44 @@ function closeAdmin(){
 
 /* ADD PRODUCT */
 function addProduct(){
-  let name = document.getElementById("aName").value;
-  let code = document.getElementById("aCode").value;
-  let price = document.getElementById("aPrice").value;
-  let file = document.getElementById("aImage").files[0];
+  let name = aName.value;
+  let code = aCode.value;
+  let price = aPrice.value;
+  let file = aImage.files[0];
 
   let reader = new FileReader();
   reader.onload = function(){
-    let img = reader.result;
-
-    products.push({name, code, price, image: img});
+    products.push({name, code, price, image: reader.result});
     localStorage.setItem("products", JSON.stringify(products));
-
     display();
-    alert("Product Added!");
+    alert("Added");
     closeAdmin();
   };
-
   reader.readAsDataURL(file);
+}
+
+/* DELETE */
+function deleteProduct(i){
+  if(confirm("Delete this product?")){
+    products.splice(i,1);
+    localStorage.setItem("products", JSON.stringify(products));
+    display();
+  }
+}
+
+/* ADMIN LIST */
+function loadAdminList(){
+  let box = document.getElementById("adminList");
+  box.innerHTML = "";
+
+  products.forEach((p,i)=>{
+    box.innerHTML += `
+      <div class="admin-item">
+        <div>${p.name} <br><small>${p.code}</small></div>
+        <button onclick="deleteProduct(${i})">Delete</button>
+      </div>
+    `;
+  });
 }
 
 /* CART */
