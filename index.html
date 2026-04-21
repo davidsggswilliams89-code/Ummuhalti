@@ -1,4 +1,4 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Ummuhalti Collection</title>
@@ -15,7 +15,6 @@ l<!DOCTYPE html>
     .header {
       position: fixed;
       top: 0;
-      left: 0;
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -28,15 +27,15 @@ l<!DOCTYPE html>
 
     .header a {
       color: white;
-      text-decoration: none;
       margin-left: 10px;
-      font-size: 14px;
+      text-decoration: none;
       cursor: pointer;
     }
 
+    /* HERO */
     .hero {
       text-align: center;
-      padding: 100px 20px 40px;
+      padding: 100px 20px 30px;
       background: white;
     }
 
@@ -64,6 +63,7 @@ l<!DOCTYPE html>
     .img-box img {
       width: 100%;
       border-radius: 10px;
+      cursor: pointer;
     }
 
     .price {
@@ -71,18 +71,29 @@ l<!DOCTYPE html>
       color: white;
       text-align: center;
       padding: 5px;
-      font-weight: bold;
       border-radius: 5px;
+      margin-top: -30px;
+      position: relative;
     }
 
-    .btn {
-      background: green;
+    /* BUY BUTTON */
+    .buy-btn {
+      background: #25D366;
       color: white;
       padding: 10px;
       border: none;
       width: 100%;
       margin-top: 5px;
       border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .buy-btn img {
+      width: 18px;
+      height: 18px;
     }
 
     /* DOTS */
@@ -102,25 +113,6 @@ l<!DOCTYPE html>
 
     .dot.active {
       background: #111;
-    }
-
-    /* SECTION */
-    .section {
-      background: white;
-      margin-top: 10px;
-      padding: 15px;
-    }
-
-    /* WHATSAPP */
-    .whatsapp {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: green;
-      color: white;
-      padding: 12px;
-      border-radius: 50%;
-      text-decoration: none;
     }
 
     /* MODAL */
@@ -186,6 +178,27 @@ l<!DOCTYPE html>
       padding:5px 10px;
       border-radius:5px;
     }
+
+    .btn {
+      background: green;
+      color: white;
+      padding: 10px;
+      border: none;
+      width: 100%;
+      margin-top: 5px;
+      border-radius: 5px;
+    }
+
+    .whatsapp {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: green;
+      color: white;
+      padding: 12px;
+      border-radius: 50%;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -203,7 +216,7 @@ l<!DOCTYPE html>
 <!-- HERO -->
 <div class="hero">
   <h1>Ummuhalti Collection</h1>
-  <p>Swipe & Shop Easily</p>
+  <p>Shop easily via WhatsApp</p>
 </div>
 
 <!-- PRODUCTS -->
@@ -253,8 +266,6 @@ let products = JSON.parse(localStorage.getItem("products")) || [
   {name:"Kaftan Supreme", code:"UMM-006", price:"₦7500", image:"kaftan.jpg"}
 ];
 
-let cart = [];
-
 function display(){
   let box = document.getElementById("productList");
   let dots = document.getElementById("dots");
@@ -268,11 +279,15 @@ function display(){
         <div class="img-box" onclick="openModal(${i})">
           <img src="${p.image}">
         </div>
+
         <div class="price">${p.price}</div>
         <h3>${p.name}</h3>
         <p>${p.code}</p>
-        <button class="btn" onclick="add('${p.name}','${p.code}','${p.price}')">
-          Add to Cart
+
+        <button class="buy-btn"
+        onclick="buyNow('${p.name}','${p.code}','${p.price}','${p.image}')">
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+          Buy Now
         </button>
       </div>
     `;
@@ -290,6 +305,17 @@ function updateDots(i){
     d.classList.remove("active");
     if(idx === i) d.classList.add("active");
   });
+}
+
+/* WHATSAPP BUY */
+function buyNow(name, code, price, image){
+  let msg = `Hello, I want to order:%0A%0A` +
+            `Product: ${name}%0A` +
+            `Code: ${code}%0A` +
+            `Price: ${price}%0A%0A` +
+            `Image: ${image}`;
+
+  window.open(`https://wa.me/2348012345678?text=${msg}`, "_blank");
 }
 
 /* MODAL */
@@ -330,7 +356,6 @@ function addProduct(){
     products.push({name, code, price, image: reader.result});
     localStorage.setItem("products", JSON.stringify(products));
     display();
-    alert("Added");
     closeAdmin();
   };
   reader.readAsDataURL(file);
@@ -338,11 +363,9 @@ function addProduct(){
 
 /* DELETE */
 function deleteProduct(i){
-  if(confirm("Delete this product?")){
-    products.splice(i,1);
-    localStorage.setItem("products", JSON.stringify(products));
-    display();
-  }
+  products.splice(i,1);
+  localStorage.setItem("products", JSON.stringify(products));
+  display();
 }
 
 /* ADMIN LIST */
@@ -353,17 +376,11 @@ function loadAdminList(){
   products.forEach((p,i)=>{
     box.innerHTML += `
       <div class="admin-item">
-        <div>${p.name} <br><small>${p.code}</small></div>
+        <div>${p.name}<br><small>${p.code}</small></div>
         <button onclick="deleteProduct(${i})">Delete</button>
       </div>
     `;
   });
-}
-
-/* CART */
-function add(n,c,p){
-  cart.push({n,c,p});
-  alert("Added");
 }
 
 display();
