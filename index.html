@@ -19,7 +19,7 @@
       position: fixed;
       top: 0;
       width: 100%;
-      padding: 8px 0;
+      padding: 8px;
       z-index: 2000;
       display: flex;
       align-items: center;
@@ -27,8 +27,8 @@
     }
 
     .marquee-text {
+      animation: move 10s linear infinite;
       white-space: nowrap;
-      animation: move 12s linear infinite;
     }
 
     @keyframes move {
@@ -40,12 +40,12 @@
       position: absolute;
       right: 10px;
       background: #25D366;
-      padding: 5px 8px;
+      padding: 6px 10px;
       border-radius: 50%;
       cursor: pointer;
     }
 
-    /* CATEGORY BAR */
+    /* CATEGORY */
     .category-bar {
       position: fixed;
       top: 40px;
@@ -60,10 +60,6 @@
       padding: 10px;
       cursor: pointer;
       flex: 0 0 auto;
-    }
-
-    .category-bar div:hover {
-      background: #25D366;
     }
 
     /* VIEW */
@@ -88,7 +84,7 @@
     img { width: 100%; border-radius: 10px; }
 
     .price {
-      background: #000;
+      background: black;
       color: white;
       text-align: center;
       padding: 5px;
@@ -133,6 +129,34 @@
       margin-top: 5px;
       border-radius: 5px;
     }
+
+    /* ADMIN LIST FIX */
+    .admin-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #eee;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+
+    .admin-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .delete-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 
@@ -167,36 +191,36 @@
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
 
-  <h2>Admin</h2>
+  <h2>Admin Panel</h2>
 
   <input id="aName" placeholder="Name">
   <input id="aCode" placeholder="Code">
   <input id="aPrice" placeholder="Price">
-  <input id="aCategory" placeholder="Category">
+  <input id="aCategory" placeholder="Category (Kaftan, Lace...)">
   <input id="aImage" placeholder="Image URL">
 
-  <button class="btn" onclick="addProduct()">Add</button>
+  <button class="btn" onclick="addProduct()">Add Product</button>
 
+  <h3>Manage Products</h3>
   <div id="adminList"></div>
 
   <button class="btn" onclick="closeAdmin()">Close</button>
-
 </div>
 
 <script>
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
+/* DISPLAY */
 function createCarousel(list){
-
   let html = '<div class="carousel">';
 
-  list.forEach((p,i)=>{
+  list.forEach(p=>{
     html += `
       <div class="card">
         <img src="${p.image}">
         <h3>${p.name}</h3>
-        <p>${p.code}</p>
+        <p>${p.category}</p>
         <div class="price">${p.price}</div>
 
         <button class="buy-btn"
@@ -212,7 +236,6 @@ function createCarousel(list){
 }
 
 function showView(type){
-
   document.querySelectorAll(".view").forEach(v=>{
     v.classList.remove("active");
   });
@@ -234,9 +257,10 @@ function showView(type){
 function buyNow(name, code, price, image){
   let msg = `Hello, I want to order:
 
-${name}
-${code}
-${price}
+Product: ${name}
+Code: ${code}
+Price: ${price}
+
 ${image}`;
 
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
@@ -255,36 +279,41 @@ function closeAdmin(){
   adminPanel.style.display="none";
 }
 
+/* ADD */
 function addProduct(){
   let p = {
     name: aName.value,
     code: aCode.value,
     price: aPrice.value,
-    category: aCategory.value,
+    category: aCategory.value.trim(),
     image: aImage.value
   };
 
   products.push(p);
   localStorage.setItem("products", JSON.stringify(products));
+
   showView("all");
   loadAdmin();
 }
 
 /* DELETE + DRAG */
-let dragIndex=null;
+let dragIndex = null;
 
-function dragStart(i){ dragIndex=i; }
+function dragStart(i){
+  dragIndex = i;
+}
 
 function dropItem(i){
   let temp = products[dragIndex];
   products.splice(dragIndex,1);
   products.splice(i,0,temp);
+
   localStorage.setItem("products", JSON.stringify(products));
   loadAdmin();
 }
 
 function deleteProduct(i){
-  if(confirm("Delete?")){
+  if(confirm("Delete this product?")){
     products.splice(i,1);
     localStorage.setItem("products", JSON.stringify(products));
     loadAdmin();
@@ -292,23 +321,29 @@ function deleteProduct(i){
   }
 }
 
+/* ADMIN LIST */
 function loadAdmin(){
   let box = document.getElementById("adminList");
   box.innerHTML="";
 
   products.forEach((p,i)=>{
     box.innerHTML+=`
-      <div draggable="true"
-      ondragstart="dragStart(${i})"
-      ondrop="dropItem(${i})"
-      ondragover="event.preventDefault()"
-      style="display:flex; gap:10px; margin:5px;">
+      <div class="admin-item"
+        draggable="true"
+        ondragstart="dragStart(${i})"
+        ondragover="event.preventDefault()"
+        ondrop="dropItem(${i})">
 
-        <img src="${p.image}" width="50">
+        <img src="${p.image}">
 
-        <div>${p.name}</div>
+        <div style="flex:1;">
+          <b>${p.name}</b><br>
+          <small>${p.category}</small>
+        </div>
 
-        <button onclick="deleteProduct(${i})">X</button>
+        <button class="delete-btn"
+        onclick="deleteProduct(${i})">Delete</button>
+
       </div>
     `;
   });
