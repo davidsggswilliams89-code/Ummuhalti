@@ -16,7 +16,11 @@
     }
 
     .marquee-text { animation:move 10s linear infinite; white-space:nowrap; }
-    @keyframes move { from{transform:translateX(100%);} to{transform:translateX(-100%);} }
+
+    @keyframes move {
+      from{transform:translateX(100%);}
+      to{transform:translateX(-100%);}
+    }
 
     .admin-icon {
       position:absolute; right:10px;
@@ -39,7 +43,12 @@
     .active { display:block; }
 
     /* CAROUSEL */
-    .carousel { display:flex; overflow-x:auto; gap:15px; padding:10px; }
+    .carousel {
+      display:flex;
+      overflow-x:auto;
+      gap:15px;
+      padding:10px;
+    }
 
     .card {
       min-width:85%;
@@ -251,10 +260,10 @@ function addProduct(){
     price:aPrice.value,
     category:aCategory.value,
     image:uploadedImage,
-    date: Date.now() // 👈 NEW FEATURE
+    date:Date.now()
   };
 
-  products.unshift(p); // 👈 newest first
+  products.unshift(p);
 
   localStorage.setItem("products", JSON.stringify(products));
 
@@ -266,7 +275,7 @@ function addProduct(){
   loadAdmin();
 }
 
-/* DISPLAY */
+/* CAROUSEL */
 function createCarousel(list){
   let html='<div class="carousel">';
 
@@ -299,6 +308,7 @@ function createCarousel(list){
   return html;
 }
 
+/* VIEW */
 function showView(type){
 
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
@@ -309,7 +319,21 @@ function showView(type){
 
   let box=document.getElementById(type+"View");
   box.classList.add("active");
-  box.innerHTML=createCarousel(data);
+
+  /* 🔥 KAFTAN DOUBLE CAROUSEL */
+  if(type==="kaftan"){
+
+    let mid = Math.ceil(data.length / 2);
+    let top = data.slice(0,mid);
+    let bottom = data.slice(mid);
+
+    box.innerHTML =
+      createCarousel(top) +
+      createCarousel(bottom);
+
+  } else {
+    box.innerHTML = createCarousel(data);
+  }
 }
 
 /* BUY */
