@@ -4,6 +4,9 @@
   <title>Ummuhalti Collection</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- CLOUDINARY SUPPORT -->
+  <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -63,7 +66,6 @@
     .img-box img {
       width: 100%;
       border-radius: 10px;
-      cursor: pointer;
     }
 
     .price {
@@ -72,8 +74,6 @@
       text-align: center;
       padding: 5px;
       border-radius: 5px;
-      margin-top: -30px;
-      position: relative;
     }
 
     /* BUY BUTTON */
@@ -89,11 +89,11 @@
       justify-content: center;
       align-items: center;
       gap: 8px;
+      cursor: pointer;
     }
 
     .buy-btn img {
       width: 18px;
-      height: 18px;
     }
 
     /* DOTS */
@@ -162,21 +162,21 @@
       margin: 5px 0;
     }
 
-    .admin-item{
-      display:flex;
-      justify-content:space-between;
-      padding:10px;
-      background:#eee;
-      margin:5px 0;
-      border-radius:5px;
+    .admin-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: #eee;
+      margin: 5px 0;
+      border-radius: 5px;
     }
 
-    .admin-item button{
-      background:red;
-      color:white;
-      border:none;
-      padding:5px 10px;
-      border-radius:5px;
+    .admin-item button {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
     }
 
     .btn {
@@ -216,7 +216,7 @@
 <!-- HERO -->
 <div class="hero">
   <h1>Ummuhalti Collection</h1>
-  <p>Shop easily via WhatsApp</p>
+  <p>Auto Cloud Image Store</p>
 </div>
 
 <!-- PRODUCTS -->
@@ -243,7 +243,7 @@
   <input id="aPrice" placeholder="Price">
   <input type="file" id="aImage">
 
-  <button class="btn" onclick="addProduct()">Add Product</button>
+  <button class="btn" onclick="addProduct()">Upload Product</button>
 
   <hr>
   <h3>Delete Products</h3>
@@ -257,15 +257,19 @@
 
 <script>
 
+/* CLOUDINARY CONFIG */
+const CLOUD_NAME = "db92r6j9z";
+const UPLOAD_PRESET = "ummuhalti";
+
+/* PRODUCTS */
 let products = JSON.parse(localStorage.getItem("products")) || [
-  {name:"Kaftan Royal", code:"UMM-001", price:"₦5000", image:"kaftan.jpg"},
-  {name:"Kaftan Premium", code:"UMM-002", price:"₦5500", image:"kaftan.jpg"},
-  {name:"Kaftan Classic", code:"UMM-003", price:"₦6000", image:"kaftan.jpg"},
-  {name:"Kaftan Luxury", code:"UMM-004", price:"₦6500", image:"kaftan.jpg"},
-  {name:"Kaftan Elite", code:"UMM-005", price:"₦7000", image:"kaftan.jpg"},
-  {name:"Kaftan Supreme", code:"UMM-006", price:"₦7500", image:"kaftan.jpg"}
+  {name:"Kaftan Royal", code:"UMM-001", price:"₦5000", image:"https://via.placeholder.com/400"},
+  {name:"Kaftan Premium", code:"UMM-002", price:"₦5500", image:"https://via.placeholder.com/400"}
 ];
 
+let cart = [];
+
+/* DISPLAY PRODUCTS */
 function display(){
   let box = document.getElementById("productList");
   let dots = document.getElementById("dots");
@@ -295,19 +299,10 @@ function display(){
     dots.innerHTML += `<span class="dot"></span>`;
   });
 
-  updateDots(0);
   loadAdminList();
 }
 
-/* DOTS */
-function updateDots(i){
-  document.querySelectorAll(".dot").forEach((d,idx)=>{
-    d.classList.remove("active");
-    if(idx === i) d.classList.add("active");
-  });
-}
-
-/* WHATSAPP BUY */
+/* BUY NOW */
 function buyNow(name, code, price, image){
   let msg = `Hello, I want to order:%0A%0A` +
             `Product: ${name}%0A` +
@@ -315,50 +310,68 @@ function buyNow(name, code, price, image){
             `Price: ${price}%0A%0A` +
             `Image: ${image}`;
 
-  window.open(`https://wa.me/2349114738932?text=${msg}`, "_blank");
+  window.open("https://wa.me/2348012345678?text=" + encodeURIComponent(msg), "_blank");
 }
 
 /* MODAL */
 function openModal(i){
   let p = products[i];
-  document.getElementById("mImg").src = p.image;
-  document.getElementById("mName").innerText = p.name;
-  document.getElementById("mCode").innerText = p.code;
-  document.getElementById("mPrice").innerText = p.price;
-  document.getElementById("modal").style.display = "flex";
+  mImg.src = p.image;
+  mName.innerText = p.name;
+  mCode.innerText = p.code;
+  mPrice.innerText = p.price;
+  modal.style.display = "flex";
 }
 
 function closeModal(){
-  document.getElementById("modal").style.display = "none";
+  modal.style.display = "none";
 }
 
 /* ADMIN */
 function openAdmin(){
   let pass = prompt("Enter Password:");
   if(pass === "1234"){
-    document.getElementById("adminPanel").style.display = "block";
+    adminPanel.style.display = "block";
   } else alert("Wrong password");
 }
 
 function closeAdmin(){
-  document.getElementById("adminPanel").style.display = "none";
+  adminPanel.style.display = "none";
 }
 
-/* ADD PRODUCT */
+/* CLOUDINARY UPLOAD */
 function addProduct(){
+
   let name = aName.value;
   let code = aCode.value;
   let price = aPrice.value;
   let file = aImage.files[0];
 
-  let reader = new FileReader();
-  reader.onload = function(){
-    products.push({name, code, price, image: reader.result});
+  let formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", UPLOAD_PRESET);
+
+  fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    products.push({
+      name,
+      code,
+      price,
+      image: data.secure_url
+    });
+
     localStorage.setItem("products", JSON.stringify(products));
+
     display();
     closeAdmin();
-  };
-  reader.readAsDataURL(file);
+
+    alert("Uploaded successfully!");
+  });
 }
 
 /* DELETE */
