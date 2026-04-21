@@ -39,7 +39,21 @@
       100% { transform: translateX(-100%); }
     }
 
-    /* 🔽 CATEGORY HEADER */
+    /* 🔐 ADMIN ICON */
+    .admin-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3000;
+      font-size: 16px;
+      cursor: pointer;
+      background: #25D366;
+      padding: 6px 8px;
+      border-radius: 50%;
+    }
+
+    /* CATEGORY BAR */
     .category-bar {
       position: fixed;
       top: 40px;
@@ -201,22 +215,29 @@
       text-decoration: none;
     }
 
-    select {
-      padding: 8px;
-      width: 100%;
-      margin: 10px 0;
+    /* MAKE HEADER RELATIVE FOR ICON */
+    .top-marquee {
+      position: fixed;
+      display: flex;
+      align-items: center;
     }
   </style>
 </head>
 
 <body>
 
-<!-- 🔝 MARQUEE -->
+<!-- 🔝 MARQUEE + ADMIN ICON -->
 <div class="top-marquee">
-  <div class="marquee-text">✨ Ummuhalti Collection ✨ Premium Fashion Store ✨</div>
+
+  <div class="marquee-text">
+    ✨ Ummuhalti Collection ✨ Premium Fashion Store ✨
+  </div>
+
+  <div class="admin-icon" onclick="openAdmin()">🔐</div>
+
 </div>
 
-<!-- 🔽 CATEGORY BAR -->
+<!-- CATEGORY BAR -->
 <div class="category-bar">
   <div onclick="setCategory('all')">ALL</div>
   <div onclick="setCategory('Kaftan')">KAFTAN</div>
@@ -314,9 +335,7 @@ Price: ${price}
 Image:
 ${image}`;
 
-  let phone = "2349114738932";
-
-  window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(msg), "_blank");
+  window.open("https://wa.me/2349114738932?text=" + encodeURIComponent(msg), "_blank");
 }
 
 /* CATEGORY FILTER */
@@ -348,6 +367,8 @@ function openAdmin(){
   let pass = prompt("Enter Password:");
   if(pass === "1234"){
     adminPanel.style.display = "block";
+  } else {
+    alert("Wrong password");
   }
 }
 
