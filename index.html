@@ -7,14 +7,14 @@
   <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 
   <style>
-    body { 
-      margin:0; 
-      font-family:Arial; 
-      background:#f5f5f5; 
-      padding-top:80px; /* ✅ exact header space */
+    body {
+      margin:0;
+      font-family:Arial;
+      background:#f5f5f5;
+      padding-top:80px;
     }
 
-    /* HEADER 1 */
+    /* HEADER */
     .top-marquee {
       background:#111;
       color:white;
@@ -31,7 +31,6 @@
     .marquee-text {
       animation:move 10s linear infinite;
       white-space:nowrap;
-      font-size:14px;
     }
 
     @keyframes move {
@@ -48,7 +47,6 @@
       cursor:pointer;
     }
 
-    /* HEADER 2 */
     .category-bar {
       position:fixed;
       top:40px;
@@ -64,16 +62,11 @@
     .category-bar div {
       color:white;
       padding:0 12px;
-      font-size:13px;
       cursor:pointer;
       white-space:nowrap;
     }
 
-    /* VIEW */
-    .view { display:none; }
-    .active { display:block; }
-
-    /* VERTICAL PRODUCTS */
+    /* PRODUCTS */
     .carousel {
       display:flex;
       flex-direction:column;
@@ -82,7 +75,6 @@
     }
 
     .card {
-      width:100%;
       background:white;
       border-radius:12px;
       padding:10px;
@@ -90,13 +82,39 @@
       box-shadow:0 4px 10px rgba(0,0,0,0.1);
     }
 
-    img {
-      width:100%;
-      border-radius:10px;
-      pointer-events:none;
+    /* SLIDER */
+    .slider { overflow:hidden; position:relative; }
+
+    .slides {
+      display:flex;
+      transition:0.3s;
     }
 
-    /* NEW BADGE */
+    .slides img {
+      width:100%;
+      flex-shrink:0;
+      border-radius:10px;
+    }
+
+    .dots {
+      text-align:center;
+      margin-top:5px;
+    }
+
+    .dots span {
+      display:inline-block;
+      width:8px;
+      height:8px;
+      background:#ccc;
+      margin:3px;
+      border-radius:50%;
+    }
+
+    .dots .active {
+      background:#25D366;
+    }
+
+    /* BADGE */
     .new-badge {
       position:absolute;
       top:10px;
@@ -106,7 +124,6 @@
       padding:5px 8px;
       font-size:12px;
       border-radius:5px;
-      font-weight:bold;
     }
 
     /* PRICE */
@@ -117,10 +134,9 @@
       padding:10px;
       border-radius:10px;
       margin-top:8px;
-      font-weight:bold;
     }
 
-    /* BUY BUTTON */
+    /* BUY */
     .buy-btn {
       background:#25D366;
       color:white;
@@ -167,32 +183,6 @@
       border-radius:8px;
     }
 
-    .admin-item {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      background:#eee;
-      padding:8px;
-      margin:5px 0;
-      border-radius:8px;
-    }
-
-    .admin-item img {
-      width:50px;
-      height:50px;
-      object-fit:cover;
-      border-radius:5px;
-    }
-
-    .delete-btn {
-      background:red;
-      color:white;
-      border:none;
-      padding:5px 10px;
-      border-radius:5px;
-      cursor:pointer;
-    }
-
   </style>
 </head>
 
@@ -204,7 +194,6 @@
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
 
-<!-- CATEGORY -->
 <div class="category-bar">
   <div onclick="showView('all')">ALL</div>
   <div onclick="showView('kaftan')">KAFTAN</div>
@@ -214,20 +203,11 @@
   <div onclick="showView('abayas')">ABAYAS</div>
 </div>
 
-<!-- VIEWS -->
-<div id="views">
-  <div id="allView" class="view"></div>
-  <div id="kaftanView" class="view"></div>
-  <div id="laceView" class="view"></div>
-  <div id="bagsView" class="view"></div>
-  <div id="shoesView" class="view"></div>
-  <div id="abayasView" class="view"></div>
-</div>
+<div id="allView"></div>
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
-
-  <h2>Admin Panel</h2>
+  <h2>Admin</h2>
 
   <input id="aName" placeholder="Product Name">
   <input id="aPrice" placeholder="Price">
@@ -240,103 +220,104 @@
     <option>Abayas</option>
   </select>
 
-  <button class="btn" onclick="uploadImage()">Upload Image</button>
-  <p id="uploadStatus">No image selected</p>
-  <img id="preview" style="width:100%; display:none;">
+  <button class="btn" onclick="uploadImage()">Upload Images</button>
+  <p id="uploadStatus">No images</p>
 
   <button class="btn" onclick="addProduct()">Add Product</button>
 
-  <hr>
-
-  <div id="adminList"></div>
-
   <button class="btn" onclick="closeAdmin()">Close</button>
-
 </div>
 
 <script>
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
-let uploadedImage = "";
+let uploadedImages = [];
 
-/* UPLOAD */
+/* UPLOAD MULTIPLE */
 function uploadImage(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti"
+    uploadPreset:"ummuhalti",
+    multiple:true
   },
   function(error,result){
     if(result && result.event==="success"){
-      uploadedImage = result.info.secure_url;
-      preview.src = uploadedImage;
-      preview.style.display="block";
-      uploadStatus.innerText="Uploaded ✔";
+      uploadedImages.push(result.info.secure_url);
+      uploadStatus.innerText = uploadedImages.length + " uploaded ✔";
     }
   });
 }
 
-/* ADD PRODUCT */
+/* ADD */
 function addProduct(){
-  if(!uploadedImage) return alert("Upload image");
+  if(uploadedImages.length===0) return alert("Upload images");
 
-  let p = {
+  products.unshift({
     name:aName.value,
     price:aPrice.value,
     category:aCategory.value,
-    image:uploadedImage,
-    date: Date.now()
-  };
+    images:uploadedImages,
+    date:Date.now()
+  });
 
-  products.unshift(p);
-  localStorage.setItem("products", JSON.stringify(products));
-
-  uploadedImage="";
-  preview.style.display="none";
+  localStorage.setItem("products",JSON.stringify(products));
+  uploadedImages=[];
+  uploadStatus.innerText="No images";
 
   showView("all");
-  loadAdmin();
 }
 
 /* DISPLAY */
-function createCarousel(list){
-  let html='<div class="carousel">';
-
-  list.forEach(p=>{
-    let isNew = (Date.now() - p.date) < (24*60*60*1000);
-
-    html+=`
-      <div class="card">
-        ${isNew ? '<div class="new-badge">NEW</div>' : ''}
-        <img src="${p.image}">
-        <h3>${p.name}</h3>
-        <div class="price">₦${p.price}</div>
-        <button class="buy-btn"
-        onclick="buyNow('${p.name}','${p.price}','${p.image}')">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-          Buy Now
-        </button>
-      </div>`;
-  });
-
-  html+='</div>';
-  return html;
-}
-
 function showView(type){
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
 
   let data = (type==="all")
     ? products
     : products.filter(p=>p.category.toLowerCase()===type);
 
-  let box=document.getElementById(type+"View");
-  box.classList.add("active");
-  box.innerHTML=createCarousel(data);
+  let html='<div class="carousel">';
+
+  data.forEach((p,i)=>{
+
+    let isNew = (Date.now()-p.date)<86400000;
+
+    html+=`
+    <div class="card">
+
+      ${isNew?'<div class="new-badge">NEW</div>':''}
+
+      <div class="slider">
+        <div class="slides" id="slide${i}">
+          ${p.images.map(img=>`<img src="${img}">`).join("")}
+        </div>
+
+        <div class="dots">
+          ${p.images.map((_,d)=>`<span onclick="goSlide(${i},${d})"></span>`).join("")}
+        </div>
+      </div>
+
+      <h3>${p.name}</h3>
+      <div class="price">₦${p.price}</div>
+
+      <button class="buy-btn"
+      onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+      Buy Now</button>
+
+    </div>`;
+  });
+
+  html+='</div>';
+  document.getElementById("allView").innerHTML=html;
+}
+
+/* SLIDE */
+function goSlide(i,index){
+  document.getElementById("slide"+i).style.transform=`translateX(-${index*100}%)`;
 }
 
 /* BUY */
-function buyNow(name, price, image){
-  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${image}`;
+function buyNow(name,price,img){
+  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
@@ -344,7 +325,6 @@ function buyNow(name, price, image){
 function openAdmin(){
   if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
-    loadAdmin();
   }
 }
 
@@ -352,28 +332,6 @@ function closeAdmin(){
   adminPanel.style.display="none";
 }
 
-function loadAdmin(){
-  let box=document.getElementById("adminList");
-  box.innerHTML="";
-
-  products.forEach((p,i)=>{
-    box.innerHTML+=`
-    <div class="admin-item">
-      <img src="${p.image}">
-      <div>${p.name}</div>
-      <button class="delete-btn" onclick="deleteProduct(${i})">Delete</button>
-    </div>`;
-  });
-}
-
-function deleteProduct(i){
-  products.splice(i,1);
-  localStorage.setItem("products",JSON.stringify(products));
-  loadAdmin();
-  showView("all");
-}
-
-/* INIT */
 showView("all");
 
 </script>
