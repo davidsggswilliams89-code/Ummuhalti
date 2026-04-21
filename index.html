@@ -7,7 +7,13 @@
   <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 
   <style>
-    body { margin:0; font-family:Arial; background:#f5f5f5; padding-top:90px; }
+    body { 
+      margin:0; 
+      font-family:Arial; 
+      background:#f5f5f5; 
+      padding-top:90px;
+      scroll-behavior:smooth;
+    }
 
     /* HEADER */
     .top-marquee {
@@ -38,11 +44,16 @@
     .view { display:none; }
     .active { display:block; }
 
-    /* CAROUSEL */
-    .carousel { display:flex; overflow-x:auto; gap:15px; padding:10px; }
+    /* 🔥 VERTICAL LAYOUT */
+    .carousel {
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+      padding:10px;
+    }
 
     .card {
-      min-width:85%;
+      width:100%;
       background:white;
       border-radius:12px;
       padding:10px;
@@ -70,9 +81,9 @@
       background:#111;
       color:white;
       text-align:center;
-      padding:8px;
+      padding:10px;
       border-radius:10px;
-      margin-top:5px;
+      margin-top:8px;
       font-weight:bold;
     }
 
@@ -82,17 +93,18 @@
       color:white;
       border:none;
       width:100%;
-      padding:12px;
-      margin-top:8px;
+      padding:14px;
+      margin-top:10px;
       border-radius:25px;
       display:flex;
       justify-content:center;
       align-items:center;
       gap:8px;
       cursor:pointer;
+      font-size:16px;
     }
 
-    .buy-btn img { width:18px; }
+    .buy-btn img { width:20px; }
 
     /* ADMIN */
     .admin {
@@ -146,6 +158,7 @@
       border:none;
       padding:5px 10px;
       border-radius:5px;
+      cursor:pointer;
     }
 
   </style>
@@ -251,10 +264,10 @@ function addProduct(){
     price:aPrice.value,
     category:aCategory.value,
     image:uploadedImage,
-    date: Date.now() // 👈 NEW FEATURE
+    date: Date.now()
   };
 
-  products.unshift(p); // 👈 newest first
+  products.unshift(p);
 
   localStorage.setItem("products", JSON.stringify(products));
 
