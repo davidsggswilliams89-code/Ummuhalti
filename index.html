@@ -11,40 +11,64 @@
       margin:0; 
       font-family:Arial; 
       background:#f5f5f5; 
-      padding-top:90px;
+      padding-top:95px; /* space for headers */
       scroll-behavior:smooth;
     }
 
-    /* HEADER */
+    /* HEADER 1 */
     .top-marquee {
-      background:#111; color:white; position:fixed; top:0; width:100%;
-      padding:8px; display:flex; align-items:center; z-index:2000;
+      background:#111; 
+      color:white; 
+      position:fixed; 
+      top:0; 
+      width:100%;
+      padding:8px; 
+      display:flex; 
+      align-items:center; 
+      z-index:3000;
     }
 
-    .marquee-text { animation:move 10s linear infinite; white-space:nowrap; }
-    @keyframes move { from{transform:translateX(100%);} to{transform:translateX(-100%);} }
+    .marquee-text { 
+      animation:move 10s linear infinite; 
+      white-space:nowrap; 
+    }
+
+    @keyframes move {
+      from{transform:translateX(100%);}
+      to{transform:translateX(-100%);}
+    }
 
     .admin-icon {
-      position:absolute; right:10px;
-      background:#25D366; padding:6px 10px;
-      border-radius:50%; cursor:pointer;
+      position:absolute; 
+      right:10px;
+      background:#25D366; 
+      padding:6px 10px;
+      border-radius:50%; 
+      cursor:pointer;
     }
 
-    /* CATEGORY */
+    /* HEADER 2 */
     .category-bar {
-      position:fixed; top:40px; width:100%;
-      background:#222; display:flex; overflow-x:auto;
+      position:fixed; 
+      top:40px; 
+      width:100%;
+      background:#222; 
+      display:flex; 
+      overflow-x:auto;
+      z-index:2999;
     }
 
     .category-bar div {
-      color:white; padding:10px; cursor:pointer;
+      color:white; 
+      padding:10px; 
+      cursor:pointer;
     }
 
     /* VIEW */
     .view { display:none; }
     .active { display:block; }
 
-    /* 🔥 VERTICAL LAYOUT */
+    /* VERTICAL PRODUCTS */
     .carousel {
       display:flex;
       flex-direction:column;
@@ -61,7 +85,11 @@
       box-shadow:0 4px 10px rgba(0,0,0,0.1);
     }
 
-    img { width:100%; border-radius:10px; }
+    img { 
+      width:100%; 
+      border-radius:10px;
+      pointer-events:none; /* ❌ prevents zoom/hold behavior */
+    }
 
     /* NEW BADGE */
     .new-badge {
@@ -114,7 +142,7 @@
       width:100%;
       height:100%;
       background:white;
-      z-index:3000;
+      z-index:4000;
       padding:15px;
       overflow:auto;
     }
@@ -198,7 +226,7 @@
   <h2>Admin Panel</h2>
 
   <input id="aName" placeholder="Product Name">
-  <input id="aPrice" placeholder="Price (e.g 5000)">
+  <input id="aPrice" placeholder="Price">
 
   <select id="aCategory">
     <option>Kaftan</option>
@@ -210,22 +238,11 @@
 
   <button class="btn" onclick="uploadImage()">Upload Image</button>
   <p id="uploadStatus">No image selected</p>
-  <img id="preview" style="width:100%; display:none; border-radius:10px;">
+  <img id="preview" style="width:100%; display:none;">
 
   <button class="btn" onclick="addProduct()">Add Product</button>
 
   <hr>
-
-  <h3>Select Category</h3>
-
-  <select id="filterCategory" onchange="loadAdmin()">
-    <option value="all">All</option>
-    <option value="Kaftan">Kaftan</option>
-    <option value="Lace">Lace</option>
-    <option value="Bags">Bags</option>
-    <option value="Shoes">Shoes</option>
-    <option value="Abayas">Abayas</option>
-  </select>
 
   <div id="adminList"></div>
 
@@ -256,7 +273,6 @@ function uploadImage(){
 
 /* ADD PRODUCT */
 function addProduct(){
-
   if(!uploadedImage) return alert("Upload image");
 
   let p = {
@@ -268,12 +284,10 @@ function addProduct(){
   };
 
   products.unshift(p);
-
   localStorage.setItem("products", JSON.stringify(products));
 
   uploadedImage="";
   preview.style.display="none";
-  uploadStatus.innerText="No image selected";
 
   showView("all");
   loadAdmin();
@@ -284,27 +298,19 @@ function createCarousel(list){
   let html='<div class="carousel">';
 
   list.forEach(p=>{
-
     let isNew = (Date.now() - p.date) < (24*60*60*1000);
 
     html+=`
       <div class="card">
-
         ${isNew ? '<div class="new-badge">NEW</div>' : ''}
-
         <img src="${p.image}">
         <h3>${p.name}</h3>
-
         <div class="price">₦${p.price}</div>
-
         <button class="buy-btn"
         onclick="buyNow('${p.name}','${p.price}','${p.image}')">
-
           <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
           Buy Now
-
         </button>
-
       </div>`;
   });
 
@@ -313,7 +319,6 @@ function createCarousel(list){
 }
 
 function showView(type){
-
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
 
   let data = (type==="all")
@@ -327,20 +332,13 @@ function showView(type){
 
 /* BUY */
 function buyNow(name, price, image){
-
-  let msg=`Hello, I want to order:
-
-Product: ${name}
-Price: ₦${price}
-
-${image}`;
-
+  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${image}`;
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
 /* ADMIN */
 function openAdmin(){
-  if(prompt("Password:")==="1234"){
+  if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
     loadAdmin();
   }
@@ -350,41 +348,25 @@ function closeAdmin(){
   adminPanel.style.display="none";
 }
 
-/* DELETE */
-function deleteProduct(i){
-  if(confirm("Delete?")){
-    products.splice(i,1);
-    localStorage.setItem("products", JSON.stringify(products));
-    loadAdmin();
-    showView("all");
-  }
-}
-
-/* ADMIN LIST */
 function loadAdmin(){
-
-  let cat = filterCategory.value;
-
-  let list = (cat==="all")
-    ? products
-    : products.filter(p=>p.category===cat);
-
   let box=document.getElementById("adminList");
   box.innerHTML="";
 
-  list.forEach((p,i)=>{
+  products.forEach((p,i)=>{
     box.innerHTML+=`
-      <div class="admin-item">
-        <img src="${p.image}">
-        <div style="flex:1;">
-          <b>${p.name}</b><br>
-          <small>${p.category}</small>
-        </div>
-        <button class="delete-btn" onclick="deleteProduct(${i})">
-          Delete
-        </button>
-      </div>`;
+    <div class="admin-item">
+      <img src="${p.image}">
+      <div>${p.name}</div>
+      <button class="delete-btn" onclick="deleteProduct(${i})">Delete</button>
+    </div>`;
   });
+}
+
+function deleteProduct(i){
+  products.splice(i,1);
+  localStorage.setItem("products",JSON.stringify(products));
+  loadAdmin();
+  showView("all");
 }
 
 /* INIT */
