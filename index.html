@@ -4,8 +4,6 @@
   <title>Ummuhalti Collection</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
-
   <style>
     body {
       margin: 0;
@@ -14,45 +12,37 @@
       padding-top: 90px;
     }
 
-    /* 🔝 MARQUEE HEADER */
+    /* HEADER */
     .top-marquee {
       background: #111;
       color: white;
-      overflow: hidden;
-      white-space: nowrap;
       position: fixed;
       top: 0;
       width: 100%;
-      z-index: 2000;
       padding: 8px 0;
+      z-index: 2000;
       display: flex;
       align-items: center;
+      overflow: hidden;
     }
 
     .marquee-text {
-      display: inline-block;
-      padding-left: 100%;
-      animation: moveLeft 12s linear infinite;
-      font-weight: bold;
+      white-space: nowrap;
+      animation: move 12s linear infinite;
     }
 
-    @keyframes moveLeft {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+    @keyframes move {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
     }
 
-    /* 🔐 ADMIN ICON */
     .admin-icon {
       position: absolute;
       right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 3000;
-      font-size: 16px;
-      cursor: pointer;
       background: #25D366;
-      padding: 6px 8px;
+      padding: 5px 8px;
       border-radius: 50%;
+      cursor: pointer;
     }
 
     /* CATEGORY BAR */
@@ -63,15 +53,12 @@
       background: #222;
       display: flex;
       overflow-x: auto;
-      white-space: nowrap;
-      z-index: 1999;
     }
 
     .category-bar div {
       color: white;
-      padding: 10px 15px;
+      padding: 10px;
       cursor: pointer;
-      font-size: 13px;
       flex: 0 0 auto;
     }
 
@@ -79,34 +66,29 @@
       background: #25D366;
     }
 
+    /* VIEW */
+    .view { display: none; }
+    .active { display: block; }
+
     /* CAROUSEL */
     .carousel {
       display: flex;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
       gap: 15px;
       padding: 10px;
     }
 
-    .carousel::-webkit-scrollbar {
-      display: none;
-    }
-
     .card {
-      flex: 0 0 85%;
-      scroll-snap-align: center;
+      min-width: 85%;
       background: white;
       border-radius: 10px;
       padding: 10px;
     }
 
-    .img-box img {
-      width: 100%;
-      border-radius: 10px;
-    }
+    img { width: 100%; border-radius: 10px; }
 
     .price {
-      background: rgba(0,0,0,0.7);
+      background: #000;
       color: white;
       text-align: center;
       padding: 5px;
@@ -116,47 +98,11 @@
     .buy-btn {
       background: #25D366;
       color: white;
-      padding: 10px;
       border: none;
       width: 100%;
+      padding: 10px;
       margin-top: 5px;
       border-radius: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-
-    .buy-btn img {
-      width: 18px;
-    }
-
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 3000;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      width: 90%;
-      text-align: center;
-    }
-
-    .modal img {
-      width: 100%;
-      border-radius: 10px;
     }
 
     /* ADMIN */
@@ -164,13 +110,12 @@
       display: none;
       position: fixed;
       top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       background: white;
-      z-index: 4000;
+      z-index: 3000;
       padding: 15px;
-      overflow-y: auto;
+      overflow: auto;
     }
 
     input {
@@ -188,267 +133,189 @@
       margin-top: 5px;
       border-radius: 5px;
     }
-
-    .whatsapp {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: green;
-      color: white;
-      padding: 12px;
-      border-radius: 50%;
-      text-decoration: none;
-    }
-
   </style>
 </head>
 
 <body>
 
-<!-- 🔝 MARQUEE -->
+<!-- HEADER -->
 <div class="top-marquee">
-  <div class="marquee-text">
-    ✨ Ummuhalti Collection ✨ Premium Fashion Store ✨
-  </div>
-
+  <div class="marquee-text">✨ Ummuhalti Collection ✨ Premium Fashion Store ✨</div>
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
 
 <!-- CATEGORY -->
 <div class="category-bar">
-  <div onclick="setCategory('all')">ALL</div>
-  <div onclick="setCategory('Kaftan')">KAFTAN</div>
-  <div onclick="setCategory('Lace')">LACE</div>
-  <div onclick="setCategory('Bags')">BAGS</div>
-  <div onclick="setCategory('Shoes')">SHOES</div>
-  <div onclick="setCategory('Abayas')">ABAYAS</div>
+  <div onclick="showView('all')">ALL</div>
+  <div onclick="showView('kaftan')">KAFTAN</div>
+  <div onclick="showView('lace')">LACE</div>
+  <div onclick="showView('bags')">BAGS</div>
+  <div onclick="showView('shoes')">SHOES</div>
+  <div onclick="showView('abayas')">ABAYAS</div>
 </div>
 
-<!-- PRODUCTS -->
-<div class="carousel" id="productList"></div>
-
-<!-- MODAL -->
-<div class="modal" id="modal" onclick="closeModal()">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <img id="mImg">
-    <h3 id="mName"></h3>
-    <p id="mCode"></p>
-    <p id="mPrice"></p>
-    <button class="btn" onclick="closeModal()">Close</button>
-  </div>
+<!-- VIEWS -->
+<div id="views">
+  <div id="allView" class="view"></div>
+  <div id="kaftanView" class="view"></div>
+  <div id="laceView" class="view"></div>
+  <div id="bagsView" class="view"></div>
+  <div id="shoesView" class="view"></div>
+  <div id="abayasView" class="view"></div>
 </div>
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
-  <h2>Admin Dashboard</h2>
 
-  <input id="aName" placeholder="Product Name">
-  <input id="aCode" placeholder="Product Code">
+  <h2>Admin</h2>
+
+  <input id="aName" placeholder="Name">
+  <input id="aCode" placeholder="Code">
   <input id="aPrice" placeholder="Price">
   <input id="aCategory" placeholder="Category">
-  <input type="file" id="aImage">
+  <input id="aImage" placeholder="Image URL">
 
-  <button class="btn" onclick="addProduct()">Upload Product</button>
+  <button class="btn" onclick="addProduct()">Add</button>
 
-  <hr>
-  <h3>Delete & Reorder Products</h3>
   <div id="adminList"></div>
 
-  <button class="btn" style="background:red" onclick="closeAdmin()">Close</button>
-</div>
+  <button class="btn" onclick="closeAdmin()">Close</button>
 
-<!-- WHATSAPP -->
-<a href="https://wa.me/2349114738932" class="whatsapp">💬</a>
+</div>
 
 <script>
 
-const CLOUD_NAME = "db92r6j9z";
-const UPLOAD_PRESET = "ummuhalti";
-
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-/* DISPLAY */
-function display(list = products){
+function createCarousel(list){
 
-  let box = document.getElementById("productList");
-  box.innerHTML = "";
+  let html = '<div class="carousel">';
 
   list.forEach((p,i)=>{
-
-    box.innerHTML += `
+    html += `
       <div class="card">
-
-        <div onclick="openModal(${i})">
-          <img src="${p.image}">
-        </div>
-
-        <div class="price">${p.price}</div>
-
+        <img src="${p.image}">
         <h3>${p.name}</h3>
-        <p>${p.category}</p>
         <p>${p.code}</p>
+        <div class="price">${p.price}</div>
 
         <button class="buy-btn"
         onclick="buyNow('${p.name}','${p.code}','${p.price}','${p.image}')">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
           Buy Now
         </button>
-
       </div>
     `;
   });
 
-  loadAdminList();
+  html += '</div>';
+  return html;
 }
 
-/* BUY NOW */
-function buyNow(name, code, price, image){
+function showView(type){
 
+  document.querySelectorAll(".view").forEach(v=>{
+    v.classList.remove("active");
+  });
+
+  let data = products;
+
+  if(type !== "all"){
+    data = products.filter(p =>
+      p.category.toLowerCase() === type
+    );
+  }
+
+  let box = document.getElementById(type+"View");
+  box.classList.add("active");
+  box.innerHTML = createCarousel(data);
+}
+
+/* BUY */
+function buyNow(name, code, price, image){
   let msg = `Hello, I want to order:
 
-Product: ${name}
-Code: ${code}
-Price: ${price}
-
-Image:
+${name}
+${code}
+${price}
 ${image}`;
 
-  window.open("https://wa.me/2349114738932?text=" + encodeURIComponent(msg), "_blank");
-}
-
-/* CATEGORY */
-function setCategory(cat){
-  if(cat === "all"){
-    display(products);
-  } else {
-    display(products.filter(p => p.category === cat));
-  }
-}
-
-/* MODAL */
-function openModal(i){
-  let p = products[i];
-  mImg.src = p.image;
-  mName.innerText = p.name;
-  mCode.innerText = p.code;
-  mPrice.innerText = p.price;
-  modal.style.display = "flex";
-}
-
-function closeModal(){
-  modal.style.display = "none";
+  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
 /* ADMIN */
 function openAdmin(){
-  let pass = prompt("Enter Password:");
+  let pass = prompt("Password:");
   if(pass === "1234"){
-    adminPanel.style.display = "block";
-  } else {
-    alert("Wrong password");
+    adminPanel.style.display="block";
+    loadAdmin();
   }
 }
 
 function closeAdmin(){
-  adminPanel.style.display = "none";
+  adminPanel.style.display="none";
 }
 
-/* UPLOAD */
 function addProduct(){
+  let p = {
+    name: aName.value,
+    code: aCode.value,
+    price: aPrice.value,
+    category: aCategory.value,
+    image: aImage.value
+  };
 
-  let name = aName.value;
-  let code = aCode.value;
-  let price = aPrice.value;
-  let category = aCategory.value;
-  let file = aImage.files[0];
-
-  let formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", UPLOAD_PRESET);
-
-  fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-
-    products.push({
-      name,
-      code,
-      price,
-      category,
-      image: data.secure_url
-    });
-
-    localStorage.setItem("products", JSON.stringify(products));
-    display();
-    closeAdmin();
-
-    alert("Uploaded successfully!");
-  });
+  products.push(p);
+  localStorage.setItem("products", JSON.stringify(products));
+  showView("all");
+  loadAdmin();
 }
 
-/* CONFIRM DELETE */
-function confirmDelete(i){
-  if(confirm("Are you sure you want to delete this product?")){
+/* DELETE + DRAG */
+let dragIndex=null;
+
+function dragStart(i){ dragIndex=i; }
+
+function dropItem(i){
+  let temp = products[dragIndex];
+  products.splice(dragIndex,1);
+  products.splice(i,0,temp);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadAdmin();
+}
+
+function deleteProduct(i){
+  if(confirm("Delete?")){
     products.splice(i,1);
     localStorage.setItem("products", JSON.stringify(products));
-    display();
+    loadAdmin();
+    showView("all");
   }
 }
 
-/* DRAG & DROP */
-let draggedIndex = null;
-
-function dragStart(i){
-  draggedIndex = i;
-}
-
-function allowDrop(e){
-  e.preventDefault();
-}
-
-function dropItem(i){
-  let temp = products[draggedIndex];
-  products.splice(draggedIndex,1);
-  products.splice(i,0,temp);
-
-  localStorage.setItem("products", JSON.stringify(products));
-  display();
-}
-
-/* ADMIN LIST */
-function loadAdminList(){
+function loadAdmin(){
   let box = document.getElementById("adminList");
-  box.innerHTML = "";
+  box.innerHTML="";
 
   products.forEach((p,i)=>{
-    box.innerHTML += `
+    box.innerHTML+=`
       <div draggable="true"
-        ondragstart="dragStart(${i})"
-        ondragover="allowDrop(event)"
-        ondrop="dropItem(${i})"
-        style="display:flex; align-items:center; gap:10px; padding:8px; background:#eee; margin:5px 0; border-radius:5px;">
+      ondragstart="dragStart(${i})"
+      ondrop="dropItem(${i})"
+      ondragover="event.preventDefault()"
+      style="display:flex; gap:10px; margin:5px;">
 
-        <img src="${p.image}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">
+        <img src="${p.image}" width="50">
 
-        <div style="flex:1;">
-          <b>${p.name}</b><br>
-          <small>${p.code}</small>
-        </div>
+        <div>${p.name}</div>
 
-        <button onclick="confirmDelete(${i})"
-          style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px;">
-          Delete
-        </button>
-
+        <button onclick="deleteProduct(${i})">X</button>
       </div>
     `;
   });
 }
 
-display();
+/* INIT */
+showView("all");
 
 </script>
 
