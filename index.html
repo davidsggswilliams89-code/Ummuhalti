@@ -63,13 +63,6 @@
       background: #25D366;
     }
 
-    /* HERO */
-    .hero {
-      text-align: center;
-      padding: 20px;
-      background: white;
-    }
-
     /* CAROUSEL */
     .carousel {
       display: flex;
@@ -218,12 +211,12 @@
 
 <body>
 
-<!-- 🔝 MARQUEE HEADER -->
+<!-- 🔝 MARQUEE -->
 <div class="top-marquee">
   <div class="marquee-text">✨ Ummuhalti Collection ✨ Premium Fashion Store ✨</div>
 </div>
 
-<!-- 🔽 CATEGORY HEADER -->
+<!-- 🔽 CATEGORY BAR -->
 <div class="category-bar">
   <div onclick="setCategory('all')">ALL</div>
   <div onclick="setCategory('Kaftan')">KAFTAN</div>
@@ -231,12 +224,6 @@
   <div onclick="setCategory('Bags')">BAGS</div>
   <div onclick="setCategory('Shoes')">SHOES</div>
   <div onclick="setCategory('Abayas')">ABAYAS</div>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-  <h2>Ummuhalti Collection</h2>
-  <p>Shop by Category</p>
 </div>
 
 <!-- PRODUCTS -->
@@ -332,7 +319,7 @@ ${image}`;
   window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(msg), "_blank");
 }
 
-/* FILTER */
+/* CATEGORY FILTER */
 function setCategory(cat){
   if(cat === "all"){
     display(products);
