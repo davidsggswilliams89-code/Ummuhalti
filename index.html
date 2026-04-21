@@ -11,43 +11,63 @@
       margin: 0;
       font-family: Arial;
       background: #f5f5f5;
+      padding-top: 90px;
     }
 
-    .header {
+    /* 🔝 MARQUEE HEADER */
+    .top-marquee {
+      background: #111;
+      color: white;
+      overflow: hidden;
+      white-space: nowrap;
       position: fixed;
       top: 0;
       width: 100%;
+      z-index: 2000;
+      padding: 8px 0;
+    }
+
+    .marquee-text {
+      display: inline-block;
+      padding-left: 100%;
+      animation: moveLeft 12s linear infinite;
+      font-weight: bold;
+    }
+
+    @keyframes moveLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* 🔽 CATEGORY HEADER */
+    .category-bar {
+      position: fixed;
+      top: 40px;
+      width: 100%;
+      background: #222;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #111;
-      color: white;
-      padding: 12px 15px;
-      z-index: 1000;
+      overflow-x: auto;
+      white-space: nowrap;
+      z-index: 1999;
     }
 
-    .header a {
+    .category-bar div {
       color: white;
-      margin-left: 10px;
-      text-decoration: none;
+      padding: 10px 15px;
       cursor: pointer;
+      font-size: 13px;
+      flex: 0 0 auto;
     }
 
+    .category-bar div:hover {
+      background: #25D366;
+    }
+
+    /* HERO */
     .hero {
       text-align: center;
-      padding: 100px 20px 20px;
+      padding: 20px;
       background: white;
-    }
-
-    /* FILTER */
-    .filter-box {
-      text-align: center;
-      padding: 10px;
-    }
-
-    select {
-      padding: 8px;
-      width: 60%;
     }
 
     /* CAROUSEL */
@@ -103,24 +123,7 @@
       width: 18px;
     }
 
-    .dots {
-      text-align: center;
-      margin-top: 5px;
-    }
-
-    .dot {
-      height: 8px;
-      width: 8px;
-      margin: 0 3px;
-      background: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .dot.active {
-      background: #111;
-    }
-
+    /* MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -131,7 +134,7 @@
       background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
-      z-index: 2000;
+      z-index: 3000;
     }
 
     .modal-content {
@@ -147,6 +150,7 @@
       border-radius: 10px;
     }
 
+    /* ADMIN */
     .admin {
       display: none;
       position: fixed;
@@ -155,7 +159,7 @@
       width: 100%;
       height: 100%;
       background: white;
-      z-index: 3000;
+      z-index: 4000;
       padding: 15px;
       overflow-y: auto;
     }
@@ -203,39 +207,40 @@
       border-radius: 50%;
       text-decoration: none;
     }
+
+    select {
+      padding: 8px;
+      width: 100%;
+      margin: 10px 0;
+    }
   </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div>Ummuhalti</div>
-  <div>
-    <a href="#products">Products</a>
-    <a onclick="openAdmin()">Admin</a>
-  </div>
+<!-- 🔝 MARQUEE HEADER -->
+<div class="top-marquee">
+  <div class="marquee-text">✨ Ummuhalti Collection ✨ Premium Fashion Store ✨</div>
+</div>
+
+<!-- 🔽 CATEGORY HEADER -->
+<div class="category-bar">
+  <div onclick="setCategory('all')">ALL</div>
+  <div onclick="setCategory('Kaftan')">KAFTAN</div>
+  <div onclick="setCategory('Lace')">LACE</div>
+  <div onclick="setCategory('Bags')">BAGS</div>
+  <div onclick="setCategory('Shoes')">SHOES</div>
+  <div onclick="setCategory('Abayas')">ABAYAS</div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
-  <h1>Ummuhalti Collection</h1>
+  <h2>Ummuhalti Collection</h2>
   <p>Shop by Category</p>
-</div>
-
-<!-- FILTER -->
-<div class="filter-box">
-  <select id="filter" onchange="filterProducts()">
-    <option value="all">All Categories</option>
-    <option value="Kaftan">Kaftan</option>
-    <option value="Shirt">Shirt</option>
-    <option value="Luxury">Luxury</option>
-  </select>
 </div>
 
 <!-- PRODUCTS -->
 <div class="carousel" id="productList"></div>
-<div class="dots" id="dots"></div>
 
 <!-- MODAL -->
 <div class="modal" id="modal" onclick="closeModal()">
@@ -255,7 +260,7 @@
   <input id="aName" placeholder="Product Name">
   <input id="aCode" placeholder="Product Code">
   <input id="aPrice" placeholder="Price">
-  <input id="aCategory" placeholder="Category (Kaftan/Shirt/Luxury)">
+  <input id="aCategory" placeholder="Category">
   <input type="file" id="aImage">
 
   <button class="btn" onclick="addProduct()">Upload Product</button>
@@ -280,10 +285,7 @@ let products = JSON.parse(localStorage.getItem("products")) || [];
 function display(list = products){
 
   let box = document.getElementById("productList");
-  let dots = document.getElementById("dots");
-
   box.innerHTML = "";
-  dots.innerHTML = "";
 
   list.forEach((p,i)=>{
 
@@ -297,7 +299,7 @@ function display(list = products){
         <div class="price">${p.price}</div>
 
         <h3>${p.name}</h3>
-        <p>Category: ${p.category || "None"}</p>
+        <p>${p.category}</p>
         <p>${p.code}</p>
 
         <button class="buy-btn"
@@ -308,8 +310,6 @@ function display(list = products){
 
       </div>
     `;
-
-    dots.innerHTML += `<span class="dot"></span>`;
   });
 
   loadAdminList();
@@ -333,14 +333,11 @@ ${image}`;
 }
 
 /* FILTER */
-function filterProducts(){
-
-  let value = document.getElementById("filter").value;
-
-  if(value === "all"){
+function setCategory(cat){
+  if(cat === "all"){
     display(products);
   } else {
-    let filtered = products.filter(p => p.category === value);
+    let filtered = products.filter(p => p.category === cat);
     display(filtered);
   }
 }
@@ -364,14 +361,14 @@ function openAdmin(){
   let pass = prompt("Enter Password:");
   if(pass === "1234"){
     adminPanel.style.display = "block";
-  } else alert("Wrong password");
+  }
 }
 
 function closeAdmin(){
   adminPanel.style.display = "none";
 }
 
-/* CLOUDINARY UPLOAD */
+/* UPLOAD */
 function addProduct(){
 
   let name = aName.value;
@@ -423,7 +420,7 @@ function loadAdminList(){
   products.forEach((p,i)=>{
     box.innerHTML += `
       <div class="admin-item">
-        <div>${p.name}<br><small>${p.code}</small></div>
+        <div>${p.name}</div>
         <button onclick="deleteProduct(${i})">Delete</button>
       </div>
     `;
