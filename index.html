@@ -46,10 +46,24 @@
       background:white;
       border-radius:12px;
       padding:10px;
+      position:relative;
       box-shadow:0 4px 10px rgba(0,0,0,0.1);
     }
 
     img { width:100%; border-radius:10px; }
+
+    /* NEW BADGE */
+    .new-badge {
+      position:absolute;
+      top:10px;
+      left:10px;
+      background:red;
+      color:white;
+      padding:5px 8px;
+      font-size:12px;
+      border-radius:5px;
+      font-weight:bold;
+    }
 
     /* PRICE */
     .price {
@@ -75,7 +89,6 @@
       justify-content:center;
       align-items:center;
       gap:8px;
-      font-size:14px;
       cursor:pointer;
     }
 
@@ -237,10 +250,12 @@ function addProduct(){
     name:aName.value,
     price:aPrice.value,
     category:aCategory.value,
-    image:uploadedImage
+    image:uploadedImage,
+    date: Date.now() // 👈 NEW FEATURE
   };
 
-  products.push(p);
+  products.unshift(p); // 👈 newest first
+
   localStorage.setItem("products", JSON.stringify(products));
 
   uploadedImage="";
@@ -256,8 +271,14 @@ function createCarousel(list){
   let html='<div class="carousel">';
 
   list.forEach(p=>{
+
+    let isNew = (Date.now() - p.date) < (24*60*60*1000);
+
     html+=`
       <div class="card">
+
+        ${isNew ? '<div class="new-badge">NEW</div>' : ''}
+
         <img src="${p.image}">
         <h3>${p.name}</h3>
 
@@ -270,6 +291,7 @@ function createCarousel(list){
           Buy Now
 
         </button>
+
       </div>`;
   });
 
