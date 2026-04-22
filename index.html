@@ -7,183 +7,83 @@
   <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 
   <style>
-    body {
-      margin:0;
-      font-family:Arial;
-      background:#f5f5f5;
-      padding-top:80px;
+    body{margin:0;font-family:Arial;background:#f5f5f5;padding-top:80px;}
+
+    .top-marquee{
+      background:#111;color:#fff;position:fixed;top:0;width:100%;
+      height:40px;display:flex;align-items:center;padding:0 10px;z-index:999;
     }
 
-    /* HEADER */
-    .top-marquee {
-      background:#111;
-      color:white;
-      position:fixed;
-      top:0;
-      width:100%;
-      height:40px;
-      display:flex;
-      align-items:center;
-      padding:0 10px;
-      z-index:3000;
+    .admin-icon{
+      position:absolute;right:10px;background:#25D366;
+      padding:6px;border-radius:50%;cursor:pointer;
     }
 
-    .marquee-text {
-      animation:move 10s linear infinite;
-      white-space:nowrap;
+    .category-bar{
+      position:fixed;top:40px;width:100%;height:40px;
+      background:#222;display:flex;align-items:center;overflow-x:auto;
     }
 
-    @keyframes move {
-      from{transform:translateX(100%);}
-      to{transform:translateX(-100%);}
+    .category-bar div{color:#fff;padding:0 12px;cursor:pointer;}
+
+    .carousel{display:flex;flex-direction:column;gap:15px;padding:10px;}
+
+    .card{
+      background:#fff;border-radius:12px;padding:10px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.1);
     }
 
-    .admin-icon {
-      position:absolute;
-      right:10px;
-      background:#25D366;
-      padding:6px 10px;
-      border-radius:50%;
+    .slider{overflow:hidden;}
+    .slides{display:flex;transition:0.3s;}
+
+    .slides img{
+      width:100%;flex-shrink:0;border-radius:10px;
+    }
+
+    .dots{text-align:center;margin-top:5px;}
+    .dots span{
+      width:8px;height:8px;background:#ccc;
+      display:inline-block;margin:3px;border-radius:50%;
       cursor:pointer;
     }
 
-    .category-bar {
-      position:fixed;
-      top:40px;
-      width:100%;
-      height:40px;
-      background:#222;
-      display:flex;
-      align-items:center;
-      overflow-x:auto;
+    .price{
+      background:#111;color:#fff;padding:10px;
+      border-radius:10px;margin-top:8px;text-align:center;
     }
 
-    .category-bar div {
-      color:white;
-      padding:0 12px;
-      cursor:pointer;
-      white-space:nowrap;
+    .buy-btn{
+      background:#25D366;color:#fff;border:none;
+      width:100%;padding:12px;margin-top:8px;
+      border-radius:25px;cursor:pointer;
     }
-
-    /* PRODUCT */
-    .carousel {
-      display:flex;
-      flex-direction:column;
-      gap:15px;
-      padding:10px;
-    }
-
-    .card {
-      background:white;
-      border-radius:12px;
-      padding:10px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .slider { overflow:hidden; }
-    .slides { display:flex; transition:0.3s; }
-
-    .slides img {
-      width:100%;
-      flex-shrink:0;
-      border-radius:10px;
-    }
-
-    .dots { text-align:center; margin-top:5px; }
-    .dots span {
-      display:inline-block;
-      width:8px;
-      height:8px;
-      background:#ccc;
-      margin:3px;
-      border-radius:50%;
-      cursor:pointer;
-    }
-
-    .dots .active { background:#25D366; }
-
-    .price {
-      background:#111;
-      color:white;
-      padding:10px;
-      border-radius:10px;
-      text-align:center;
-      margin-top:8px;
-    }
-
-    .buy-btn {
-      background:#25D366;
-      color:white;
-      border:none;
-      width:100%;
-      padding:14px;
-      margin-top:10px;
-      border-radius:25px;
-      display:flex;
-      justify-content:center;
-      gap:8px;
-    }
-
-    .buy-btn img { width:20px; }
 
     /* ADMIN */
-    .admin {
-      display:none;
-      position:fixed;
-      top:0;
-      width:100%;
-      height:100%;
-      background:white;
-      z-index:4000;
-      padding:15px;
-      overflow:auto;
+    .admin{
+      display:none;position:fixed;top:0;width:100%;
+      height:100%;background:#fff;z-index:2000;padding:15px;overflow:auto;
     }
 
-    input, select {
-      width:100%;
-      padding:10px;
-      margin:5px 0;
+    input,select{width:100%;padding:10px;margin:5px 0;}
+
+    .btn{
+      background:green;color:#fff;border:none;
+      width:100%;padding:10px;margin-top:5px;border-radius:6px;
     }
 
-    .btn {
-      background:green;
-      color:white;
-      padding:10px;
-      border:none;
-      width:100%;
-      margin-top:5px;
-      border-radius:8px;
+    /* PREVIEW */
+    .preview-box{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+
+    .preview-item{position:relative;}
+
+    .preview-item img{
+      width:70px;height:70px;object-fit:cover;border-radius:6px;
     }
 
-    /* IMAGE PREVIEW */
-    .preview-box {
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:10px;
-    }
-
-    .preview-item {
-      position:relative;
-    }
-
-    .preview-item img {
-      width:70px;
-      height:70px;
-      object-fit:cover;
-      border-radius:6px;
-    }
-
-    .remove-img {
-      position:absolute;
-      top:-5px;
-      right:-5px;
-      background:red;
-      color:white;
-      border-radius:50%;
-      font-size:12px;
-      padding:2px 6px;
-      cursor:pointer;
+    .remove-btn{
+      position:absolute;top:-5px;right:-5px;
+      background:red;color:#fff;border-radius:50%;
+      padding:2px 6px;font-size:12px;cursor:pointer;
     }
 
   </style>
@@ -191,19 +91,14 @@
 
 <body>
 
-<!-- HEADER -->
 <div class="top-marquee">
-  <div class="marquee-text">✨ Ummuhalti Collection ✨ Premium Fashion Store ✨</div>
+  Ummuhalti Collection
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
 
 <div class="category-bar">
   <div onclick="showView('all')">ALL</div>
   <div onclick="showView('kaftan')">KAFTAN</div>
-  <div onclick="showView('lace')">LACE</div>
-  <div onclick="showView('bags')">BAGS</div>
-  <div onclick="showView('shoes')">SHOES</div>
-  <div onclick="showView('abayas')">ABAYAS</div>
 </div>
 
 <div id="allView"></div>
@@ -211,7 +106,7 @@
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
 
-  <h2>Admin Panel</h2>
+  <h3>Add Product</h3>
 
   <input id="aName" placeholder="Product Name">
   <input id="aPrice" placeholder="Price">
@@ -219,18 +114,15 @@
   <select id="aCategory">
     <option>Kaftan</option>
     <option>Lace</option>
-    <option>Bags</option>
-    <option>Shoes</option>
-    <option>Abayas</option>
   </select>
 
   <button class="btn" onclick="uploadImage()">Upload Images</button>
-  <p id="uploadStatus">No images</p>
+  <p id="status">No images</p>
 
+  <!-- PREVIEW -->
   <div class="preview-box" id="previewBox"></div>
 
   <button class="btn" onclick="addProduct()">Add Product</button>
-
   <button class="btn" onclick="closeAdmin()">Close</button>
 
 </div>
@@ -251,7 +143,7 @@ function uploadImage(){
     if(result && result.event==="success"){
       uploadedImages.push(result.info.secure_url);
       renderPreview();
-      uploadStatus.innerText = uploadedImages.length + " images ✔";
+      status.innerText = uploadedImages.length + " images uploaded";
     }
   });
 }
@@ -265,33 +157,38 @@ function renderPreview(){
     box.innerHTML += `
       <div class="preview-item">
         <img src="${img}">
-        <div class="remove-img" onclick="removeImage(${i})">×</div>
+        <div class="remove-btn" onclick="removeImage(${i})">×</div>
       </div>`;
   });
 }
 
+/* REMOVE IMAGE */
 function removeImage(i){
   uploadedImages.splice(i,1);
   renderPreview();
+  status.innerText = uploadedImages.length + " images uploaded";
 }
 
 /* ADD PRODUCT */
 function addProduct(){
-  if(uploadedImages.length===0) return alert("Upload images");
+
+  if(uploadedImages.length===0){
+    alert("Upload images first");
+    return;
+  }
 
   products.unshift({
     name:aName.value,
     price:aPrice.value,
     category:aCategory.value,
-    images:[...uploadedImages],
-    date:Date.now()
+    images:[...uploadedImages]
   });
 
   localStorage.setItem("products",JSON.stringify(products));
 
   uploadedImages=[];
   renderPreview();
-  uploadStatus.innerText="No images";
+  status.innerText="No images";
 
   showView("all");
 }
@@ -299,38 +196,33 @@ function addProduct(){
 /* DISPLAY */
 function showView(type){
 
-  let data = (type==="all")
-    ? products
-    : products.filter(p=>p.category.toLowerCase()===type);
-
   let html='<div class="carousel">';
 
-  data.forEach((p,i)=>{
+  products.forEach((p,i)=>{
 
     let imgs = p.images || [p.image];
 
     html+=`
-    <div class="card">
+      <div class="card">
 
-      <div class="slider">
-        <div class="slides" id="slide${i}">
-          ${imgs.map(img=>`<img src="${img}">`).join("")}
+        <div class="slider">
+          <div class="slides" id="s${i}">
+            ${imgs.map(img=>`<img src="${img}">`).join("")}
+          </div>
         </div>
 
         <div class="dots">
-          ${imgs.map((_,d)=>`<span onclick="goSlide(${i},${d})"></span>`).join("")}
+          ${imgs.map((_,d)=>`<span onclick="slide(${i},${d})"></span>`).join("")}
         </div>
-      </div>
 
-      <h3>${p.name}</h3>
-      <div class="price">₦${p.price}</div>
+        <h4>${p.name}</h4>
+        <div class="price">₦${p.price}</div>
 
-      <button class="buy-btn"
-      onclick="buyNow('${p.name}','${p.price}','${imgs[0]}')">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-      Buy Now</button>
+        <button class="buy-btn"
+        onclick="buyNow('${p.name}','${p.price}','${imgs[0]}')">
+        Buy Now</button>
 
-    </div>`;
+      </div>`;
   });
 
   html+='</div>';
@@ -338,13 +230,14 @@ function showView(type){
 }
 
 /* SLIDE */
-function goSlide(i,index){
-  document.getElementById("slide"+i).style.transform=`translateX(-${index*100}%)`;
+function slide(i,d){
+  document.getElementById("s"+i).style.transform =
+  `translateX(-${d*100}%)`;
 }
 
 /* BUY */
 function buyNow(name,price,img){
-  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
+  let msg=`Order:\n${name}\n₦${price}\n${img}`;
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
