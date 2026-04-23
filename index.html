@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ummuhalti Collection</title>
+  <title>BOB TEXTILE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 
   <style>
     body{
@@ -37,11 +39,10 @@
       white-space:nowrap;
       animation:move 12s linear infinite;
       font-size:14px;
-      padding-left:20px;
     }
 
     @keyframes move{
-      0%{transform:translateX(0);}
+      0%{transform:translateX(100%);}
       100%{transform:translateX(-100%);}
     }
 
@@ -54,7 +55,7 @@
       cursor:pointer;
     }
 
-    /* CATEGORY BAR */
+    /* CATEGORY */
     .category-bar{
       position:fixed;
       top:40px;
@@ -70,16 +71,12 @@
       color:#fff;
       padding:0 14px;
       cursor:pointer;
-      white-space:nowrap;
-      height:100%;
       display:flex;
       align-items:center;
-      transition:0.3s;
     }
 
     .category-btn.active{
       background:#25D366;
-      color:#fff;
       font-weight:bold;
       border-radius:5px;
     }
@@ -91,8 +88,8 @@
     /* ABOUT */
     .about-box{
       background:#fff;
-      border-radius:12px;
       padding:15px;
+      border-radius:12px;
     }
 
     .link-btn{
@@ -102,11 +99,11 @@
       padding:10px;
       margin:8px 0;
       border-radius:8px;
-      text-decoration:none;
       text-align:center;
+      text-decoration:none;
     }
 
-    /* PRODUCTS */
+    /* PRODUCT */
     .carousel{
       display:flex;
       flex-direction:column;
@@ -177,6 +174,73 @@
       font-size:11px;
     }
 
+    /* ADMIN */
+    .admin{
+      display:none;
+      position:fixed;
+      top:0;
+      width:100%;
+      height:100%;
+      background:#fff;
+      z-index:4000;
+      padding:15px;
+      overflow:auto;
+    }
+
+    input,select{
+      width:100%;
+      padding:10px;
+      margin:5px 0;
+    }
+
+    .btn{
+      background:green;
+      color:white;
+      padding:10px;
+      border:none;
+      width:100%;
+      border-radius:6px;
+      margin-top:5px;
+    }
+
+    .preview{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .preview div{
+      position:relative;
+    }
+
+    .preview img{
+      width:70px;
+      height:70px;
+      object-fit:cover;
+      border-radius:6px;
+    }
+
+    .remove{
+      position:absolute;
+      top:-5px;
+      right:-5px;
+      background:red;
+      color:white;
+      border-radius:50%;
+      padding:2px 6px;
+      cursor:pointer;
+    }
+
+    .admin-item{
+      display:flex;
+      gap:10px;
+      background:#eee;
+      padding:8px;
+      margin:5px 0;
+      border-radius:6px;
+      align-items:center;
+    }
+
   </style>
 </head>
 
@@ -184,37 +248,29 @@
 
 <!-- HEADER -->
 <div class="top-marquee">
-
   <img src="YOUR_LOGO_URL_HERE" class="logo">
-
-  <div class="marquee-text">
-    ✨ Ummuhalti Collection ✨ Premium Fashion Store ✨
-  </div>
-
+  <div class="marquee-text">✨ BOB TEXTILE ✨ Premium Fashion Store ✨</div>
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
 
 <!-- CATEGORY -->
 <div class="category-bar">
-  <div class="category-btn active" onclick="showView('about', this)">ABOUT US</div>
-  <div class="category-btn" onclick="showView('kaftan', this)">KAFTAN</div>
-  <div class="category-btn" onclick="showView('lace', this)">LACE</div>
-  <div class="category-btn" onclick="showView('bags', this)">BAGS</div>
-  <div class="category-btn" onclick="showView('shoes', this)">SHOES</div>
-  <div class="category-btn" onclick="showView('abayas', this)">ABAYAS</div>
+  <div class="category-btn active" onclick="showView('about',this)">ABOUT US</div>
+  <div class="category-btn" onclick="showView('kaftan',this)">KAFTAN</div>
+  <div class="category-btn" onclick="showView('lace',this)">LACE</div>
+  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
+  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
+  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
 </div>
 
 <!-- VIEWS -->
 <div id="aboutView" class="view active-view">
   <div class="about-box">
-    <h3>Ummuhalti Collection</h3>
+    <h3>BOB TEXTILE</h3>
     <p><b>Address:</b> Kano, Nigeria</p>
-
-    <a class="link-btn" href="https://wa.me/2349114738932">💬 WhatsApp</a>
-    <a class="link-btn" href="#">📱 WhatsApp Group</a>
-    <a class="link-btn" href="#">🎵 TikTok</a>
-    <a class="link-btn" href="#">📘 Facebook</a>
-    <a class="link-btn" href="#">📸 Instagram</a>
+    <a class="link-btn" href="https://wa.me/2349114738932">WhatsApp</a>
+    <a class="link-btn" href="#">TikTok</a>
+    <a class="link-btn" href="#">Instagram</a>
   </div>
 </div>
 
@@ -224,78 +280,207 @@
 <div id="shoesView" class="view"></div>
 <div id="abayasView" class="view"></div>
 
+<!-- ADMIN -->
+<div class="admin" id="adminPanel">
+
+<h3>Admin Panel</h3>
+
+<input id="aName" placeholder="Product Name">
+<input id="aPrice" placeholder="Price">
+
+<select id="aCategory">
+<option>Kaftan</option>
+<option>Lace</option>
+<option>Bags</option>
+<option>Shoes</option>
+<option>Abayas</option>
+</select>
+
+<button class="btn" onclick="uploadImage()">Upload Images</button>
+
+<div class="preview" id="previewBox"></div>
+
+<button class="btn" onclick="addProduct()">Save Product</button>
+
+<hr>
+
+<select id="filterCategory" onchange="loadAdmin()">
+<option value="all">All</option>
+<option>Kaftan</option>
+<option>Lace</option>
+<option>Bags</option>
+<option>Shoes</option>
+<option>Abayas</option>
+</select>
+
+<div id="adminList"></div>
+
+<button class="btn" onclick="closeAdmin()">Close</button>
+
+</div>
+
 <script>
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
+let uploadedImages = [];
+let editIndex=null;
 
-/* SWITCH VIEW + ACTIVE BUTTON */
-function showView(type, el){
+/* CATEGORY SWITCH */
+function showView(type,el){
+document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
+document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+el.classList.add("active");
 
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
-  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+if(type==="about"){
+document.getElementById("aboutView").classList.add("active-view");
+return;
+}
 
-  el.classList.add("active");
+let data=products.filter(p=>p.category.toLowerCase()===type);
 
-  if(type==="about"){
-    document.getElementById("aboutView").classList.add("active-view");
-    return;
-  }
+let html='<div class="carousel">';
+data.forEach((p,i)=>{
+let isNew=Date.now()-p.date<86400000;
 
-  let data = products.filter(p=>p.category.toLowerCase()===type);
+html+=`
+<div class="card">
+${isNew?'<div class="new-badge">NEW</div>':''}
+<div style="overflow:hidden">
+<div class="slides" id="s${i}">
+${p.images.map(img=>`<img src="${img}">`).join("")}
+</div>
+</div>
+<div class="dots">
+${p.images.map((_,d)=>`<span onclick="slide(${i},${d})"></span>`).join("")}
+</div>
+<h4>${p.name}</h4>
+<div class="price">₦${p.price}</div>
+<button class="buy-btn" onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">Buy Now</button>
+</div>`;
+});
+html+='</div>';
 
-  let html='<div class="carousel">';
-
-  data.forEach((p,i)=>{
-
-    let isNew = Date.now()-p.date < 86400000;
-
-    html+=`
-    <div class="card">
-
-      ${isNew ? '<div class="new-badge">NEW</div>' : ''}
-
-      <div style="overflow:hidden">
-        <div class="slides" id="s${i}">
-          ${p.images.map(img=>`<img src="${img}">`).join("")}
-        </div>
-      </div>
-
-      <div class="dots">
-        ${p.images.map((_,d)=>`<span onclick="slide(${i},${d})"></span>`).join("")}
-      </div>
-
-      <h4>${p.name}</h4>
-      <div class="price">₦${p.price}</div>
-
-      <button class="buy-btn"
-      onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
-      Buy Now</button>
-
-    </div>`;
-  });
-
-  html+='</div>';
-
-  let view = document.getElementById(type+"View");
-  view.innerHTML = html;
-  view.classList.add("active-view");
+let view=document.getElementById(type+"View");
+view.innerHTML=html;
+view.classList.add("active-view");
 }
 
 /* SLIDE */
 function slide(i,d){
-  document.getElementById("s"+i).style.transform =
-  `translateX(-${d*100}%)`;
+document.getElementById("s"+i).style.transform=`translateX(-${d*100}%)`;
 }
 
 /* BUY */
 function buyNow(name,price,img){
-  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
-  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
+let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
+window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
 /* ADMIN */
 function openAdmin(){
-  alert("Admin panel is in your full version");
+if(prompt("Password")==="1234"){
+adminPanel.style.display="block";
+loadAdmin();
+}
+}
+
+function closeAdmin(){
+adminPanel.style.display="none";
+}
+
+/* UPLOAD */
+function uploadImage(){
+cloudinary.openUploadWidget({
+cloudName:"db92r6j9z",
+uploadPreset:"ummuhalti",
+multiple:true
+},(err,res)=>{
+if(res && res.event==="success"){
+uploadedImages.push(res.info.secure_url);
+renderPreview();
+}
+});
+}
+
+function renderPreview(){
+previewBox.innerHTML="";
+uploadedImages.forEach((img,i)=>{
+previewBox.innerHTML+=`
+<div>
+<img src="${img}">
+<div class="remove" onclick="removeImage(${i})">×</div>
+</div>`;
+});
+}
+
+function removeImage(i){
+uploadedImages.splice(i,1);
+renderPreview();
+}
+
+/* ADD */
+function addProduct(){
+if(uploadedImages.length===0) return alert("Upload images");
+
+let p={
+name:aName.value,
+price:aPrice.value,
+category:aCategory.value,
+images:[...uploadedImages],
+date:Date.now()
+};
+
+if(editIndex!==null){
+products[editIndex]=p;
+editIndex=null;
+}else{
+products.unshift(p);
+}
+
+localStorage.setItem("products",JSON.stringify(products));
+uploadedImages=[];
+renderPreview();
+showView("kaftan",document.querySelector(".category-btn"));
+loadAdmin();
+}
+
+/* ADMIN LIST */
+function loadAdmin(){
+let cat=filterCategory.value;
+
+let list=products
+.map((p,i)=>({...p,index:i}))
+.filter(p=>cat==="all"||p.category===cat)
+.sort((a,b)=>b.date-a.date);
+
+adminList.innerHTML="";
+list.forEach(p=>{
+adminList.innerHTML+=`
+<div class="admin-item">
+<img src="${p.images[0]}" width="50">
+<div style="flex:1">${p.name}</div>
+<button onclick="editProduct(${p.index})">Edit</button>
+<button onclick="deleteProduct(${p.index})">Delete</button>
+</div>`;
+});
+}
+
+function editProduct(i){
+let p=products[i];
+aName.value=p.name;
+aPrice.value=p.price;
+aCategory.value=p.category;
+uploadedImages=[...p.images];
+renderPreview();
+editIndex=i;
+}
+
+function deleteProduct(i){
+if(confirm("Delete product?")){
+products.splice(i,1);
+localStorage.setItem("products",JSON.stringify(products));
+loadAdmin();
+}
 }
 
 </script>
