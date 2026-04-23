@@ -1,213 +1,12 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>BOB TEXTILE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script>
-
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let uploadedImages = [];
-
-let startX = 0;
-let currentIndex = {};
-
-/* VIEW SWITCH */
-function showView(type,el){
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
-  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active");
-
-  if(type==="about"){
-    aboutView.classList.add("active-view");
-    return;
-  }
-
-  let list = products.filter(p => p.category.toLowerCase().trim() === type);
-
-  let html = '<div class="carousel">';
-
-  list.forEach((p,i)=>{
-
-    currentIndex[i] = 0;
-
-    let isNew = Date.now()-p.date < 86400000;
-
-    html += `
-    <div class="card">
-
-      ${isNew?'<div class="new-badge">NEW</div>':''}
-
-      <div class="slides"
-        id="slide${i}"
-        ontouchstart="touchStart(event,${i})"
-        ontouchmove="touchMove(event,${i})">
-
-        ${p.images.map(img=>`<img src="${img}">`).join('')}
-      </div>
-
-      <div class="dots">
-        ${p.images.map((_,d)=>`<span onclick="slide(${i},${d})"></span>`).join('')}
-      </div>
-
-      <h4>${p.name}</h4>
-      <div class="price">₦${p.price}</div>
-
-      <button class="buy-btn"
-        onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
-        Buy Now
-      </button>
-
-    </div>`;
-  });
-
-  html += '</div>';
-
-  let box = document.getElementById(type+"View");
-  box.innerHTML = html;
-  box.classList.add("active-view");
-}
-
-/* TOUCH START */
-function touchStart(e,i){
-  startX = e.touches[0].clientX;
-}
-
-/* TOUCH MOVE */
-function touchMove(e,i){
-
-  let endX = e.touches[0].clientX;
-  let diff = startX - endX;
-
-  if(Math.abs(diff) > 50){
-
-    if(diff > 0){
-      nextSlide(i);
-    } else {
-      prevSlide(i);
-    }
-
-    startX = endX; // reset
-  }
-}
-
-/* NEXT */
-function nextSlide(i){
-  let slides = document.querySelectorAll(`#slide${i} img`).length;
-
-  if(currentIndex[i] < slides-1){
-    currentIndex[i]++;
-  }
-
-  updateSlide(i);
-}
-
-/* PREV */
-function prevSlide(i){
-  if(currentIndex[i] > 0){
-    currentIndex[i]--;
-  }
-
-  updateSlide(i);
-}
-
-/* DOT CLICK */
-function slide(i,d){
-  currentIndex[i] = d;
-  updateSlide(i);
-}
-
-/* UPDATE */
-function updateSlide(i){
-  document.getElementById("slide"+i).style.transform =
-    `translateX(-${currentIndex[i]*100}%)`;
-}
-
-/* BUY */
-function buyNow(name,price,img){
-  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
-  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
-}
-
-/* ADMIN */
-function openAdmin(){
-  if(prompt("Password")==="1234"){
-    adminPanel.style.display="block";
-    loadAdmin();
-  }
-}
-
-function closeAdmin(){
-  adminPanel.style.display="none";
-}
-
-/* UPLOAD */
-function uploadImage(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:true
-  }, (error,result)=>{
-    if(result && result.event==="success"){
-      uploadedImages.push(result.info.secure_url);
-      renderPreview();
-    }
-  });
-}
-
-function renderPreview(){
-  previewBox.innerHTML="";
-  uploadedImages.forEach(img=>{
-    previewBox.innerHTML += `<img src="${img}">`;
-  });
-}
-
-/* ADD PRODUCT */
-function addProduct(){
-  if(uploadedImages.length===0) return alert("Upload images");
-
-  products.unshift({
-    name:aName.value,
-    price:aPrice.value,
-    category:aCategory.value,
-    images:[...uploadedImages],
-    date:Date.now()
-  });
-
-  localStorage.setItem("products", JSON.stringify(products));
-
-  uploadedImages=[];
-  renderPreview();
-
-  let active = document.querySelector(".category-btn.active");
-  if(active) active.click();
-
-  loadAdmin();
-}
-
-/* ADMIN LIST */
-function loadAdmin(){
-  adminList.innerHTML="";
-  products.forEach((p,i)=>{
-    adminList.innerHTML += `
-    <div class="admin-item">
-      <img src="${p.images[0]}" width="50">
-      <div style="flex:1">${p.name}</div>
-      <button onclick="deleteProduct(${i})">Delete</button>
-    </div>`;
-  });
-}
-
-/* DELETE */
-function deleteProduct(i){
-  if(confirm("Delete?")){
-    products.splice(i,1);
-    localStorage.setItem("products", JSON.stringify(products));
-    loadAdmin();
-  }
-}
-
-</script>
+  <!-- ✅ CLOUDINARY FIX -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 
   <style>
     body{margin:0;font-family:Arial;background:#f5f5f5;padding-top:80px;}
@@ -268,10 +67,6 @@ function deleteProduct(i){
     .slides img{width:100%;flex-shrink:0;border-radius:10px;}
 
     .dots{text-align:center;margin-top:5px;}
-    .dots span{
-      width:8px;height:8px;background:#ccc;display:inline-block;
-      margin:3px;border-radius:50%;cursor:pointer;
-    }
 
     .new-badge{
       position:absolute;top:10px;left:10px;background:red;color:white;
@@ -370,12 +165,13 @@ function deleteProduct(i){
   <input id="aName" placeholder="Product Name">
   <input id="aPrice" placeholder="Price">
 
+  <!-- ✅ FIXED CATEGORY VALUES -->
   <select id="aCategory">
-    <option>Kaftan</option>
-    <option>Lace</option>
-    <option>Bags</option>
-    <option>Shoes</option>
-    <option>Abayas</option>
+    <option value="kaftan">Kaftan</option>
+    <option value="lace">Lace</option>
+    <option value="bags">Bags</option>
+    <option value="shoes">Shoes</option>
+    <option value="abayas">Abayas</option>
   </select>
 
   <button class="btn" onclick="uploadImage()">Upload Images</button>
@@ -395,6 +191,7 @@ function deleteProduct(i){
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let uploadedImages = [];
 
+/* VIEW */
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
@@ -405,11 +202,12 @@ function showView(type,el){
     return;
   }
 
-  let list = products.filter(p => p.category.toLowerCase().trim() === type);
+  let list = products.filter(p => p.category === type);
 
   let html = '<div class="carousel">';
 
   list.forEach((p,i)=>{
+
     let isNew = Date.now()-p.date < 86400000;
 
     html += `
@@ -420,14 +218,11 @@ function showView(type,el){
         ${p.images.map(img=>`<img src="${img}">`).join('')}
       </div>
 
-      <div class="dots">
-        ${p.images.map((_,d)=>`<span onclick="slide(${i},${d})"></span>`).join('')}
-      </div>
-
       <h4>${p.name}</h4>
       <div class="price">₦${p.price}</div>
 
-      <button class="buy-btn" onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
+      <button class="buy-btn"
+        onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
         Buy Now
       </button>
     </div>`;
@@ -435,20 +230,17 @@ function showView(type,el){
 
   html += '</div>';
 
-  let box = document.getElementById(type+"View");
-  box.innerHTML = html;
-  box.classList.add("active-view");
+  document.getElementById(type+"View").innerHTML = html;
+  document.getElementById(type+"View").classList.add("active-view");
 }
 
-function slide(i,d){
-  document.getElementById("slide"+i).style.transform=`translateX(-${d*100}%)`;
-}
-
+/* BUY */
 function buyNow(name,price,img){
   let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
+/* ADMIN */
 function openAdmin(){
   if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
@@ -460,6 +252,7 @@ function closeAdmin(){
   adminPanel.style.display="none";
 }
 
+/* UPLOAD FIXED */
 function uploadImage(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
@@ -480,6 +273,7 @@ function renderPreview(){
   });
 }
 
+/* ADD PRODUCT FIX */
 function addProduct(){
   if(uploadedImages.length===0) return alert("Upload images");
 
@@ -496,13 +290,13 @@ function addProduct(){
   uploadedImages=[];
   renderPreview();
 
-  // 🔥 FIX: refresh current category
   let active = document.querySelector(".category-btn.active");
   if(active) active.click();
 
   loadAdmin();
 }
 
+/* ADMIN LIST */
 function loadAdmin(){
   adminList.innerHTML="";
   products.forEach((p,i)=>{
