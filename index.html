@@ -24,28 +24,13 @@
       height:45px;
       display:flex;
       align-items:center;
+      overflow:hidden;
       z-index:3000;
-      overflow:hidden;
     }
 
-    /* LOGO */
-    .logo{
-      height:34px;
-      margin-left:0;
-      padding-left:8px;
-      border-radius:6px;
-      background:#111;
-      z-index:5;
-      position:relative;
-    }
+    .logo{height:34px;padding-left:8px;position:relative;z-index:3;background:#111;}
 
-    /* MARQUEE */
-    .marquee-wrapper{
-      position:absolute;
-      width:100%;
-      overflow:hidden;
-      z-index:1;
-    }
+    .marquee-wrapper{position:absolute;width:100%;overflow:hidden;z-index:1;}
 
     .marquee-text{
       white-space:nowrap;
@@ -58,22 +43,12 @@
       100%{transform:translateX(-100%);}
     }
 
-    /* ADMIN ICON */
     .admin-icon{
-      position:absolute;
-      right:0;
-      top:0;
-      height:45px;
-      width:45px;
-      background:#222;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      font-size:18px;
-      z-index:10;
-      border-left:1px solid #333;
+      position:absolute;right:0;top:0;
+      width:45px;height:45px;
+      background:#222;color:white;
+      display:flex;justify-content:center;align-items:center;
+      z-index:4;cursor:pointer;
     }
 
     /* CATEGORY */
@@ -84,91 +59,88 @@
       height:40px;
       background:#222;
       display:flex;
-      align-items:center;
       overflow-x:auto;
       z-index:2000;
     }
 
     .category-btn{
       color:white;
-      padding:0 14px;
-      white-space:nowrap;
+      padding:8px 14px;
+      margin:5px;
+      border-radius:20px;
       cursor:pointer;
+      white-space:nowrap;
     }
 
-    .category-btn.active{
-      background:#25D366;
-      border-radius:5px;
-      font-weight:bold;
-    }
+    .category-btn.active{background:#25D366;}
 
     .view{display:none;padding:10px;}
     .active-view{display:block;}
 
-    /* ABOUT */
-    .about-box{
-      background:white;
-      padding:15px;
-      border-radius:12px;
-    }
-
-    .social-btn{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      text-decoration:none;
-      padding:12px;
-      border-radius:8px;
-      margin:10px 0;
-      color:white;
-      font-weight:bold;
-    }
-
-    .social-wa{background:#25D366;}
-    .social-fb{background:#1877F2;}
-    .social-ig{background:#E1306C;}
-    .social-tk{background:#000;}
-
-    .social-btn img{width:20px;}
-
-    /* PRODUCT */
+    /* CARD */
     .card{
       background:white;
       border-radius:14px;
-      padding:12px;
+      padding:10px;
       margin-bottom:15px;
       box-shadow:0 2px 10px rgba(0,0,0,0.08);
-      position:relative;
     }
 
-    .img-wrap{
-      position:relative;
-    }
-
-    .img-wrap img{
-      width:100%;
-      border-radius:12px;
-      display:block;
-    }
+    .img-wrap{position:relative;border-radius:12px;overflow:hidden;}
 
     .new-badge{
       position:absolute;
-      top:8px;
-      left:8px;
+      top:10px;
+      left:10px;
       background:red;
       color:white;
       font-size:11px;
-      padding:4px 6px;
+      padding:4px 7px;
       border-radius:5px;
+      z-index:10;
     }
+
+    /* CAROUSEL */
+    .carousel{
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+    }
+
+    .carousel img{
+      min-width:100%;
+      height:400px;
+      object-fit:contain;
+      background:#fff;
+      scroll-snap-align:center;
+      flex-shrink:0;
+    }
+
+    .carousel::-webkit-scrollbar{display:none;}
+
+    /* DOTS FIX */
+    .dots{
+      text-align:center;
+      margin-top:5px;
+    }
+
+    .dot{
+      height:8px;width:8px;
+      margin:0 3px;
+      background:#bbb;
+      border-radius:50%;
+      display:inline-block;
+    }
+
+    .dot.active{background:#000;}
 
     .price{
       background:#111;
       color:white;
       text-align:center;
       padding:10px;
-      border-radius:8px;
       margin-top:10px;
+      border-radius:8px;
       font-weight:bold;
     }
 
@@ -181,57 +153,13 @@
       margin-top:10px;
       border-radius:12px;
       font-weight:bold;
-      cursor:pointer;
       display:flex;
-      align-items:center;
       justify-content:center;
+      align-items:center;
       gap:8px;
     }
 
-    .buy-btn img{width:20px;}
-
-    /* ADMIN */
-    .admin{
-      display:none;
-      position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:white;
-      z-index:5000;
-      padding:15px;
-      overflow-y:auto;
-    }
-
-    input,select{
-      width:100%;
-      padding:12px;
-      margin:6px 0;
-      border:1px solid #ddd;
-      border-radius:8px;
-    }
-
-    .btn{
-      background:green;
-      color:white;
-      border:none;
-      width:100%;
-      padding:12px;
-      border-radius:8px;
-      margin-top:10px;
-      font-weight:bold;
-    }
-
-    .admin-item{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      background:#f2f2f2;
-      padding:8px;
-      border-radius:6px;
-      margin:5px 0;
-    }
+    .buy-btn img{width:18px;}
 
   </style>
 </head>
@@ -240,12 +168,11 @@
 
 <!-- HEADER -->
 <div class="top-marquee">
-
   <img src="logo.jpeg" class="logo">
 
   <div class="marquee-wrapper">
     <div class="marquee-text">
-      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨ Affordable Luxury ✨
+      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨
     </div>
   </div>
 
@@ -254,7 +181,7 @@
 
 <!-- CATEGORY -->
 <div class="category-bar">
-  <div class="category-btn" onclick="showView('about',this)">ABOUT US</div>
+  <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
   <div class="category-btn" onclick="showView('kaftan',this)">KAFTAN</div>
   <div class="category-btn" onclick="showView('lace',this)">LACE</div>
   <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
@@ -264,32 +191,9 @@
   <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
 </div>
 
-<!-- ABOUT -->
+<!-- VIEWS -->
 <div id="aboutView" class="view active-view">
-  <div class="about-box">
-    <h3>BOB TEXTILE</h3>
-
-    <p>
-      We are a professional textile brand specializing in quality fabrics and modern fashion designs.
-      Our mission is to deliver premium clothing materials at affordable prices.
-    </p>
-
-    <a class="social-btn social-wa" href="https://wa.me/2349114738932">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"> WhatsApp
-    </a>
-
-    <a class="social-btn social-fb" href="https://www.facebook.com/share/1X8HYKMJXT/">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"> Facebook
-    </a>
-
-    <a class="social-btn social-ig" href="https://www.instagram.com/bob__textile">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"> Instagram
-    </a>
-
-    <a class="social-btn social-tk" href="https://www.tiktok.com/@bob__textile">
-      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"> TikTok
-    </a>
-  </div>
+  <div class="card">Welcome to BOB TEXTILE</div>
 </div>
 
 <div id="kaftanView" class="view"></div>
@@ -300,168 +204,95 @@
 <div id="yardView" class="view"></div>
 <div id="capsView" class="view"></div>
 
-<!-- ADMIN -->
-<div class="admin" id="adminPanel">
-
-  <h3>Admin Panel</h3>
-
-  <input id="aName" placeholder="Product Name">
-  <input id="aPrice" placeholder="Price">
-
-  <select id="aCategory">
-    <option value="kaftan">Kaftan</option>
-    <option value="lace">Lace</option>
-    <option value="bags">Bags</option>
-    <option value="shoes">Shoes</option>
-    <option value="abayas">Abayas</option>
-    <option value="yard">Yard</option>
-    <option value="caps">Caps</option>
-  </select>
-
-  <button class="btn" onclick="uploadImage()">Upload Images</button>
-  <div class="preview" id="previewBox"></div>
-
-  <button class="btn" onclick="addProduct()">Save Product</button>
-
-  <hr>
-
-  <div id="adminList"></div>
-
-  <button class="btn" style="background:red" onclick="closeAdmin()">Close</button>
-</div>
-
 <script>
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
-let uploadedImages = [];
 
-/* RESTORE LAST VIEW */
+/* ✅ FIX 2: RESTORE ACTIVE SECTION ON REFRESH */
 window.onload = function(){
   let saved = localStorage.getItem("activeView") || "about";
   let btn = [...document.querySelectorAll(".category-btn")]
     .find(b=>b.textContent.toLowerCase().includes(saved));
 
-  if(btn) showView(saved, btn);
+  if(btn) showView(saved,btn);
 };
 
+/* VIEW */
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
-
   el.classList.add("active");
 
-  localStorage.setItem("activeView", type);
+  localStorage.setItem("activeView",type);
 
   if(type==="about"){
     aboutView.classList.add("active-view");
     return;
   }
 
-  let list = products.filter(p => p.category === type);
+  let list = products.filter(p=>p.category===type);
 
-  let html = '';
+  let html="";
 
-  list.forEach((p)=>{
-    html += `
+  list.forEach((p,index)=>{
+    html+=`
     <div class="card">
 
       <div class="img-wrap">
-        ${ (Date.now() - p.date < 86400000) ? '<div class="new-badge">NEW</div>' : '' }
-        <img src="${p.images[0]}">
+
+        ${ (Date.now()-p.date < 86400000)
+          ? '<div class="new-badge">NEW</div>' : '' }
+
+        <div class="carousel car${type}${index}">
+          ${p.images.map(img=>`<img src="${img}">`).join('')}
+        </div>
+
       </div>
 
-      <h4>${p.name}</h4>
+      <div class="dots dots${type}${index}"></div>
 
       <div class="price">₦ ${p.price}</div>
 
-      <button class="buy-btn"
-        onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
+      <button class="buy-btn">
         <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-        WhatsApp Order
+        BUY NOW
       </button>
 
     </div>`;
   });
 
-  document.getElementById(type+"View").innerHTML = html;
+  document.getElementById(type+"View").innerHTML=html;
   document.getElementById(type+"View").classList.add("active-view");
-}
 
-function buyNow(name,price,img){
-  let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
-  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
-}
-
-/* ADMIN */
-function openAdmin(){
-  if(prompt("Password")==="1234"){
-    adminPanel.style.display="block";
-    loadAdmin();
-  }
-}
-
-function closeAdmin(){
-  adminPanel.style.display="none";
-}
-
-function uploadImage(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:true
-  }, (error,result)=>{
-    if(result && result.event==="success"){
-      uploadedImages.push(result.info.secure_url);
-      renderPreview();
-    }
+  /* ✅ FIX 1: DOTS NOW ALWAYS INIT AFTER RENDER */
+  list.forEach((p,index)=>{
+    setupCarousel(".car"+type+index,".dots"+type+index);
   });
 }
 
-function renderPreview(){
-  previewBox.innerHTML="";
-  uploadedImages.forEach(img=>{
-    previewBox.innerHTML += `<img src="${img}">`;
+/* CAROUSEL + DOT FIX */
+function setupCarousel(car,dots){
+  const c=document.querySelector(car);
+  const box=document.querySelector(dots);
+  if(!c || !box) return;
+
+  const imgs=c.querySelectorAll("img");
+  box.innerHTML="";
+
+  imgs.forEach((_,i)=>{
+    let d=document.createElement("span");
+    d.classList.add("dot");
+    if(i===0) d.classList.add("active");
+    box.appendChild(d);
   });
-}
 
-function addProduct(){
-  products.unshift({
-    name:aName.value,
-    price:aPrice.value,
-    category:aCategory.value,
-    images:[...uploadedImages],
-    date:Date.now()
+  const dot=box.querySelectorAll(".dot");
+
+  c.addEventListener("scroll",()=>{
+    let i=Math.round(c.scrollLeft/c.clientWidth);
+    dot.forEach(x=>x.classList.remove("active"));
+    if(dot[i]) dot[i].classList.add("active");
   });
-
-  localStorage.setItem("products", JSON.stringify(products));
-
-  uploadedImages=[];
-  renderPreview();
-
-  let active = document.querySelector(".category-btn.active");
-  if(active) active.click();
-
-  loadAdmin();
-}
-
-function loadAdmin(){
-  adminList.innerHTML="";
-  products.forEach((p,i)=>{
-    adminList.innerHTML += `
-    <div class="admin-item">
-      <img src="${p.images[0]}" width="50">
-      <div style="flex:1">${p.name}</div>
-      <button onclick="deleteProduct(${i})">Delete</button>
-    </div>`;
-  });
-}
-
-function deleteProduct(i){
-  if(confirm("Delete?")){
-    products.splice(i,1);
-    localStorage.setItem("products", JSON.stringify(products));
-    loadAdmin();
-  }
 }
 
 </script>
