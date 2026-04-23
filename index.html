@@ -4,8 +4,6 @@
   <title>Ummuhalti Collection</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
-
   <style>
     body{
       margin:0;
@@ -24,8 +22,20 @@
       height:40px;
       display:flex;
       align-items:center;
-      padding:0 10px;
+      overflow:hidden;
       z-index:3000;
+    }
+
+    .marquee-text{
+      white-space:nowrap;
+      animation:move 12s linear infinite;
+      font-size:14px;
+      padding-left:100%;
+    }
+
+    @keyframes move{
+      0%{transform:translateX(0);}
+      100%{transform:translateX(-100%);}
     }
 
     .admin-icon{
@@ -65,11 +75,6 @@
       background:#fff;
       border-radius:12px;
       padding:15px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.1);
-    }
-
-    .about-box h3{
-      margin-top:0;
     }
 
     .link-btn{
@@ -94,7 +99,6 @@
       background:#fff;
       border-radius:12px;
       padding:10px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.1);
       position:relative;
     }
 
@@ -162,7 +166,9 @@
 
 <!-- HEADER -->
 <div class="top-marquee">
-  Ummuhalti Collection
+  <div class="marquee-text">
+    ✨ Ummuhalti Collection ✨ Premium Fashion Store ✨
+  </div>
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
 
@@ -171,6 +177,9 @@
   <div onclick="showView('about')">ABOUT US</div>
   <div onclick="showView('kaftan')">KAFTAN</div>
   <div onclick="showView('lace')">LACE</div>
+  <div onclick="showView('bags')">BAGS</div>
+  <div onclick="showView('shoes')">SHOES</div>
+  <div onclick="showView('abayas')">ABAYAS</div>
 </div>
 
 <!-- VIEWS -->
@@ -181,22 +190,22 @@
     <p><b>Address:</b> Kano, Nigeria</p>
 
     <a class="link-btn" href="https://wa.me/2349114738932" target="_blank">
-      💬 Chat on WhatsApp
+      💬 WhatsApp Chat
     </a>
 
-    <a class="link-btn" href="#" target="_blank">
-      📱 Join WhatsApp Group
+    <a class="link-btn" href="#">
+      📱 WhatsApp Group
     </a>
 
-    <a class="link-btn" href="#" target="_blank">
+    <a class="link-btn" href="#">
       🎵 TikTok
     </a>
 
-    <a class="link-btn" href="#" target="_blank">
+    <a class="link-btn" href="#">
       📘 Facebook
     </a>
 
-    <a class="link-btn" href="#" target="_blank">
+    <a class="link-btn" href="#">
       📸 Instagram
     </a>
 
@@ -205,6 +214,9 @@
 
 <div id="kaftanView" class="view"></div>
 <div id="laceView" class="view"></div>
+<div id="bagsView" class="view"></div>
+<div id="shoesView" class="view"></div>
+<div id="abayasView" class="view"></div>
 
 <script>
 
@@ -212,6 +224,7 @@ let products = JSON.parse(localStorage.getItem("products")) || [];
 
 /* SHOW VIEW */
 function showView(type){
+
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
 
   if(type==="about"){
@@ -268,6 +281,11 @@ function slide(i,d){
 function buyNow(name,price,img){
   let msg=`Hello, I want to order:\n${name}\n₦${price}\n${img}`;
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
+}
+
+/* ADMIN (dummy placeholder) */
+function openAdmin(){
+  alert("Admin still available in your main version");
 }
 
 </script>
