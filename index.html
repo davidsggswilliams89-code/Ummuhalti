@@ -14,25 +14,43 @@
       padding-top:80px;
     }
 
+    /* HEADER */
     .top-marquee{
       background:#111;
       color:white;
       position:fixed;
       top:0;
       width:100%;
-      height:40px;
+      height:45px;
       display:flex;
       align-items:center;
       z-index:3000;
       overflow:hidden;
     }
 
-    .logo{height:28px;margin-left:10px;border-radius:6px;}
+    /* LOGO ABOVE TEXT */
+    .logo{
+      height:32px;
+      margin-left:10px;
+      border-radius:6px;
+      z-index:5;
+      position:relative;
+      background:#111;
+      padding-right:8px;
+    }
+
+    /* MOVING TEXT BEHIND LOGO */
+    .marquee-wrapper{
+      position:absolute;
+      width:100%;
+      overflow:hidden;
+      z-index:1;
+    }
 
     .marquee-text{
       white-space:nowrap;
       animation:move 12s linear infinite;
-      margin-left:10px;
+      margin-left:120px;
     }
 
     @keyframes move{
@@ -40,24 +58,33 @@
       100%{transform:translateX(-100%);}
     }
 
+    /* ADMIN ICON BOX (NOT CIRCLE) */
     .admin-icon{
       position:absolute;
-      right:10px;
+      right:0;
+      top:0;
+      height:45px;
+      width:45px;
       background:#25D366;
-      padding:6px;
-      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       cursor:pointer;
+      font-size:18px;
+      z-index:10;
     }
 
+    /* CATEGORY */
     .category-bar{
       position:fixed;
-      top:40px;
+      top:45px;
       width:100%;
       height:40px;
       background:#222;
       display:flex;
       align-items:center;
       overflow-x:auto;
+      z-index:2000;
     }
 
     .category-btn{
@@ -76,6 +103,7 @@
     .view{display:none;padding:10px;}
     .active-view{display:block;}
 
+    /* ABOUT */
     .about-box{
       background:white;
       padding:15px;
@@ -93,8 +121,6 @@
       border-radius:8px;
       margin:10px 0;
     }
-
-    .social-btn img{width:22px;}
 
     /* PRODUCT */
     .card{
@@ -120,6 +146,7 @@
       font-weight:bold;
     }
 
+    /* BUY BUTTON FIX (WHATSAPP ICON) */
     .buy-btn{
       background:#25D366;
       color:white;
@@ -130,6 +157,16 @@
       border-radius:12px;
       font-weight:bold;
       cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      font-size:15px;
+    }
+
+    .buy-btn img{
+      width:20px;
+      height:20px;
     }
 
     /* ADMIN */
@@ -178,16 +215,6 @@
       border-radius:8px;
     }
 
-    .admin-item{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      background:#eee;
-      padding:8px;
-      border-radius:6px;
-      margin:5px 0;
-    }
-
   </style>
 </head>
 
@@ -195,8 +222,16 @@
 
 <!-- HEADER -->
 <div class="top-marquee">
+
+  <!-- LOGO -->
   <img src="YOUR_LOGO_URL_HERE" class="logo">
-  <div class="marquee-text">✨ BOB TEXTILE ✨ Premium Fashion Store ✨</div>
+
+  <!-- MOVING TEXT BEHIND -->
+  <div class="marquee-wrapper">
+    <div class="marquee-text">✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨ Affordable Luxury ✨</div>
+  </div>
+
+  <!-- ADMIN ICON BOX -->
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
 
@@ -208,8 +243,6 @@
   <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
   <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
   <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
-
-  <!-- ✅ NEW CATEGORIES -->
   <div class="category-btn" onclick="showView('yard',this)">YARD</div>
   <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
 </div>
@@ -224,10 +257,10 @@
       Our mission is to deliver premium clothing materials at affordable prices.
     </p>
 
-    <a class="social-btn" href="https://wa.me/2349114738932" target="_blank">WhatsApp</a>
-    <a class="social-btn" href="https://www.facebook.com/share/1X8HYKMJXT/" target="_blank">Facebook (@bob__textile)</a>
-    <a class="social-btn" href="https://www.instagram.com/bob__textile" target="_blank">Instagram (@bob__textile)</a>
-    <a class="social-btn" href="https://www.tiktok.com/@bob__textile" target="_blank">TikTok (@bob__textile)</a>
+    <a class="social-btn" href="https://wa.me/2349114738932">WhatsApp</a>
+    <a class="social-btn" href="https://www.facebook.com/share/1X8HYKMJXT/">Facebook</a>
+    <a class="social-btn" href="https://www.instagram.com/bob__textile">Instagram</a>
+    <a class="social-btn" href="https://www.tiktok.com/@bob__textile">TikTok</a>
   </div>
 </div>
 
@@ -236,8 +269,6 @@
 <div id="bagsView" class="view"></div>
 <div id="shoesView" class="view"></div>
 <div id="abayasView" class="view"></div>
-
-<!-- NEW VIEWS -->
 <div id="yardView" class="view"></div>
 <div id="capsView" class="view"></div>
 
@@ -255,8 +286,6 @@
     <option value="bags">Bags</option>
     <option value="shoes">Shoes</option>
     <option value="abayas">Abayas</option>
-
-    <!-- NEW -->
     <option value="yard">Yard</option>
     <option value="caps">Caps</option>
   </select>
@@ -292,7 +321,7 @@ function showView(type,el){
 
   let html = '';
 
-  list.forEach((p,i)=>{
+  list.forEach((p)=>{
     html += `
     <div class="card">
       <div class="slides">
@@ -305,7 +334,7 @@ function showView(type,el){
 
       <button class="buy-btn"
         onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
-        🛒 Buy Now
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"> WhatsApp Order
       </button>
     </div>`;
   });
@@ -352,8 +381,6 @@ function renderPreview(){
 }
 
 function addProduct(){
-  if(uploadedImages.length===0) return alert("Upload images");
-
   products.unshift({
     name:aName.value,
     price:aPrice.value,
