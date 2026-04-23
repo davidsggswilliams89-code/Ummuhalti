@@ -4,7 +4,6 @@
   <title>BOB TEXTILE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CLOUDINARY -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 
   <style>
@@ -15,7 +14,6 @@
       padding-top:80px;
     }
 
-    /* HEADER */
     .top-marquee{
       background:#111;
       color:white;
@@ -51,7 +49,6 @@
       cursor:pointer;
     }
 
-    /* CATEGORY */
     .category-bar{
       position:fixed;
       top:40px;
@@ -76,11 +73,9 @@
       font-weight:bold;
     }
 
-    /* VIEWS */
     .view{display:none;padding:10px;}
     .active-view{display:block;}
 
-    /* ABOUT */
     .about-box{
       background:white;
       padding:15px;
@@ -101,7 +96,7 @@
 
     .social-btn img{width:22px;}
 
-    /* PRODUCTS */
+    /* PRODUCT */
     .card{
       background:white;
       border-radius:14px;
@@ -137,7 +132,7 @@
       cursor:pointer;
     }
 
-    /* ADMIN OVERLAY */
+    /* ADMIN */
     .admin{
       display:none;
       position:fixed;
@@ -150,8 +145,6 @@
       padding:15px;
       overflow-y:auto;
     }
-
-    .admin h3{margin-top:0;}
 
     input,select{
       width:100%;
@@ -202,7 +195,7 @@
 
 <!-- HEADER -->
 <div class="top-marquee">
-  <img src="logo.jpeg" class="logo">
+  <img src="YOUR_LOGO_URL_HERE" class="logo">
   <div class="marquee-text">✨ BOB TEXTILE ✨ Premium Fashion Store ✨</div>
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
@@ -215,6 +208,10 @@
   <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
   <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
   <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
+
+  <!-- ✅ NEW CATEGORIES -->
+  <div class="category-btn" onclick="showView('yard',this)">YARD</div>
+  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
 </div>
 
 <!-- ABOUT -->
@@ -227,22 +224,10 @@
       Our mission is to deliver premium clothing materials at affordable prices.
     </p>
 
-    <a class="social-btn" href="https://wa.me/2349114738932" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"> WhatsApp
-    </a>
-
-    <a class="social-btn" href="https://www.facebook.com/share/1X8HYKMJXT/" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"> Facebook (@bob__textile)
-    </a>
-
-    <a class="social-btn" href="https://www.instagram.com/bob__textile" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"> Instagram (@bob__textile)
-    </a>
-
-    <a class="social-btn" href="https://www.tiktok.com/@bob__textile" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"> TikTok (@bob__textile)
-    </a>
-
+    <a class="social-btn" href="https://wa.me/2349114738932" target="_blank">WhatsApp</a>
+    <a class="social-btn" href="https://www.facebook.com/share/1X8HYKMJXT/" target="_blank">Facebook (@bob__textile)</a>
+    <a class="social-btn" href="https://www.instagram.com/bob__textile" target="_blank">Instagram (@bob__textile)</a>
+    <a class="social-btn" href="https://www.tiktok.com/@bob__textile" target="_blank">TikTok (@bob__textile)</a>
   </div>
 </div>
 
@@ -252,7 +237,11 @@
 <div id="shoesView" class="view"></div>
 <div id="abayasView" class="view"></div>
 
-<!-- ADMIN PANEL -->
+<!-- NEW VIEWS -->
+<div id="yardView" class="view"></div>
+<div id="capsView" class="view"></div>
+
+<!-- ADMIN -->
 <div class="admin" id="adminPanel">
 
   <h3>Admin Panel</h3>
@@ -266,10 +255,13 @@
     <option value="bags">Bags</option>
     <option value="shoes">Shoes</option>
     <option value="abayas">Abayas</option>
+
+    <!-- NEW -->
+    <option value="yard">Yard</option>
+    <option value="caps">Caps</option>
   </select>
 
   <button class="btn" onclick="uploadImage()">Upload Images</button>
-
   <div class="preview" id="previewBox"></div>
 
   <button class="btn" onclick="addProduct()">Save Product</button>
@@ -278,7 +270,7 @@
 
   <div id="adminList"></div>
 
-  <button class="btn" style="background:red" onclick="closeAdmin()">Close Admin</button>
+  <button class="btn" style="background:red" onclick="closeAdmin()">Close</button>
 </div>
 
 <script>
@@ -301,12 +293,8 @@ function showView(type,el){
   let html = '';
 
   list.forEach((p,i)=>{
-    let isNew = Date.now()-p.date < 86400000;
-
     html += `
     <div class="card">
-      ${isNew?'<div style="background:red;color:white;padding:4px 6px;border-radius:5px;font-size:11px;display:inline-block;">NEW</div>':''}
-
       <div class="slides">
         ${p.images.map(img=>`<img src="${img}">`).join('')}
       </div>
