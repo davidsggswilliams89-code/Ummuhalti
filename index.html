@@ -6,227 +6,226 @@
 
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 
-  <style>
-    body{
-      margin:0;
-      font-family:Arial;
-      background:#f5f5f5;
-      padding-top:80px;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f5f5f5;
+  padding-top:80px;
+}
 
-    /* HEADER */
-    .top-marquee{
-      background:#111;
-      color:white;
-      position:fixed;
-      top:0;
-      width:100%;
-      height:45px;
-      display:flex;
-      align-items:center;
-      overflow:hidden;
-      z-index:3000;
-    }
+/* HEADER */
+.top-marquee{
+  background:#111;
+  position:fixed;
+  top:0;
+  width:100%;
+  height:45px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  z-index:3000;
+}
 
-    .logo{height:34px;padding-left:8px;position:relative;z-index:3;}
+/* FIXED LOGO */
+.logo{
+  height:45px;
+  margin:0;
+  padding:0;
+  object-fit:cover;
+  z-index:3;
+}
 
-    .marquee-wrapper{
-      position:absolute;
-      width:100%;
-      overflow:hidden;
-      z-index:1;
-    }
+/* TEXT */
+.marquee-wrapper{
+  position:absolute;
+  width:100%;
+  overflow:hidden;
+  z-index:1;
+}
 
-    .marquee-text{
-      white-space:nowrap;
-      animation:move 12s linear infinite;
-      margin-left:120px;
-    }
+.marquee-text{
+  white-space:nowrap;
+  animation:move 12s linear infinite;
+  margin-left:120px;
+  color:white;
+}
 
-    @keyframes move{
-      0%{transform:translateX(100%);}
-      100%{transform:translateX(-100%);}
-    }
+@keyframes move{
+  0%{transform:translateX(100%);}
+  100%{transform:translateX(-100%);}
+}
 
-    .admin-icon{
-      position:absolute;
-      right:0;
-      top:0;
-      width:45px;
-      height:45px;
-      background:#222;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      z-index:4;
-    }
+.admin-icon{
+  position:absolute;
+  right:0;
+  top:0;
+  width:45px;
+  height:45px;
+  background:#222;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:4;
+}
 
-    /* CATEGORY */
-    .category-bar{
-      position:fixed;
-      top:45px;
-      width:100%;
-      height:40px;
-      background:#222;
-      display:flex;
-      overflow-x:auto;
-      z-index:2000;
-    }
+/* CATEGORY */
+.category-bar{
+  position:fixed;
+  top:45px;
+  width:100%;
+  height:40px;
+  background:#222;
+  display:flex;
+  overflow-x:auto;
+  z-index:2000;
+}
 
-    .category-btn{
-      color:white;
-      padding:8px 14px;
-      margin:5px;
-      border-radius:20px;
-      cursor:pointer;
-      white-space:nowrap;
-    }
+.category-btn{
+  color:white;
+  padding:8px 14px;
+  margin:5px;
+  border-radius:20px;
+  cursor:pointer;
+}
 
-    .category-btn.active{background:#25D366;}
+.category-btn.active{background:#25D366;}
 
-    .view{display:none;padding:10px;}
-    .active-view{display:block;}
+.view{display:none;padding:10px;}
+.active-view{display:block;}
 
-    /* CARD */
-    .card{
-      background:white;
-      border-radius:14px;
-      padding:10px;
-      margin-bottom:15px;
-      box-shadow:0 2px 10px rgba(0,0,0,0.08);
-    }
+/* CARD */
+.card{
+  background:white;
+  border-radius:14px;
+  padding:10px;
+  margin-bottom:15px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
 
-    .img-wrap{
-      position:relative;
-      border-radius:12px;
-      overflow:hidden;
-    }
+/* IMAGE WRAP */
+.img-wrap{
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+}
 
-    /* NEW BADGE FIX */
-    .new-badge{
-      position:absolute;
-      top:8px;
-      left:8px;
-      background:red;
-      color:white;
-      font-size:11px;
-      padding:4px 6px;
-      border-radius:5px;
-      z-index:10;
-    }
+/* PERFECT BADGE */
+.new-badge{
+  position:absolute;
+  top:0;
+  left:0;
+  margin:6px;
+  background:red;
+  color:white;
+  font-size:11px;
+  padding:4px 6px;
+  border-radius:5px;
+  z-index:10;
+}
 
-    /* CAROUSEL */
-    .carousel{
-      display:flex;
-      overflow-x:auto;
-      scroll-snap-type:x mandatory;
-    }
+/* CAROUSEL */
+.carousel{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+}
 
-    .carousel img{
-      min-width:100%;
-      height:400px;
-      object-fit:contain;
-      background:white;
-      scroll-snap-align:center;
-    }
+.carousel img{
+  min-width:100%;
+  height:400px;
+  object-fit:contain;
+  background:white;
+  scroll-snap-align:center;
+}
 
-    .carousel::-webkit-scrollbar{display:none;}
+.carousel::-webkit-scrollbar{display:none;}
 
-    .dots{text-align:center;margin-top:5px;}
-    .dot{
-      height:8px;width:8px;margin:0 3px;
-      background:#bbb;border-radius:50%;
-      display:inline-block;
-    }
-    .dot.active{background:#000;}
+/* DOTS */
+.dots{text-align:center;margin-top:5px;}
+.dot{
+  height:8px;width:8px;margin:0 3px;
+  background:#bbb;border-radius:50%;
+  display:inline-block;
+}
+.dot.active{background:#000;}
 
-    .price{
-      background:#111;
-      color:white;
-      text-align:center;
-      padding:10px;
-      margin-top:10px;
-      border-radius:8px;
-      font-weight:bold;
-    }
+/* PRICE */
+.price{
+  background:#111;
+  color:white;
+  text-align:center;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  font-weight:bold;
+}
 
-    .buy-btn{
-      background:#25D366;
-      color:white;
-      border:none;
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      border-radius:12px;
-      font-weight:bold;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:8px;
-      cursor:pointer;
-    }
+/* BUY */
+.buy-btn{
+  background:#25D366;
+  color:white;
+  border:none;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:12px;
+  font-weight:bold;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+}
 
-    .buy-btn img{width:18px;}
+.buy-btn img{width:18px;}
 
-    /* ADMIN */
-    .admin{
-      display:none;
-      position:fixed;
-      top:0;left:0;
-      width:100%;height:100%;
-      background:white;
-      z-index:5000;
-      padding:15px;
-      overflow-y:auto;
-    }
+/* ADMIN */
+.admin{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:white;
+  z-index:5000;
+  padding:15px;
+  overflow-y:auto;
+}
 
-    input,select{
-      width:100%;
-      padding:12px;
-      margin:6px 0;
-      border:1px solid #ddd;
-      border-radius:8px;
-    }
+input,select{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
 
-    .btn{
-      width:100%;
-      padding:12px;
-      background:green;
-      color:white;
-      border:none;
-      border-radius:8px;
-      margin-top:10px;
-      font-weight:bold;
-    }
+.btn{
+  width:100%;
+  padding:12px;
+  background:green;
+  color:white;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+  font-weight:bold;
+}
 
-    .admin-item{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      background:#f2f2f2;
-      padding:8px;
-      border-radius:6px;
-      margin:5px 0;
-    }
+.admin-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#f2f2f2;
+  padding:8px;
+  border-radius:6px;
+  margin:5px 0;
+}
 
-    .delete-btn{
-      background:red;
-      color:white;
-      border:none;
-      padding:6px 8px;
-      border-radius:6px;
-    }
+.delete-btn{background:red;color:white;border:none;padding:6px;border-radius:6px;}
+.edit-btn{background:orange;color:white;border:none;padding:6px;border-radius:6px;}
 
-    .edit-btn{
-      background:orange;
-      color:white;
-      border:none;
-      padding:6px 8px;
-      border-radius:6px;
-    }
-
-  </style>
+</style>
 </head>
 
 <body>
@@ -302,8 +301,8 @@
 <select id="editCategory" onchange="loadEditList()"></select>
 <div id="editList"></div>
 
-<input id="editName" placeholder="Edit Name">
-<input id="editPrice" placeholder="Edit Price">
+<input id="editName">
+<input id="editPrice">
 <button class="btn" onclick="saveEdit()">Update</button>
 
 </div>
@@ -314,15 +313,13 @@ let products=JSON.parse(localStorage.getItem("products"))||[];
 let uploadedImages=[];
 let editIndex=null;
 
-/* RESTORE ACTIVE */
 window.onload=()=>{
   let saved=localStorage.getItem("activeView")||"about";
   let btn=[...document.querySelectorAll(".category-btn")]
-    .find(b=>b.textContent.toLowerCase().includes(saved));
+  .find(b=>b.textContent.toLowerCase().includes(saved));
   if(btn) showView(saved,btn);
 };
 
-/* VIEW */
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
@@ -330,10 +327,7 @@ function showView(type,el){
 
   localStorage.setItem("activeView",type);
 
-  if(type==="about"){
-    aboutView.classList.add("active-view");
-    return;
-  }
+  if(type==="about"){aboutView.classList.add("active-view");return;}
 
   let list=products.filter(p=>p.category===type);
   let html="";
@@ -343,10 +337,8 @@ function showView(type,el){
 
     html+=`
     <div class="card">
-
       <div class="img-wrap">
         ${isNew?'<div class="new-badge">NEW</div>':''}
-
         <div class="carousel car${type}${i}">
           ${p.images.map(img=>`<img src="${img}">`).join('')}
         </div>
@@ -360,7 +352,6 @@ function showView(type,el){
         <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
         BUY NOW
       </button>
-
     </div>`;
   });
 
@@ -372,7 +363,7 @@ function showView(type,el){
   });
 }
 
-/* BUY NOW (FULL DETAILS) */
+/* BUY */
 function buyNow(i,type){
   let list=products.filter(p=>p.category===type);
   let p=list[i];
@@ -381,14 +372,12 @@ function buyNow(i,type){
   let imgs=car.querySelectorAll("img");
   let index=Math.round(car.scrollLeft/car.clientWidth);
 
-  let img=imgs[index].src;
-
   let msg=`Hello 👋
 I want to order this product:
 
 Category: ${type}
 Price: ₦${p.price}
-Image: ${img}
+Image: ${imgs[index].src}
 
 Is it available?`;
 
@@ -424,19 +413,18 @@ function setupCarousel(car,dots){
 function openAdmin(){
   if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
-    fillSelects();
-    loadDeleteList();
-    loadEditList();
+    fill();
   }
 }
 
-function fillSelects(){
+function fill(){
   let cats=["kaftan","lace","bags","shoes","abayas","yard","caps"];
   deleteCategory.innerHTML=cats.map(x=>`<option>${x}</option>`).join("");
   editCategory.innerHTML=cats.map(x=>`<option>${x}</option>`).join("");
+  loadDeleteList();
+  loadEditList();
 }
 
-/* UPLOAD */
 function uploadImage(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
@@ -449,7 +437,6 @@ function uploadImage(){
   });
 }
 
-/* SAVE */
 function addProduct(){
   products.unshift({
     name:aName.value,
@@ -458,22 +445,18 @@ function addProduct(){
     images:[...uploadedImages],
     date:Date.now()
   });
-
   localStorage.setItem("products",JSON.stringify(products));
   uploadedImages=[];
 }
 
-/* DELETE */
 function loadDeleteList(){
   let cat=deleteCategory.value;
   deleteList.innerHTML="";
-
   products.forEach((p,i)=>{
     if(p.category===cat){
       deleteList.innerHTML+=`
       <div class="admin-item">
         <img src="${p.images[0]}" width="40">
-        <div style="flex:1">₦${p.price}</div>
         <button class="delete-btn" onclick="del(${i})">Delete</button>
       </div>`;
     }
@@ -486,17 +469,14 @@ function del(i){
   loadDeleteList();
 }
 
-/* EDIT */
 function loadEditList(){
   let cat=editCategory.value;
   editList.innerHTML="";
-
   products.forEach((p,i)=>{
     if(p.category===cat){
       editList.innerHTML+=`
       <div class="admin-item">
         <img src="${p.images[0]}" width="40">
-        <div style="flex:1">₦${p.price}</div>
         <button onclick="startEdit(${i})" class="edit-btn">Edit</button>
       </div>`;
     }
@@ -510,13 +490,9 @@ function startEdit(i){
 }
 
 function saveEdit(){
-  if(editIndex==null)return;
-
   products[editIndex].name=editName.value;
   products[editIndex].price=editPrice.value;
-
   localStorage.setItem("products",JSON.stringify(products));
-
   loadEditList();
 }
 
