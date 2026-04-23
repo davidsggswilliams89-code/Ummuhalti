@@ -28,6 +28,7 @@
       overflow:hidden;
     }
 
+    /* LOGO */
     .logo{
       height:34px;
       margin-left:0;
@@ -38,6 +39,7 @@
       position:relative;
     }
 
+    /* MARQUEE */
     .marquee-wrapper{
       position:absolute;
       width:100%;
@@ -56,7 +58,7 @@
       100%{transform:translateX(-100%);}
     }
 
-    /* ADMIN ICON (PADLOCK STYLE) */
+    /* ADMIN ICON */
     .admin-icon{
       position:absolute;
       right:0;
@@ -137,10 +139,8 @@
       margin-bottom:15px;
       box-shadow:0 2px 10px rgba(0,0,0,0.08);
       position:relative;
-      overflow:hidden;
     }
 
-    /* IMAGE WRAPPER (FOR BADGE POSITIONING) */
     .img-wrap{
       position:relative;
     }
@@ -151,7 +151,6 @@
       display:block;
     }
 
-    /* NEW BADGE FIXED TOP LEFT OF IMAGE */
     .new-badge{
       position:absolute;
       top:8px;
@@ -161,7 +160,6 @@
       font-size:11px;
       padding:4px 6px;
       border-radius:5px;
-      z-index:2;
     }
 
     .price{
@@ -251,13 +249,12 @@
     </div>
   </div>
 
-  <!-- PADLOCK ADMIN ICON -->
   <div class="admin-icon" onclick="openAdmin()">🔒</div>
 </div>
 
 <!-- CATEGORY -->
 <div class="category-bar">
-  <div class="category-btn active" onclick="showView('about',this)">ABOUT US</div>
+  <div class="category-btn" onclick="showView('about',this)">ABOUT US</div>
   <div class="category-btn" onclick="showView('kaftan',this)">KAFTAN</div>
   <div class="category-btn" onclick="showView('lace',this)">LACE</div>
   <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
@@ -338,10 +335,22 @@
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let uploadedImages = [];
 
+/* RESTORE LAST VIEW */
+window.onload = function(){
+  let saved = localStorage.getItem("activeView") || "about";
+  let btn = [...document.querySelectorAll(".category-btn")]
+    .find(b=>b.textContent.toLowerCase().includes(saved));
+
+  if(btn) showView(saved, btn);
+};
+
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+
   el.classList.add("active");
+
+  localStorage.setItem("activeView", type);
 
   if(type==="about"){
     aboutView.classList.add("active-view");
