@@ -14,7 +14,6 @@
       padding-top:80px;
     }
 
-    /* HEADER */
     .top-marquee{
       background:#111;
       color:white;
@@ -28,7 +27,7 @@
       z-index:3000;
     }
 
-    .logo{height:34px;padding-left:8px;position:relative;z-index:3;background:#111;}
+    .logo{height:34px;padding-left:8px;background:#111;z-index:3;position:relative;}
 
     .marquee-wrapper{position:absolute;width:100%;overflow:hidden;z-index:1;}
 
@@ -48,7 +47,7 @@
       width:45px;height:45px;
       background:#222;color:white;
       display:flex;justify-content:center;align-items:center;
-      z-index:4;cursor:pointer;
+      cursor:pointer;z-index:4;
     }
 
     /* CATEGORY */
@@ -100,7 +99,6 @@
       z-index:10;
     }
 
-    /* CAROUSEL */
     .carousel{
       display:flex;
       overflow-x:auto;
@@ -113,25 +111,12 @@
       object-fit:contain;
       background:#fff;
       scroll-snap-align:center;
-      flex-shrink:0;
     }
 
     .carousel::-webkit-scrollbar{display:none;}
 
-    /* DOTS FIX */
-    .dots{
-      text-align:center;
-      margin-top:5px;
-    }
-
-    .dot{
-      height:8px;width:8px;
-      margin:0 3px;
-      background:#bbb;
-      border-radius:50%;
-      display:inline-block;
-    }
-
+    .dots{text-align:center;margin-top:5px;}
+    .dot{height:8px;width:8px;margin:0 3px;background:#bbb;border-radius:50%;display:inline-block;}
     .dot.active{background:#000;}
 
     .price{
@@ -160,6 +145,56 @@
     }
 
     .buy-btn img{width:18px;}
+
+    /* ADMIN */
+    .admin{
+      display:none;
+      position:fixed;
+      top:0;left:0;
+      width:100%;height:100%;
+      background:white;
+      z-index:5000;
+      padding:15px;
+      overflow-y:auto;
+    }
+
+    input,select{
+      width:100%;
+      padding:12px;
+      margin:6px 0;
+      border:1px solid #ddd;
+      border-radius:8px;
+    }
+
+    .btn{
+      width:100%;
+      padding:12px;
+      background:green;
+      color:white;
+      border:none;
+      margin-top:10px;
+      border-radius:8px;
+      font-weight:bold;
+    }
+
+    .admin-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#f2f2f2;
+      padding:8px;
+      border-radius:6px;
+      margin:5px 0;
+    }
+
+    .delete-btn{
+      background:red;
+      color:white;
+      border:none;
+      padding:6px 10px;
+      border-radius:6px;
+      cursor:pointer;
+    }
 
   </style>
 </head>
@@ -204,26 +239,56 @@
 <div id="yardView" class="view"></div>
 <div id="capsView" class="view"></div>
 
+<!-- ADMIN -->
+<div class="admin" id="adminPanel">
+
+  <h3>Admin Panel</h3>
+
+  <input id="aName" placeholder="Product Name">
+  <input id="aPrice" placeholder="Price">
+
+  <select id="aCategory">
+    <option value="kaftan">Kaftan</option>
+    <option value="lace">Lace</option>
+    <option value="bags">Bags</option>
+    <option value="shoes">Shoes</option>
+    <option value="abayas">Abayas</option>
+    <option value="yard">Yard</option>
+    <option value="caps">Caps</option>
+  </select>
+
+  <button class="btn" onclick="uploadImage()">Upload Images</button>
+  <button class="btn" onclick="addProduct()">Save Product</button>
+
+  <hr>
+
+  <h3>Delete Products</h3>
+
+  <!-- CATEGORY SELECT FOR DELETE -->
+  <select id="deleteCategory" onchange="loadDeleteList()">
+    <option value="kaftan">Kaftan</option>
+    <option value="lace">Lace</option>
+    <option value="bags">Bags</option>
+    <option value="shoes">Shoes</option>
+    <option value="abayas">Abayas</option>
+    <option value="yard">Yard</option>
+    <option value="caps">Caps</option>
+  </select>
+
+  <div id="deleteList"></div>
+
+</div>
+
 <script>
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
-
-/* ✅ FIX 2: RESTORE ACTIVE SECTION ON REFRESH */
-window.onload = function(){
-  let saved = localStorage.getItem("activeView") || "about";
-  let btn = [...document.querySelectorAll(".category-btn")]
-    .find(b=>b.textContent.toLowerCase().includes(saved));
-
-  if(btn) showView(saved,btn);
-};
+let uploadedImages = [];
 
 /* VIEW */
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
   el.classList.add("active");
-
-  localStorage.setItem("activeView",type);
 
   if(type==="about"){
     aboutView.classList.add("active-view");
@@ -263,36 +328,66 @@ function showView(type,el){
 
   document.getElementById(type+"View").innerHTML=html;
   document.getElementById(type+"View").classList.add("active-view");
+}
 
-  /* ✅ FIX 1: DOTS NOW ALWAYS INIT AFTER RENDER */
-  list.forEach((p,index)=>{
-    setupCarousel(".car"+type+index,".dots"+type+index);
+/* ADMIN DELETE SYSTEM */
+function loadDeleteList(){
+  let cat=document.getElementById("deleteCategory").value;
+  let box=document.getElementById("deleteList");
+  box.innerHTML="";
+
+  products.forEach((p,i)=>{
+    if(p.category===cat){
+      box.innerHTML+=`
+      <div class="admin-item">
+        <img src="${p.images[0]}" width="40">
+        <div style="flex:1">₦ ${p.price}</div>
+        <button class="delete-btn" onclick="deleteProduct(${i})">Delete</button>
+      </div>`;
+    }
   });
 }
 
-/* CAROUSEL + DOT FIX */
-function setupCarousel(car,dots){
-  const c=document.querySelector(car);
-  const box=document.querySelector(dots);
-  if(!c || !box) return;
+function deleteProduct(i){
+  if(confirm("Delete this product?")){
+    products.splice(i,1);
+    localStorage.setItem("products",JSON.stringify(products));
+    loadDeleteList();
+  }
+}
 
-  const imgs=c.querySelectorAll("img");
-  box.innerHTML="";
+/* ADMIN */
+function openAdmin(){
+  if(prompt("Password")==="1234"){
+    adminPanel.style.display="block";
+    loadDeleteList();
+  }
+}
 
-  imgs.forEach((_,i)=>{
-    let d=document.createElement("span");
-    d.classList.add("dot");
-    if(i===0) d.classList.add("active");
-    box.appendChild(d);
+function uploadImage(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true
+  },(err,res)=>{
+    if(res && res.event==="success"){
+      uploadedImages.push(res.info.secure_url);
+    }
+  });
+}
+
+function addProduct(){
+  products.unshift({
+    name:aName.value,
+    price:aPrice.value,
+    category:aCategory.value,
+    images:[...uploadedImages],
+    date:Date.now()
   });
 
-  const dot=box.querySelectorAll(".dot");
-
-  c.addEventListener("scroll",()=>{
-    let i=Math.round(c.scrollLeft/c.clientWidth);
-    dot.forEach(x=>x.classList.remove("active"));
-    if(dot[i]) dot[i].classList.add("active");
-  });
+  localStorage.setItem("products",JSON.stringify(products));
+  uploadedImages=[];
+  alert("Saved");
 }
 
 </script>
