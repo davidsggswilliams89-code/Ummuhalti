@@ -7,38 +7,17 @@
   <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 
   <style>
-    body{
-      margin:0;
-      font-family:Arial;
-      background:#f5f5f5;
-      padding-top:80px;
-    }
+    body{margin:0;font-family:Arial;background:#f5f5f5;padding-top:80px;}
 
-    /* HEADER */
     .top-marquee{
-      background:#111;
-      color:white;
-      position:fixed;
-      top:0;
-      width:100%;
-      height:40px;
-      display:flex;
-      align-items:center;
-      overflow:hidden;
-      z-index:3000;
+      background:#111;color:white;position:fixed;top:0;width:100%;height:40px;
+      display:flex;align-items:center;z-index:3000;overflow:hidden;
     }
 
-    .logo{
-      height:28px;
-      margin-left:10px;
-      border-radius:6px;
-    }
+    .logo{height:28px;margin-left:10px;border-radius:6px;}
 
     .marquee-text{
-      white-space:nowrap;
-      animation:move 12s linear infinite;
-      margin-left:10px;
-      font-size:14px;
+      white-space:nowrap;animation:move 12s linear infinite;margin-left:10px;
     }
 
     @keyframes move{
@@ -47,214 +26,86 @@
     }
 
     .admin-icon{
-      position:absolute;
-      right:10px;
-      background:#25D366;
-      padding:6px;
-      border-radius:50%;
-      cursor:pointer;
+      position:absolute;right:10px;background:#25D366;padding:6px;
+      border-radius:50%;cursor:pointer;
     }
 
-    /* CATEGORY */
     .category-bar{
-      position:fixed;
-      top:40px;
-      width:100%;
-      height:40px;
-      background:#222;
-      display:flex;
-      align-items:center;
-      overflow-x:auto;
-      z-index:2999;
+      position:fixed;top:40px;width:100%;height:40px;background:#222;
+      display:flex;align-items:center;overflow-x:auto;
     }
 
     .category-btn{
-      color:white;
-      padding:0 14px;
-      white-space:nowrap;
-      cursor:pointer;
-      line-height:40px;
+      color:white;padding:0 14px;white-space:nowrap;cursor:pointer;
     }
 
     .category-btn.active{
-      background:#25D366;
-      border-radius:5px;
-      font-weight:bold;
+      background:#25D366;border-radius:5px;font-weight:bold;
     }
 
-    /* VIEW */
-    .view{
-      display:none;
-      padding:10px;
-    }
+    .view{display:none;padding:10px;}
+    .active-view{display:block;}
 
-    .active-view{
-      display:block;
-    }
-
-    /* ABOUT */
-    .about-box{
-      background:white;
-      padding:15px;
-      border-radius:12px;
-    }
+    .about-box{background:white;padding:15px;border-radius:12px;}
 
     .social-btn{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      background:#25D366;
-      color:white;
-      text-decoration:none;
-      padding:12px;
-      border-radius:8px;
-      margin:10px 0;
-      font-weight:bold;
+      display:flex;align-items:center;gap:10px;background:#25D366;
+      color:white;text-decoration:none;padding:12px;border-radius:8px;margin:10px 0;
     }
 
-    .social-btn img{
-      width:22px;
-      height:22px;
-    }
+    .social-btn img{width:22px;}
 
-    /* PRODUCT */
-    .carousel{
-      display:flex;
-      flex-direction:column;
-      gap:15px;
-    }
+    .carousel{display:flex;flex-direction:column;gap:15px;}
 
     .card{
-      background:white;
-      border-radius:12px;
-      padding:10px;
-      position:relative;
+      background:white;border-radius:12px;padding:10px;position:relative;
     }
 
-    .slides{
-      display:flex;
-      transition:0.3s;
-      width:100%;
-    }
+    .slides{display:flex;transition:0.3s;}
+    .slides img{width:100%;flex-shrink:0;border-radius:10px;}
 
-    .slides img{
-      width:100%;
-      flex-shrink:0;
-      border-radius:10px;
-    }
-
-    .dots{
-      text-align:center;
-      margin-top:5px;
-    }
-
+    .dots{text-align:center;margin-top:5px;}
     .dots span{
-      width:8px;
-      height:8px;
-      background:#ccc;
-      display:inline-block;
-      border-radius:50%;
-      margin:3px;
-      cursor:pointer;
+      width:8px;height:8px;background:#ccc;display:inline-block;
+      margin:3px;border-radius:50%;cursor:pointer;
     }
 
     .new-badge{
-      position:absolute;
-      top:10px;
-      left:10px;
-      background:red;
-      color:white;
-      padding:4px 6px;
-      border-radius:5px;
-      font-size:11px;
+      position:absolute;top:10px;left:10px;background:red;color:white;
+      padding:4px 6px;border-radius:5px;font-size:11px;
     }
 
     .price{
-      background:#111;
-      color:white;
-      text-align:center;
-      padding:10px;
-      border-radius:10px;
-      margin-top:8px;
+      background:#111;color:white;text-align:center;
+      padding:10px;border-radius:10px;margin-top:8px;
     }
 
     .buy-btn{
-      background:#25D366;
-      color:white;
-      border:none;
-      width:100%;
-      padding:12px;
-      margin-top:8px;
-      border-radius:25px;
-      cursor:pointer;
-      font-weight:bold;
+      background:#25D366;color:white;border:none;width:100%;
+      padding:12px;margin-top:8px;border-radius:25px;cursor:pointer;
     }
 
-    /* ADMIN */
     .admin{
-      display:none;
-      position:fixed;
-      top:0;
-      width:100%;
-      height:100%;
-      background:white;
-      z-index:4000;
-      padding:15px;
-      overflow:auto;
+      display:none;position:fixed;top:0;width:100%;height:100%;
+      background:white;z-index:4000;padding:15px;overflow:auto;
     }
 
-    input,select{
-      width:100%;
-      padding:10px;
-      margin:5px 0;
-    }
+    input,select{width:100%;padding:10px;margin:5px 0;}
 
     .btn{
-      background:green;
-      color:white;
-      border:none;
-      width:100%;
-      padding:10px;
-      border-radius:6px;
-      margin-top:6px;
+      background:green;color:white;border:none;width:100%;
+      padding:10px;border-radius:6px;margin-top:6px;
     }
 
-    .preview{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .preview div{
-      position:relative;
-    }
+    .preview{display:flex;gap:10px;flex-wrap:wrap;}
 
     .preview img{
-      width:70px;
-      height:70px;
-      object-fit:cover;
-      border-radius:6px;
-    }
-
-    .remove{
-      position:absolute;
-      top:-5px;
-      right:-5px;
-      background:red;
-      color:white;
-      border-radius:50%;
-      padding:2px 6px;
-      cursor:pointer;
+      width:70px;height:70px;object-fit:cover;border-radius:6px;
     }
 
     .admin-item{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      background:#eee;
-      padding:8px;
-      border-radius:6px;
-      margin:5px 0;
+      display:flex;gap:10px;align-items:center;
+      background:#eee;padding:8px;border-radius:6px;margin:5px 0;
     }
 
   </style>
@@ -283,26 +134,22 @@
 <div id="aboutView" class="view active-view">
   <div class="about-box">
     <h3>BOB TEXTILE</h3>
-    <p><b>Address:</b> Kano, Nigeria</p>
+    <p>Kano, Nigeria</p>
 
     <a class="social-btn" href="https://wa.me/2349114738932">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-      WhatsApp
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"> WhatsApp
     </a>
 
     <a class="social-btn" href="#">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
-      Facebook
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"> Facebook
     </a>
 
     <a class="social-btn" href="#">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-      Instagram
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"> Instagram
     </a>
 
     <a class="social-btn" href="#">
-      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-      TikTok
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"> TikTok
     </a>
 
   </div>
@@ -316,7 +163,6 @@
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
-  <h3>Admin Panel</h3>
 
   <input id="aName" placeholder="Product Name">
   <input id="aPrice" placeholder="Price">
@@ -342,6 +188,7 @@
 </div>
 
 <script>
+
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let uploadedImages = [];
 
@@ -351,28 +198,36 @@ function showView(type,el){
   el.classList.add("active");
 
   if(type==="about"){
-    document.getElementById("aboutView").classList.add("active-view");
+    aboutView.classList.add("active-view");
     return;
   }
 
-  let list = products.filter(p => p.category.toLowerCase()===type);
+  let list = products.filter(p => p.category.toLowerCase().trim() === type);
+
   let html = '<div class="carousel">';
 
   list.forEach((p,i)=>{
     let isNew = Date.now()-p.date < 86400000;
+
     html += `
-      <div class="card">
-        ${isNew?'<div class="new-badge">NEW</div>':''}
-        <div class="slides" id="slide${i}">
-          ${p.images.map(img=>`<img src="${img}">`).join('')}
-        </div>
-        <div class="dots">
-          ${p.images.map((_,d)=>`<span onclick="slide(${i},${d})"></span>`).join('')}
-        </div>
-        <h4>${p.name}</h4>
-        <div class="price">₦${p.price}</div>
-        <button class="buy-btn" onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">Buy Now</button>
-      </div>`;
+    <div class="card">
+      ${isNew?'<div class="new-badge">NEW</div>':''}
+
+      <div class="slides" id="slide${i}">
+        ${p.images.map(img=>`<img src="${img}">`).join('')}
+      </div>
+
+      <div class="dots">
+        ${p.images.map((_,d)=>`<span onclick="slide(${i},${d})"></span>`).join('')}
+      </div>
+
+      <h4>${p.name}</h4>
+      <div class="price">₦${p.price}</div>
+
+      <button class="buy-btn" onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
+        Buy Now
+      </button>
+    </div>`;
   });
 
   html += '</div>';
@@ -407,7 +262,7 @@ function uploadImage(){
     cloudName:"db92r6j9z",
     uploadPreset:"ummuhalti",
     multiple:true
-  }, function(error,result){
+  }, (error,result)=>{
     if(result && result.event==="success"){
       uploadedImages.push(result.info.secure_url);
       renderPreview();
@@ -417,18 +272,9 @@ function uploadImage(){
 
 function renderPreview(){
   previewBox.innerHTML="";
-  uploadedImages.forEach((img,i)=>{
-    previewBox.innerHTML += `
-      <div>
-        <img src="${img}">
-        <div class="remove" onclick="removeImage(${i})">×</div>
-      </div>`;
+  uploadedImages.forEach(img=>{
+    previewBox.innerHTML += `<img src="${img}">`;
   });
-}
-
-function removeImage(i){
-  uploadedImages.splice(i,1);
-  renderPreview();
 }
 
 function addProduct(){
@@ -446,6 +292,11 @@ function addProduct(){
 
   uploadedImages=[];
   renderPreview();
+
+  // 🔥 FIX: refresh current category
+  let active = document.querySelector(".category-btn.active");
+  if(active) active.click();
+
   loadAdmin();
 }
 
@@ -453,21 +304,22 @@ function loadAdmin(){
   adminList.innerHTML="";
   products.forEach((p,i)=>{
     adminList.innerHTML += `
-      <div class="admin-item">
-        <img src="${p.images[0]}" width="50">
-        <div style="flex:1">${p.name}</div>
-        <button onclick="deleteProduct(${i})">Delete</button>
-      </div>`;
+    <div class="admin-item">
+      <img src="${p.images[0]}" width="50">
+      <div style="flex:1">${p.name}</div>
+      <button onclick="deleteProduct(${i})">Delete</button>
+    </div>`;
   });
 }
 
 function deleteProduct(i){
-  if(confirm("Delete product?")){
+  if(confirm("Delete?")){
     products.splice(i,1);
     localStorage.setItem("products", JSON.stringify(products));
     loadAdmin();
   }
 }
+
 </script>
 
 </body>
