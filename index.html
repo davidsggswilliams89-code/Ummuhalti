@@ -28,18 +28,18 @@
       overflow:hidden;
     }
 
-    /* LOGO ABOVE TEXT */
+    /* LOGO FIXED LEFT EDGE */
     .logo{
-      height:32px;
-      margin-left:10px;
+      height:34px;
+      margin-left:0;
+      padding-left:8px;
       border-radius:6px;
+      background:#111;
       z-index:5;
       position:relative;
-      background:#111;
-      padding-right:8px;
     }
 
-    /* MOVING TEXT BEHIND LOGO */
+    /* MOVING TEXT */
     .marquee-wrapper{
       position:absolute;
       width:100%;
@@ -58,20 +58,22 @@
       100%{transform:translateX(-100%);}
     }
 
-    /* ADMIN ICON BOX (NOT CIRCLE) */
+    /* ADMIN ICON (MATCH HEADER COLOR) */
     .admin-icon{
       position:absolute;
       right:0;
       top:0;
       height:45px;
       width:45px;
-      background:#25D366;
+      background:#222;
+      color:white;
       display:flex;
       align-items:center;
       justify-content:center;
       cursor:pointer;
       font-size:18px;
       z-index:10;
+      border-left:1px solid #333;
     }
 
     /* CATEGORY */
@@ -114,12 +116,21 @@
       display:flex;
       align-items:center;
       gap:10px;
-      background:#25D366;
-      color:white;
       text-decoration:none;
       padding:12px;
       border-radius:8px;
       margin:10px 0;
+      color:white;
+      font-weight:bold;
+    }
+
+    .social-wa{background:#25D366;}
+    .social-fb{background:#1877F2;}
+    .social-ig{background:#E1306C;}
+    .social-tk{background:#000;}
+
+    .social-btn img{
+      width:20px;
     }
 
     /* PRODUCT */
@@ -129,6 +140,18 @@
       padding:12px;
       margin-bottom:15px;
       box-shadow:0 2px 10px rgba(0,0,0,0.08);
+      position:relative;
+    }
+
+    .new-badge{
+      position:absolute;
+      top:10px;
+      left:10px;
+      background:red;
+      color:white;
+      font-size:11px;
+      padding:4px 6px;
+      border-radius:5px;
     }
 
     .slides img{
@@ -146,7 +169,6 @@
       font-weight:bold;
     }
 
-    /* BUY BUTTON FIX (WHATSAPP ICON) */
     .buy-btn{
       background:#25D366;
       color:white;
@@ -161,13 +183,9 @@
       align-items:center;
       justify-content:center;
       gap:8px;
-      font-size:15px;
     }
 
-    .buy-btn img{
-      width:20px;
-      height:20px;
-    }
+    .buy-btn img{width:20px;}
 
     /* ADMIN */
     .admin{
@@ -202,17 +220,22 @@
       font-weight:bold;
     }
 
-    .preview{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+    .category-title{
+      margin-top:15px;
+      font-weight:bold;
+      background:#eee;
+      padding:5px;
+      border-radius:5px;
     }
 
-    .preview img{
-      width:70px;
-      height:70px;
-      object-fit:cover;
-      border-radius:8px;
+    .admin-item{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      background:#f2f2f2;
+      padding:8px;
+      border-radius:6px;
+      margin:5px 0;
     }
 
   </style>
@@ -223,16 +246,15 @@
 <!-- HEADER -->
 <div class="top-marquee">
 
-  <!-- LOGO -->
-  <img src="logo.jpeg" class="logo">
+  <img src="YOUR_LOGO_URL_HERE" class="logo">
 
-  <!-- MOVING TEXT BEHIND -->
   <div class="marquee-wrapper">
-    <div class="marquee-text">✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨ Affordable Luxury ✨</div>
+    <div class="marquee-text">
+      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨ Affordable Luxury ✨
+    </div>
   </div>
 
-  <!-- ADMIN ICON BOX -->
-  <div class="admin-icon" onclick="openAdmin()">🔐</div>
+  <div class="admin-icon" onclick="openAdmin()">⚙️</div>
 </div>
 
 <!-- CATEGORY -->
@@ -257,10 +279,21 @@
       Our mission is to deliver premium clothing materials at affordable prices.
     </p>
 
-    <a class="social-btn" href="https://wa.me/2349114738932">WhatsApp</a>
-    <a class="social-btn" href="https://www.facebook.com/share/1X8HYKMJXT/">Facebook</a>
-    <a class="social-btn" href="https://www.instagram.com/bob__textile">Instagram</a>
-    <a class="social-btn" href="https://www.tiktok.com/@bob__textile">TikTok</a>
+    <a class="social-btn social-wa" href="https://wa.me/2349114738932">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"> WhatsApp
+    </a>
+
+    <a class="social-btn social-fb" href="https://www.facebook.com/share/1X8HYKMJXT/">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"> Facebook
+    </a>
+
+    <a class="social-btn social-ig" href="https://www.instagram.com/bob__textile">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"> Instagram
+    </a>
+
+    <a class="social-btn social-tk" href="https://www.tiktok.com/@bob__textile">
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"> TikTok
+    </a>
   </div>
 </div>
 
@@ -307,6 +340,10 @@
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let uploadedImages = [];
 
+function isNew(date){
+  return (Date.now() - date) < 86400000;
+}
+
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
@@ -324,6 +361,8 @@ function showView(type,el){
   list.forEach((p)=>{
     html += `
     <div class="card">
+      ${isNew(p.date) ? '<div class="new-badge">NEW</div>' : ''}
+
       <div class="slides">
         ${p.images.map(img=>`<img src="${img}">`).join('')}
       </div>
@@ -334,7 +373,8 @@ function showView(type,el){
 
       <button class="buy-btn"
         onclick="buyNow('${p.name}','${p.price}','${p.images[0]}')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"> WhatsApp Order
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+        WhatsApp Order
       </button>
     </div>`;
   });
@@ -400,15 +440,25 @@ function addProduct(){
   loadAdmin();
 }
 
+/* GROUPED ADMIN VIEW */
 function loadAdmin(){
   adminList.innerHTML="";
-  products.forEach((p,i)=>{
-    adminList.innerHTML += `
-    <div class="admin-item">
-      <img src="${p.images[0]}" width="50">
-      <div style="flex:1">${p.name}</div>
-      <button onclick="deleteProduct(${i})">Delete</button>
-    </div>`;
+
+  let categories = [...new Set(products.map(p=>p.category))];
+
+  categories.forEach(cat=>{
+    adminList.innerHTML += `<div class="category-title">${cat.toUpperCase()}</div>`;
+
+    products
+      .filter(p=>p.category===cat)
+      .forEach((p,i)=>{
+        adminList.innerHTML += `
+        <div class="admin-item">
+          <img src="${p.images[0]}" width="50">
+          <div style="flex:1">${p.name}</div>
+          <button onclick="deleteProduct(${i})">Delete</button>
+        </div>`;
+      });
   });
 }
 
