@@ -28,12 +28,7 @@
       z-index:3000;
     }
 
-    .logo{
-      height:34px;
-      padding-left:8px;
-      position:relative;
-      z-index:3;
-    }
+    .logo{height:34px;padding-left:8px;position:relative;z-index:3;}
 
     .marquee-wrapper{
       position:absolute;
@@ -63,8 +58,8 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      z-index:4;
       cursor:pointer;
+      z-index:4;
     }
 
     /* CATEGORY */
@@ -88,9 +83,7 @@
       white-space:nowrap;
     }
 
-    .category-btn.active{
-      background:#25D366;
-    }
+    .category-btn.active{background:#25D366;}
 
     .view{display:none;padding:10px;}
     .active-view{display:block;}
@@ -110,7 +103,7 @@
       overflow:hidden;
     }
 
-    /* NEW BADGE FIXED */
+    /* NEW BADGE FIX */
     .new-badge{
       position:absolute;
       top:8px;
@@ -140,14 +133,10 @@
 
     .carousel::-webkit-scrollbar{display:none;}
 
-    /* DOTS */
     .dots{text-align:center;margin-top:5px;}
     .dot{
-      height:8px;
-      width:8px;
-      margin:0 3px;
-      background:#bbb;
-      border-radius:50%;
+      height:8px;width:8px;margin:0 3px;
+      background:#bbb;border-radius:50%;
       display:inline-block;
     }
     .dot.active{background:#000;}
@@ -184,10 +173,8 @@
     .admin{
       display:none;
       position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
+      top:0;left:0;
+      width:100%;height:100%;
       background:white;
       z-index:5000;
       padding:15px;
@@ -229,8 +216,16 @@
       border:none;
       padding:6px 8px;
       border-radius:6px;
-      cursor:pointer;
     }
+
+    .edit-btn{
+      background:orange;
+      color:white;
+      border:none;
+      padding:6px 8px;
+      border-radius:6px;
+    }
+
   </style>
 </head>
 
@@ -277,39 +272,39 @@
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
 
-  <h3>Admin Panel</h3>
+<h3>Admin Panel</h3>
 
-  <input id="aName" placeholder="Product Name">
-  <input id="aPrice" placeholder="Price">
+<input id="aName" placeholder="Product Name">
+<input id="aPrice" placeholder="Price">
 
-  <select id="aCategory">
-    <option value="kaftan">Kaftan</option>
-    <option value="lace">Lace</option>
-    <option value="bags">Bags</option>
-    <option value="shoes">Shoes</option>
-    <option value="abayas">Abayas</option>
-    <option value="yard">Yard</option>
-    <option value="caps">Caps</option>
-  </select>
+<select id="aCategory">
+  <option value="kaftan">Kaftan</option>
+  <option value="lace">Lace</option>
+  <option value="bags">Bags</option>
+  <option value="shoes">Shoes</option>
+  <option value="abayas">Abayas</option>
+  <option value="yard">Yard</option>
+  <option value="caps">Caps</option>
+</select>
 
-  <button class="btn" onclick="uploadImage()">Upload Images</button>
-  <button class="btn" onclick="addProduct()">Save Product</button>
+<button class="btn" onclick="uploadImage()">Upload Images</button>
+<button class="btn" onclick="addProduct()">Save Product</button>
 
-  <hr>
+<hr>
 
-  <h3>Delete</h3>
-  <select id="deleteCategory" onchange="loadDeleteList()"></select>
-  <div id="deleteList"></div>
+<h3>Delete Product</h3>
+<select id="deleteCategory" onchange="loadDeleteList()"></select>
+<div id="deleteList"></div>
 
-  <hr>
+<hr>
 
-  <h3>Edit</h3>
-  <select id="editCategory" onchange="loadEditList()"></select>
-  <div id="editList"></div>
+<h3>Edit Product</h3>
+<select id="editCategory" onchange="loadEditList()"></select>
+<div id="editList"></div>
 
-  <input id="editName" placeholder="Edit Name">
-  <input id="editPrice" placeholder="Edit Price">
-  <button class="btn" onclick="saveEdit()">Update Product</button>
+<input id="editName" placeholder="Edit Name">
+<input id="editPrice" placeholder="Edit Price">
+<button class="btn" onclick="saveEdit()">Update</button>
 
 </div>
 
@@ -319,7 +314,7 @@ let products=JSON.parse(localStorage.getItem("products"))||[];
 let uploadedImages=[];
 let editIndex=null;
 
-/* RESTORE */
+/* RESTORE ACTIVE */
 window.onload=()=>{
   let saved=localStorage.getItem("activeView")||"about";
   let btn=[...document.querySelectorAll(".category-btn")]
@@ -377,20 +372,27 @@ function showView(type,el){
   });
 }
 
-/* BUY */
+/* BUY NOW (FULL DETAILS) */
 function buyNow(i,type){
   let list=products.filter(p=>p.category===type);
   let p=list[i];
 
-  let c=document.querySelector(".car"+type+i);
-  let imgs=c.querySelectorAll("img");
-  let index=Math.round(c.scrollLeft/c.clientWidth);
+  let car=document.querySelector(".car"+type+i);
+  let imgs=car.querySelectorAll("img");
+  let index=Math.round(car.scrollLeft/car.clientWidth);
 
   let img=imgs[index].src;
 
-  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(
-    `Order:\n₦${p.price}\n${img}`
-  ));
+  let msg=`Hello 👋
+I want to order this product:
+
+Category: ${type}
+Price: ₦${p.price}
+Image: ${img}
+
+Is it available?`;
+
+  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
 /* CAROUSEL */
@@ -429,9 +431,9 @@ function openAdmin(){
 }
 
 function fillSelects(){
-  let c=["kaftan","lace","bags","shoes","abayas","yard","caps"];
-  deleteCategory.innerHTML=c.map(x=>`<option>${x}</option>`).join("");
-  editCategory.innerHTML=c.map(x=>`<option>${x}</option>`).join("");
+  let cats=["kaftan","lace","bags","shoes","abayas","yard","caps"];
+  deleteCategory.innerHTML=cats.map(x=>`<option>${x}</option>`).join("");
+  editCategory.innerHTML=cats.map(x=>`<option>${x}</option>`).join("");
 }
 
 /* UPLOAD */
@@ -472,7 +474,7 @@ function loadDeleteList(){
       <div class="admin-item">
         <img src="${p.images[0]}" width="40">
         <div style="flex:1">₦${p.price}</div>
-        <button class="delete-btn" onclick="del(${i})">X</button>
+        <button class="delete-btn" onclick="del(${i})">Delete</button>
       </div>`;
     }
   });
@@ -495,7 +497,7 @@ function loadEditList(){
       <div class="admin-item">
         <img src="${p.images[0]}" width="40">
         <div style="flex:1">₦${p.price}</div>
-        <button onclick="startEdit(${i})">Edit</button>
+        <button onclick="startEdit(${i})" class="edit-btn">Edit</button>
       </div>`;
     }
   });
