@@ -24,13 +24,20 @@
       align-items:center;
       overflow:hidden;
       z-index:3000;
+      gap:10px;
+    }
+
+    .logo{
+      height:28px;
+      margin-left:10px;
+      border-radius:6px;
     }
 
     .marquee-text{
       white-space:nowrap;
       animation:move 12s linear infinite;
       font-size:14px;
-      padding-left:100%;
+      padding-left:20px;
     }
 
     @keyframes move{
@@ -59,16 +66,27 @@
       overflow-x:auto;
     }
 
-    .category-bar div{
+    .category-btn{
       color:#fff;
-      padding:0 12px;
+      padding:0 14px;
       cursor:pointer;
       white-space:nowrap;
+      height:100%;
+      display:flex;
+      align-items:center;
+      transition:0.3s;
+    }
+
+    .category-btn.active{
+      background:#25D366;
+      color:#fff;
+      font-weight:bold;
+      border-radius:5px;
     }
 
     /* VIEW */
     .view{ display:none; padding:10px; }
-    .active{ display:block; }
+    .active-view{ display:block; }
 
     /* ABOUT */
     .about-box{
@@ -166,49 +184,37 @@
 
 <!-- HEADER -->
 <div class="top-marquee">
+
+  <img src="YOUR_LOGO_URL_HERE" class="logo">
+
   <div class="marquee-text">
     ✨ Ummuhalti Collection ✨ Premium Fashion Store ✨
   </div>
+
   <div class="admin-icon" onclick="openAdmin()">🔐</div>
 </div>
 
 <!-- CATEGORY -->
 <div class="category-bar">
-  <div onclick="showView('about')">ABOUT US</div>
-  <div onclick="showView('kaftan')">KAFTAN</div>
-  <div onclick="showView('lace')">LACE</div>
-  <div onclick="showView('bags')">BAGS</div>
-  <div onclick="showView('shoes')">SHOES</div>
-  <div onclick="showView('abayas')">ABAYAS</div>
+  <div class="category-btn active" onclick="showView('about', this)">ABOUT US</div>
+  <div class="category-btn" onclick="showView('kaftan', this)">KAFTAN</div>
+  <div class="category-btn" onclick="showView('lace', this)">LACE</div>
+  <div class="category-btn" onclick="showView('bags', this)">BAGS</div>
+  <div class="category-btn" onclick="showView('shoes', this)">SHOES</div>
+  <div class="category-btn" onclick="showView('abayas', this)">ABAYAS</div>
 </div>
 
 <!-- VIEWS -->
-<div id="aboutView" class="view active">
+<div id="aboutView" class="view active-view">
   <div class="about-box">
     <h3>Ummuhalti Collection</h3>
-
     <p><b>Address:</b> Kano, Nigeria</p>
 
-    <a class="link-btn" href="https://wa.me/2349114738932" target="_blank">
-      💬 WhatsApp Chat
-    </a>
-
-    <a class="link-btn" href="#">
-      📱 WhatsApp Group
-    </a>
-
-    <a class="link-btn" href="#">
-      🎵 TikTok
-    </a>
-
-    <a class="link-btn" href="#">
-      📘 Facebook
-    </a>
-
-    <a class="link-btn" href="#">
-      📸 Instagram
-    </a>
-
+    <a class="link-btn" href="https://wa.me/2349114738932">💬 WhatsApp</a>
+    <a class="link-btn" href="#">📱 WhatsApp Group</a>
+    <a class="link-btn" href="#">🎵 TikTok</a>
+    <a class="link-btn" href="#">📘 Facebook</a>
+    <a class="link-btn" href="#">📸 Instagram</a>
   </div>
 </div>
 
@@ -222,13 +228,16 @@
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-/* SHOW VIEW */
-function showView(type){
+/* SWITCH VIEW + ACTIVE BUTTON */
+function showView(type, el){
 
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
+  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+
+  el.classList.add("active");
 
   if(type==="about"){
-    document.getElementById("aboutView").classList.add("active");
+    document.getElementById("aboutView").classList.add("active-view");
     return;
   }
 
@@ -267,8 +276,9 @@ function showView(type){
 
   html+='</div>';
 
-  document.getElementById(type+"View").innerHTML = html;
-  document.getElementById(type+"View").classList.add("active");
+  let view = document.getElementById(type+"View");
+  view.innerHTML = html;
+  view.classList.add("active-view");
 }
 
 /* SLIDE */
@@ -283,9 +293,9 @@ function buyNow(name,price,img){
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
-/* ADMIN (dummy placeholder) */
+/* ADMIN */
 function openAdmin(){
-  alert("Admin still available in your main version");
+  alert("Admin panel is in your full version");
 }
 
 </script>
