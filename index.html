@@ -28,7 +28,6 @@
       overflow:hidden;
     }
 
-    /* LOGO FIXED LEFT EDGE */
     .logo{
       height:34px;
       margin-left:0;
@@ -39,7 +38,6 @@
       position:relative;
     }
 
-    /* MOVING TEXT */
     .marquee-wrapper{
       position:absolute;
       width:100%;
@@ -58,7 +56,7 @@
       100%{transform:translateX(-100%);}
     }
 
-    /* ADMIN ICON (MATCH HEADER COLOR) */
+    /* ADMIN ICON (PADLOCK STYLE) */
     .admin-icon{
       position:absolute;
       right:0;
@@ -129,9 +127,7 @@
     .social-ig{background:#E1306C;}
     .social-tk{background:#000;}
 
-    .social-btn img{
-      width:20px;
-    }
+    .social-btn img{width:20px;}
 
     /* PRODUCT */
     .card{
@@ -141,22 +137,31 @@
       margin-bottom:15px;
       box-shadow:0 2px 10px rgba(0,0,0,0.08);
       position:relative;
+      overflow:hidden;
     }
 
+    /* IMAGE WRAPPER (FOR BADGE POSITIONING) */
+    .img-wrap{
+      position:relative;
+    }
+
+    .img-wrap img{
+      width:100%;
+      border-radius:12px;
+      display:block;
+    }
+
+    /* NEW BADGE FIXED TOP LEFT OF IMAGE */
     .new-badge{
       position:absolute;
-      top:10px;
-      left:10px;
+      top:8px;
+      left:8px;
       background:red;
       color:white;
       font-size:11px;
       padding:4px 6px;
       border-radius:5px;
-    }
-
-    .slides img{
-      width:100%;
-      border-radius:12px;
+      z-index:2;
     }
 
     .price{
@@ -220,14 +225,6 @@
       font-weight:bold;
     }
 
-    .category-title{
-      margin-top:15px;
-      font-weight:bold;
-      background:#eee;
-      padding:5px;
-      border-radius:5px;
-    }
-
     .admin-item{
       display:flex;
       gap:10px;
@@ -254,7 +251,8 @@
     </div>
   </div>
 
-  <div class="admin-icon" onclick="openAdmin()">⚙️</div>
+  <!-- PADLOCK ADMIN ICON -->
+  <div class="admin-icon" onclick="openAdmin()">🔒</div>
 </div>
 
 <!-- CATEGORY -->
@@ -340,10 +338,6 @@
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let uploadedImages = [];
 
-function isNew(date){
-  return (Date.now() - date) < 86400000;
-}
-
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
@@ -361,10 +355,10 @@ function showView(type,el){
   list.forEach((p)=>{
     html += `
     <div class="card">
-      ${isNew(p.date) ? '<div class="new-badge">NEW</div>' : ''}
 
-      <div class="slides">
-        ${p.images.map(img=>`<img src="${img}">`).join('')}
+      <div class="img-wrap">
+        ${ (Date.now() - p.date < 86400000) ? '<div class="new-badge">NEW</div>' : '' }
+        <img src="${p.images[0]}">
       </div>
 
       <h4>${p.name}</h4>
@@ -376,6 +370,7 @@ function showView(type,el){
         <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
         WhatsApp Order
       </button>
+
     </div>`;
   });
 
@@ -440,25 +435,15 @@ function addProduct(){
   loadAdmin();
 }
 
-/* GROUPED ADMIN VIEW */
 function loadAdmin(){
   adminList.innerHTML="";
-
-  let categories = [...new Set(products.map(p=>p.category))];
-
-  categories.forEach(cat=>{
-    adminList.innerHTML += `<div class="category-title">${cat.toUpperCase()}</div>`;
-
-    products
-      .filter(p=>p.category===cat)
-      .forEach((p,i)=>{
-        adminList.innerHTML += `
-        <div class="admin-item">
-          <img src="${p.images[0]}" width="50">
-          <div style="flex:1">${p.name}</div>
-          <button onclick="deleteProduct(${i})">Delete</button>
-        </div>`;
-      });
+  products.forEach((p,i)=>{
+    adminList.innerHTML += `
+    <div class="admin-item">
+      <img src="${p.images[0]}" width="50">
+      <div style="flex:1">${p.name}</div>
+      <button onclick="deleteProduct(${i})">Delete</button>
+    </div>`;
   });
 }
 
