@@ -63,6 +63,15 @@ body{
   cursor:pointer;
 }
 
+#notifDot{
+  width:8px;
+  height:8px;
+  background:red;
+  border-radius:50%;
+  display:none;
+  margin-left:5px;
+}
+
 /* CATEGORY */
 .category-bar{
   position:fixed;
@@ -80,7 +89,6 @@ body{
   padding:6px 14px;
   margin:5px;
   border-radius:20px;
-  white-space:nowrap;
   cursor:pointer;
 }
 
@@ -96,24 +104,7 @@ body{
   margin-bottom:15px;
 }
 
-.img-wrap{
-  position:relative;
-  overflow:hidden;
-  border-radius:12px;
-}
-
-.new-badge{
-  position:absolute;
-  top:8px;
-  left:8px;
-  background:red;
-  color:white;
-  font-size:11px;
-  padding:4px 6px;
-  border-radius:5px;
-  z-index:10;
-}
-
+/* CAROUSEL */
 .carousel{
   display:flex;
   overflow-x:auto;
@@ -122,10 +113,10 @@ body{
 
 .carousel img{
   min-width:100%;
-  height:380px;
-  object-fit:contain;
+  height:250px;
+  object-fit:cover;
+  border-radius:12px;
   scroll-snap-align:center;
-  background:white;
 }
 
 .carousel::-webkit-scrollbar{display:none;}
@@ -140,34 +131,23 @@ body{
 }
 .dot.active{background:#000;}
 
-.price{
-  background:#111;
-  color:white;
-  text-align:center;
+/* FORM */
+input,textarea,select{
+  width:100%;
   padding:10px;
-  margin-top:10px;
-  border-radius:8px;
+  margin:5px 0;
 }
 
-.buy-btn{
-  background:#25D366;
+.btn{
+  width:100%;
+  padding:10px;
+  background:green;
   color:white;
   border:none;
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:12px;
-  font-weight:bold;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
+  margin-top:5px;
   cursor:pointer;
 }
 
-.buy-btn img{width:20px;}
-
-/* ADMIN */
 .admin{
   display:none;
   position:fixed;
@@ -181,25 +161,10 @@ body{
   overflow:auto;
 }
 
-input,select{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-}
-
-.btn{
-  width:100%;
-  padding:10px;
-  background:green;
-  color:white;
-  border:none;
-  margin-top:5px;
-}
-
 .admin-item{
   display:flex;
-  align-items:center;
   gap:10px;
+  align-items:center;
   background:#f2f2f2;
   padding:8px;
   margin:5px 0;
@@ -227,164 +192,120 @@ input,select{
     </div>
   </div>
 
-  <div class="admin-icon" onclick="openAdmin()">🔒</div>
+  <div class="admin-icon" onclick="openAdmin()">
+    🔒 <span id="notifDot"></span>
+  </div>
 </div>
 
 <!-- CATEGORY -->
 <div class="category-bar">
   <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
-  <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
-  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
-  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
-  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
-  <div class="category-btn" onclick="showView('yard',this)">YARD</div>
-  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
-  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>
 </div>
 
 <!-- ABOUT -->
 <div id="aboutView" class="view active-view">
+
+  <!-- IMAGE TESTIMONIAL -->
   <div class="card">
+    <h3 style="text-align:center;">🖼️ Customer Moments</h3>
 
-    <h2 style="text-align:center;">Welcome to BOB TEXTILE 👋</h2>
-    <p style="text-align:center;">
-      Your trusted destination for premium fabrics and modern fashion styles.
-    </p>
-
-    <hr>
-
-    <h3>About Us</h3>
-    <p>
-      BOB TEXTILE is a professional textile brand specializing in high-quality fabrics,
-      traditional attire, and modern fashion designs.  
-      We are committed to delivering durable, stylish, and affordable materials to our customers.
-    </p>
-
-    <hr>
-
-    <h3>Our Locations</h3>
-
-    <p><strong>📍 Kano</strong><br>
-    1. Shop No. 12, Gidan Zeeta, IBB Way, Kantin Kwari Market, Kano<br>
-    2. Muwaffaq House, Isyaka Rabiu Road, Kano
-    </p>
-
-    <p><strong>📍 Zamfara (Gusau)</strong><br>
-    1. No. 5A/6A Magizawa Plaza, Ahmadu Bello Way, Gusau<br>
-    2. T/Wada, Along AA Master Resident, Opp. Gamzaki Road, Gusau<br>
-    3. Shop No. 8B, Magizawa Plaza, Ahmadu Bello Way, Gusau
-    </p>
-
-    <p><strong>📍 Sokoto</strong><br>
-    1. Gidan Yadi, No. 29 Maiduguri Road, Gawon Nama Area, Sokoto<br>
-    2. Gidan Yadi, No. 819 Central Market, Sokoto
-    </p>
-
-    <hr>
-
-    <h3>Contact & Business Info</h3>
-
-    <p>
-    📞 09114738932<br>
-    🕒 Monday – Saturday (9:00AM – 6:00PM)<br>
-    🚚 Nationwide delivery available<br>
-    💬 Fast WhatsApp response
-    </p>
-
-    <hr>
-
-    <h3>Connect With Us</h3>
-
-    <a href="https://www.facebook.com/share/1X8HYKMJXT/" target="_blank">
-      <button class="buy-btn" style="background:#1877F2;">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
-        Facebook
-      </button>
-    </a>
-
-    <a href="https://instagram.com/bob__textile" target="_blank">
-      <button class="buy-btn" style="background:#E1306C;">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png">
-        Instagram
-      </button>
-    </a>
-
-    <a href="https://tiktok.com/@bob__textile" target="_blank">
-      <button class="buy-btn" style="background:#000;">
-        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-        TikTok
-      </button>
-    </a>
-
-    <a href="https://wa.me/2349114738932" target="_blank">
-      <button class="buy-btn">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-        WhatsApp
-      </button>
-    </a>
-
+    <div class="carousel" id="imgCarousel"></div>
+    <div class="dots" id="imgDots"></div>
   </div>
-</div>
 
-<!-- OTHER VIEWS -->
-<div id="shaddaView" class="view"></div>
-<div id="bagsView" class="view"></div>
-<div id="shoesView" class="view"></div>
-<div id="abayasView" class="view"></div>
-<div id="yardView" class="view"></div>
-<div id="capsView" class="view"></div>
-<div id="vailView" class="view"></div>
+  <!-- TEXT REVIEWS -->
+  <div class="card">
+    <h3 style="text-align:center;">💬 Customer Reviews</h3>
+    <div id="textReviews"></div>
+  </div>
+
+  <!-- REVIEW FORM -->
+  <div class="card">
+    <h3 style="text-align:center;">📝 Leave a Review</h3>
+
+    <input id="revName" placeholder="Your Name">
+    <textarea id="revMsg" placeholder="Your Message"></textarea>
+
+    <button class="btn" onclick="submitReview()">Submit Review</button>
+  </div>
+
+</div>
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
+
 <h3>Admin Panel</h3>
 
-<input id="aName" placeholder="Product Name">
-<input id="aPrice" placeholder="Price">
-
-<select id="aCategory">
-  <option value="shadda">SHADDA</option>
-  <option value="bags">BAGS</option>
-  <option value="shoes">SHOES</option>
-  <option value="abayas">ABAYAS</option>
-  <option value="yard">YARD</option>
-  <option value="caps">CAPS</option>
-  <option value="vail">VAIL</option>
-</select>
-
-<button class="btn" onclick="uploadImage()">Upload Images</button>
-<button class="btn" onclick="addProduct()">Save Product</button>
+<h3>🛠 Pending Reviews</h3>
+<div id="reviewList"></div>
 
 <hr>
 
-<h3>Delete Product</h3>
-<select id="delCat" onchange="loadDelete()"></select>
-<div id="delList"></div>
+<h3>🖼 Upload Testimonial Images</h3>
+<button class="btn" onclick="uploadImage()">Upload Image</button>
 
 <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
+
 </div>
 
 <script>
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let uploadedImages = [];
+let imageTestimonials = JSON.parse(localStorage.getItem("imageTestimonials")) || [];
+let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+let pendingReviews = JSON.parse(localStorage.getItem("pendingReviews")) || [];
+let hasNewReview = localStorage.getItem("hasNewReview")==="true";
 
 /* VIEW */
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
-  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
-
-  el.classList.add("active");
-  localStorage.setItem("activeView",type);
-
   document.getElementById(type+"View").classList.add("active-view");
+}
+
+/* SUBMIT REVIEW + WHATSAPP ALERT */
+function submitReview(){
+  if(!revName.value || !revMsg.value){
+    alert("Fill all fields");
+    return;
+  }
+
+  let name = revName.value;
+  let msg = revMsg.value;
+
+  pendingReviews.unshift({name,msg,time:Date.now()});
+  localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
+
+  hasNewReview=true;
+  localStorage.setItem("hasNewReview","true");
+
+  // 🔔 WHATSAPP ALERT
+  let text = `🚨 NEW REVIEW 🚨
+
+Name: ${name}
+Message: ${msg}`;
+
+  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(text));
+
+  revName.value="";
+  revMsg.value="";
+
+  updateNotif();
+}
+
+/* NOTIF */
+function updateNotif(){
+  document.getElementById("notifDot").style.display =
+    hasNewReview ? "inline-block" : "none";
 }
 
 /* ADMIN */
 function openAdmin(){
   if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
-    fillCats();
+    loadReviews();
+
+    hasNewReview=false;
+    localStorage.setItem("hasNewReview","false");
+    updateNotif();
   }
 }
 
@@ -392,28 +313,101 @@ function closeAdmin(){
   adminPanel.style.display="none";
 }
 
-function fillCats(){
-  delCat.innerHTML=["shadda","bags","shoes","abayas","yard","caps","vail"]
-  .map(c=>`<option>${c}</option>`).join("");
+/* LOAD REVIEWS */
+function loadReviews(){
+  let box=document.getElementById("reviewList");
+  box.innerHTML="";
+
+  pendingReviews.forEach((r,i)=>{
+    box.innerHTML+=`
+    <div class="admin-item">
+      <div style="flex:1">
+        <b>${r.name}</b><br>${r.msg}
+      </div>
+
+      <button class="btn" onclick="approve(${i})">Approve</button>
+      <button class="delete-btn" onclick="reject(${i})">X</button>
+    </div>`;
+  });
 }
 
-/* SAVE */
-function addProduct(){
-  products.unshift({
-    name:aName.value,
-    price:aPrice.value,
-    category:aCategory.value,
-    images:[...uploadedImages],
-    date:Date.now()
+/* APPROVE */
+function approve(i){
+  let r = pendingReviews.splice(i,1)[0];
+  reviews.unshift(r);
+
+  localStorage.setItem("reviews",JSON.stringify(reviews));
+  localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
+
+  loadReviews();
+  loadText();
+}
+
+/* REJECT */
+function reject(i){
+  pendingReviews.splice(i,1);
+  localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
+  loadReviews();
+}
+
+/* TEXT REVIEWS */
+function loadText(){
+  let box=document.getElementById("textReviews");
+  if(!box) return;
+
+  box.innerHTML="";
+
+  reviews.forEach(r=>{
+    box.innerHTML+=`
+    <div class="card">
+      <b>👤 ${r.name}</b>
+      <p>${r.msg}</p>
+    </div>`;
+  });
+}
+
+/* IMAGE TESTIMONIAL */
+function loadImages(){
+  let box=document.getElementById("imgCarousel");
+  let dots=document.getElementById("imgDots");
+
+  box.innerHTML="";
+  dots.innerHTML="";
+
+  imageTestimonials.forEach(img=>{
+    box.innerHTML+=`<img src="${img}">`;
   });
 
-  localStorage.setItem("products",JSON.stringify(products));
-  uploadedImages=[];
-  aName.value="";
-  aPrice.value="";
+  let dArr=[];
+
+  imageTestimonials.forEach((_,i)=>{
+    let d=document.createElement("span");
+    d.className="dot";
+    if(i===0)d.classList.add("active");
+    dots.appendChild(d);
+    dArr.push(d);
+  });
+
+  let index=0;
+
+  setInterval(()=>{
+    if(imageTestimonials.length===0) return;
+
+    index++;
+    if(index>=imageTestimonials.length) index=0;
+
+    box.scrollTo({
+      left:index*box.clientWidth,
+      behavior:"smooth"
+    });
+
+    dArr.forEach(x=>x.classList.remove("active"));
+    if(dArr[index]) dArr[index].classList.add("active");
+
+  },3000);
 }
 
-/* UPLOAD */
+/* UPLOAD IMAGE */
 function uploadImage(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
@@ -421,35 +415,19 @@ function uploadImage(){
     multiple:true
   },(e,r)=>{
     if(r.event==="success"){
-      uploadedImages.push(r.info.secure_url);
+      imageTestimonials.unshift(r.info.secure_url);
+      localStorage.setItem("imageTestimonials",JSON.stringify(imageTestimonials));
+      loadImages();
     }
   });
 }
 
-/* DELETE */
-function loadDelete(){
-  let cat = delCat.value;
-  let html="";
-
-  products.forEach((p,i)=>{
-    if(p.category===cat){
-      html+=`
-      <div class="admin-item">
-        <img src="${p.images[0]}" width="40">
-        <div style="flex:1">${p.name}</div>
-        <button class="delete-btn" onclick="delProduct(${i})">Delete</button>
-      </div>`;
-    }
-  });
-
-  delList.innerHTML=html;
-}
-
-function delProduct(i){
-  products.splice(i,1);
-  localStorage.setItem("products",JSON.stringify(products));
-  loadDelete();
-}
+/* INIT */
+window.onload=()=>{
+  loadImages();
+  loadText();
+  updateNotif();
+};
 
 </script>
 
