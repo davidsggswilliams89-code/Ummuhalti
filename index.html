@@ -148,6 +148,59 @@ body{
   gap:10px;
   cursor:pointer;
 }
+  .social-btn{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:none;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.social-btn img{
+  width:20px;
+}
+
+.fb{background:#1877F2;}
+.ig{background:#E1306C;}
+.tk{background:#000;}
+.wa{background:#25D366;}
+
+/* REMOVE UNDERLINE */
+a{text-decoration:none;}
+
+/* EACH REVIEW CARD CLEAN */
+.review-box{
+  background:#f7f7f7;
+  padding:10px;
+  margin:8px 0;
+  border-radius:10px;
+  border-left:4px solid #25D366;
+}
+
+/* FULL IMAGE TESTIMONIAL (NO CROPPING) */
+.full-image-slider{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+}
+
+.full-image-slider img{
+  min-width:100%;
+  height:auto;
+  object-fit:contain;
+  scroll-snap-align:center;
+  background:white;
+}
+
+.full-image-slider::-webkit-scrollbar{display:none;}
+  
 
 /* ADMIN */
 .admin{
@@ -240,43 +293,122 @@ input,textarea,select{
 <!-- ABOUT -->
 <div id="aboutView" class="view active-view">
 
+<!-- HERO ABOUT -->
+<div class="card" style="text-align:center;">
+
+  <h1>🧵 BOB TEXTILE</h1>
+
+  <p style="font-size:14px; color:#555;">
+    Premium fabrics • Modern fashion • Trusted quality across Nigeria
+  </p>
+
+</div>
+
+<!-- ABOUT US -->
 <div class="card">
+  <h3>📌 About Us</h3>
 
-  <h2 style="text-align:center;">Welcome to BOB TEXTILE 👋</h2>
-
-  <p style="text-align:center;">
-    Premium fabrics, modern fashion & trusted quality.
-  </p>
-
-  <hr>
-
-  <h3>📍 About Us</h3>
   <p>
-    BOB TEXTILE is a professional textile brand specializing in high-quality fabrics,
-    traditional attire, and modern fashion designs.
+    BOB TEXTILE is a leading fashion and textile brand specializing in high-quality materials,
+    traditional wear, and modern fashion designs.
   </p>
 
-  <hr>
-
-  <h3>📍 Address</h3>
   <p>
-    Kano • Zamfara • Sokoto<br>
-    Nationwide delivery available
+    We focus on durability, style, and affordability — delivering excellence to customers nationwide.
+  </p>
+</div>
+
+<!-- ADDRESS FULL -->
+<div class="card">
+  <h3>📍 Our Locations</h3>
+
+  <p>
+    <b>Kano:</b><br>
+    Shop 12, Gidan Zeeta, IBB Way, Kantin Kwari Market, Kano<br>
+    Muwaffaq House, Isyaka Rabiu Road, Kano
   </p>
 
-  <hr>
+  <p>
+    <b>Zamfara (Gusau):</b><br>
+    Magizawa Plaza, Ahmadu Bello Way, Gusau<br>
+    T/Wada Area, Opposite Gamzaki Road, Gusau<br>
+    Shop 8B, Magizawa Plaza, Gusau
+  </p>
 
+  <p>
+    <b>Sokoto:</b><br>
+    Gidan Yadi, Maiduguri Road, Gawon Nama<br>
+    Central Market Area, Sokoto
+  </p>
+</div>
+
+<!-- CONTACT -->
+<div class="card">
   <h3>📞 Contact</h3>
-  <p>09114738932</p>
 
-  <hr>
+  <p>
+    Phone: 09114738932<br>
+    WhatsApp: 24/7 Available<br>
+    Delivery: Nationwide
+  </p>
+</div>
 
+<!-- SOCIAL MEDIA BUTTONS -->
+<div class="card">
   <h3>🌐 Social Media</h3>
 
-  <a href="https://facebook.com/share/1X8HYKMJXT/" target="_blank"><button class="buy-btn">Facebook</button></a>
-  <a href="https://instagram.com/bob__textile" target="_blank"><button class="buy-btn">Instagram</button></a>
-  <a href="https://tiktok.com/@bob__textile" target="_blank"><button class="buy-btn">TikTok</button></a>
-  <a href="https://wa.me/2349114738932" target="_blank"><button class="buy-btn">WhatsApp</button></a>
+  <a href="https://facebook.com/share/1X8HYKMJXT/" target="_blank">
+    <button class="social-btn fb">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
+      Facebook
+    </button>
+  </a>
+
+  <a href="https://instagram.com/bob__textile" target="_blank">
+    <button class="social-btn ig">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png">
+      Instagram
+    </button>
+  </a>
+
+  <a href="https://tiktok.com/@bob__textile" target="_blank">
+    <button class="social-btn tk">
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
+      TikTok
+    </button>
+  </a>
+
+  <a href="https://wa.me/2349114738932" target="_blank">
+    <button class="social-btn wa">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+      WhatsApp
+    </button>
+  </a>
+
+</div>
+
+<!-- IMAGE TESTIMONIAL FULL WIDTH -->
+<div class="card">
+  <h3 style="text-align:center;">🖼️ Customer Moments</h3>
+
+  <div id="imgCarousel" class="full-image-slider"></div>
+</div>
+
+<!-- REVIEWS (EACH IN OWN CONTAINER) -->
+<div class="card">
+  <h3 style="text-align:center;">💬 Customer Reviews</h3>
+  <div id="textReviews"></div>
+</div>
+
+<!-- REVIEW FORM -->
+<div class="card">
+  <h3 style="text-align:center;">📝 Leave a Review</h3>
+
+  <input id="revName" placeholder="Your Name">
+  <textarea id="revMsg" placeholder="Your Message"></textarea>
+
+  <button class="btn" onclick="submitReview()">Submit Review</button>
+</div>
 
 </div>
 
@@ -421,19 +553,25 @@ function approve(i){
 
 /* TEXT */
 function loadText(){
-  let box=textReviews;
+  let box=document.getElementById("textReviews");
   box.innerHTML="";
+
   reviews.forEach(r=>{
-    box.innerHTML+=`<div class="card"><b>${r.name}</b><p>${r.msg}</p></div>`;
+    box.innerHTML+=`
+      <div class="review-box">
+        <b>👤 ${r.name}</b>
+        <p>${r.msg}</p>
+      </div>
+    `;
   });
 }
-
 /* IMAGE */
 function loadImages(){
-  let box=imgCarousel;
+  let box=document.getElementById("imgCarousel");
   box.innerHTML="";
-  imageTestimonials.forEach(i=>{
-    box.innerHTML+=`<img src="${i}">`;
+
+  imageTestimonials.forEach(img=>{
+    box.innerHTML+=`<img src="${img}">`;
   });
 }
 
