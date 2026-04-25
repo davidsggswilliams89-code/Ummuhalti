@@ -29,13 +29,15 @@ body{
 
 .logo{
   height:45px;
-  object-fit:contain;
+  position:relative;
+  z-index:5;
 }
 
 .marquee-wrapper{
   position:absolute;
   width:100%;
   overflow:hidden;
+  z-index:1;
 }
 
 .marquee-text{
@@ -89,7 +91,6 @@ body{
   padding:6px 14px;
   margin:5px;
   border-radius:20px;
-  white-space:nowrap;
   cursor:pointer;
 }
 
@@ -105,7 +106,7 @@ body{
   margin-bottom:15px;
 }
 
-/* PRODUCT */
+/* PRODUCT CAROUSEL */
 .carousel{
   display:flex;
   overflow-x:auto;
@@ -114,7 +115,7 @@ body{
 
 .carousel img{
   min-width:100%;
-  height:380px;
+  height:350px;
   object-fit:contain;
   scroll-snap-align:center;
   background:white;
@@ -147,8 +148,6 @@ body{
   gap:10px;
   cursor:pointer;
 }
-
-.buy-btn img{width:20px;}
 
 /* ADMIN */
 .admin{
@@ -197,8 +196,9 @@ input,textarea,select{
   padding:6px;
 }
 
-/* ABOUT IMAGE TESTIMONIAL */
-.carousel img{
+/* ABOUT IMAGE */
+#imgCarousel img{
+  width:100%;
   height:250px;
   object-fit:cover;
   border-radius:12px;
@@ -210,6 +210,7 @@ input,textarea,select{
 
 <!-- HEADER -->
 <div class="top-marquee">
+
   <img src="logo.jpeg" class="logo">
 
   <div class="marquee-wrapper">
@@ -221,6 +222,7 @@ input,textarea,select{
   <div class="admin-icon" onclick="openAdmin()">
     🔒 <span id="notifDot"></span>
   </div>
+
 </div>
 
 <!-- CATEGORY -->
@@ -238,33 +240,72 @@ input,textarea,select{
 <!-- ABOUT -->
 <div id="aboutView" class="view active-view">
 
-  <!-- IMAGE TESTIMONIAL -->
-  <div class="card">
-    <h3 style="text-align:center;">🖼️ Customer Moments</h3>
+<div class="card">
 
-    <div class="carousel" id="imgCarousel"></div>
-    <div class="dots" id="imgDots"></div>
-  </div>
+  <h2 style="text-align:center;">Welcome to BOB TEXTILE 👋</h2>
 
-  <!-- TEXT REVIEWS -->
-  <div class="card">
-    <h3 style="text-align:center;">💬 Customer Reviews</h3>
-    <div id="textReviews"></div>
-  </div>
+  <p style="text-align:center;">
+    Premium fabrics, modern fashion & trusted quality.
+  </p>
 
-  <!-- REVIEW FORM -->
-  <div class="card">
-    <h3 style="text-align:center;">📝 Leave a Review</h3>
+  <hr>
 
-    <input id="revName" placeholder="Your Name">
-    <textarea id="revMsg" placeholder="Your Message"></textarea>
+  <h3>📍 About Us</h3>
+  <p>
+    BOB TEXTILE is a professional textile brand specializing in high-quality fabrics,
+    traditional attire, and modern fashion designs.
+  </p>
 
-    <button class="btn" onclick="submitReview()">Submit Review</button>
-  </div>
+  <hr>
+
+  <h3>📍 Address</h3>
+  <p>
+    Kano • Zamfara • Sokoto<br>
+    Nationwide delivery available
+  </p>
+
+  <hr>
+
+  <h3>📞 Contact</h3>
+  <p>09114738932</p>
+
+  <hr>
+
+  <h3>🌐 Social Media</h3>
+
+  <a href="https://facebook.com/share/1X8HYKMJXT/" target="_blank"><button class="buy-btn">Facebook</button></a>
+  <a href="https://instagram.com/bob__textile" target="_blank"><button class="buy-btn">Instagram</button></a>
+  <a href="https://tiktok.com/@bob__textile" target="_blank"><button class="buy-btn">TikTok</button></a>
+  <a href="https://wa.me/2349114738932" target="_blank"><button class="buy-btn">WhatsApp</button></a>
 
 </div>
 
-<!-- OTHER VIEWS (UNCHANGED PRODUCTS) -->
+<!-- IMAGE TESTIMONIAL -->
+<div class="card">
+  <h3 style="text-align:center;">🖼️ Customer Moments</h3>
+  <div class="carousel" id="imgCarousel"></div>
+  <div class="dots" id="imgDots"></div>
+</div>
+
+<!-- TEXT REVIEWS -->
+<div class="card">
+  <h3 style="text-align:center;">💬 Customer Reviews</h3>
+  <div id="textReviews"></div>
+</div>
+
+<!-- REVIEW FORM -->
+<div class="card">
+  <h3 style="text-align:center;">📝 Leave Review</h3>
+
+  <input id="revName" placeholder="Name">
+  <textarea id="revMsg" placeholder="Message"></textarea>
+
+  <button class="btn" onclick="submitReview()">Submit</button>
+</div>
+
+</div>
+
+<!-- PRODUCT VIEWS -->
 <div id="shaddaView" class="view"></div>
 <div id="bagsView" class="view"></div>
 <div id="shoesView" class="view"></div>
@@ -278,13 +319,30 @@ input,textarea,select{
 
 <h3>Admin Panel</h3>
 
-<h3>🛠 Reviews</h3>
+<h3>Reviews</h3>
 <div id="reviewList"></div>
 
 <hr>
 
-<h3>🖼 Upload Testimonial Images</h3>
-<button class="btn" onclick="uploadImage()">Upload Image</button>
+<h3>Upload Testimonial Image</h3>
+<button class="btn" onclick="uploadImage()">Upload</button>
+
+<hr>
+
+<h3>Add Product</h3>
+<input id="aName" placeholder="Name">
+<input id="aPrice" placeholder="Price">
+<select id="aCategory">
+  <option>shadda</option>
+  <option>bags</option>
+  <option>shoes</option>
+  <option>abayas</option>
+  <option>yard</option>
+  <option>caps</option>
+  <option>vail</option>
+</select>
+
+<button class="btn" onclick="addProduct()">Save</button>
 
 <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
@@ -292,58 +350,35 @@ input,textarea,select{
 
 <script>
 
-/* STORAGE */
 let products = JSON.parse(localStorage.getItem("products")) || [];
-let uploadedImages = [];
-
 let imageTestimonials = JSON.parse(localStorage.getItem("imageTestimonials")) || [];
 let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
 let pendingReviews = JSON.parse(localStorage.getItem("pendingReviews")) || [];
 let hasNewReview = localStorage.getItem("hasNewReview")==="true";
+let uploadedImages=[];
 
 /* VIEW */
-function showView(type,el){
+function showView(t,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
-  document.getElementById(type+"View").classList.add("active-view");
-
-  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active");
+  document.getElementById(t+"View").classList.add("active-view");
 }
 
-/* REVIEW SUBMIT + WHATSAPP ALERT */
+/* REVIEW */
 function submitReview(){
-  if(!revName.value || !revMsg.value){
-    alert("Fill all fields");
-    return;
-  }
 
-  let name = revName.value;
-  let msg = revMsg.value;
+  let n=revName.value;
+  let m=revMsg.value;
 
-  pendingReviews.unshift({name,msg,time:Date.now()});
+  pendingReviews.unshift({name:n,msg:m});
   localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
 
   hasNewReview=true;
   localStorage.setItem("hasNewReview","true");
 
-  // WhatsApp alert
-  let text = `🚨 NEW REVIEW 🚨
-
-Name: ${name}
-Message: ${msg}`;
-
-  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(text));
+  window.open("https://wa.me/2349114738932?text="+encodeURIComponent("New review: "+n+" - "+m));
 
   revName.value="";
   revMsg.value="";
-
-  updateNotif();
-}
-
-/* NOTIF */
-function updateNotif(){
-  document.getElementById("notifDot").style.display =
-    hasNewReview ? "inline-block" : "none";
 }
 
 /* ADMIN */
@@ -352,117 +387,61 @@ function openAdmin(){
     adminPanel.style.display="block";
     loadReviews();
     loadImages();
-
     hasNewReview=false;
     localStorage.setItem("hasNewReview","false");
-    updateNotif();
   }
 }
 
-function closeAdmin(){
-  adminPanel.style.display="none";
-}
+function closeAdmin(){adminPanel.style.display="none";}
 
 /* REVIEWS */
 function loadReviews(){
-  let box=document.getElementById("reviewList");
+  let box=reviewList;
   box.innerHTML="";
-
   pendingReviews.forEach((r,i)=>{
     box.innerHTML+=`
     <div class="admin-item">
-      <div style="flex:1">
-        <b>${r.name}</b><br>${r.msg}
-      </div>
-
-      <button class="btn" onclick="approve(${i})">Approve</button>
-      <button class="delete-btn" onclick="reject(${i})">X</button>
+      <b>${r.name}</b>
+      <button onclick="approve(${i})" class="btn">Approve</button>
     </div>`;
   });
-
-  loadTextReviews();
 }
 
+/* APPROVE */
 function approve(i){
-  let r = pendingReviews.splice(i,1)[0];
+  let r=pendingReviews.splice(i,1)[0];
   reviews.unshift(r);
 
   localStorage.setItem("reviews",JSON.stringify(reviews));
   localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
 
   loadReviews();
-  loadTextReviews();
+  loadText();
 }
 
-function reject(i){
-  pendingReviews.splice(i,1);
-  localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
-  loadReviews();
-}
-
-/* TEXT REVIEWS */
-function loadTextReviews(){
-  let box=document.getElementById("textReviews");
-  if(!box) return;
-
+/* TEXT */
+function loadText(){
+  let box=textReviews;
   box.innerHTML="";
-
   reviews.forEach(r=>{
-    box.innerHTML+=`
-    <div class="card">
-      <b>👤 ${r.name}</b>
-      <p>${r.msg}</p>
-    </div>`;
+    box.innerHTML+=`<div class="card"><b>${r.name}</b><p>${r.msg}</p></div>`;
   });
 }
 
-/* IMAGE TESTIMONIAL */
+/* IMAGE */
 function loadImages(){
-  let box=document.getElementById("imgCarousel");
-  let dots=document.getElementById("imgDots");
-
+  let box=imgCarousel;
   box.innerHTML="";
-  dots.innerHTML="";
-
-  imageTestimonials.forEach(img=>{
-    box.innerHTML+=`<img src="${img}">`;
+  imageTestimonials.forEach(i=>{
+    box.innerHTML+=`<img src="${i}">`;
   });
-
-  let arr=[];
-
-  imageTestimonials.forEach((_,i)=>{
-    let d=document.createElement("span");
-    d.className="dot";
-    if(i===0)d.classList.add("active");
-    dots.appendChild(d);
-    arr.push(d);
-  });
-
-  let index=0;
-
-  setInterval(()=>{
-    if(imageTestimonials.length===0) return;
-
-    index++;
-    if(index>=imageTestimonials.length) index=0;
-
-    box.scrollTo({
-      left:index*box.clientWidth,
-      behavior:"smooth"
-    });
-
-    arr.forEach(x=>x.classList.remove("active"));
-    if(arr[index]) arr[index].classList.add("active");
-
-  },3000);
 }
 
-/* UPLOAD IMAGE */
+/* UPLOAD */
 function uploadImage(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:true
+    uploadPreset:"ummuhalti"
   },(e,r)=>{
     if(r.event==="success"){
       imageTestimonials.unshift(r.info.secure_url);
@@ -472,12 +451,22 @@ function uploadImage(){
   });
 }
 
-/* INIT */
+/* ADD PRODUCT */
+function addProduct(){
+  products.unshift({
+    name:aName.value,
+    price:aPrice.value,
+    category:aCategory.value,
+    images:[]
+  });
+
+  localStorage.setItem("products",JSON.stringify(products));
+  aName.value="";aPrice.value="";
+}
+
 window.onload=()=>{
-  loadReviews();
+  loadText();
   loadImages();
-  loadTextReviews();
-  updateNotif();
 };
 
 </script>
