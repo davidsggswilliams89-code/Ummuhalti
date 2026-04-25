@@ -14,7 +14,7 @@ body{
   padding-top:80px;
 }
 
-/* HEADER FIX */
+/* HEADER */
 .top-marquee{
   background:#111;
   position:fixed;
@@ -27,19 +27,22 @@ body{
   z-index:3000;
 }
 
-/* LOGO FIX (NO LEFT GAP) */
+/* LOGO */
 .logo{
   height:45px;
   margin:0;
   padding:0;
   object-fit:contain;
+  background:#111;
+  z-index:10;
 }
 
-/* MARQUEE */
+/* MOVING TEXT */
 .marquee-wrapper{
   position:absolute;
   width:100%;
   overflow:hidden;
+  z-index:1;
 }
 
 .marquee-text{
@@ -66,6 +69,7 @@ body{
   justify-content:center;
   color:white;
   cursor:pointer;
+  z-index:10;
 }
 
 /* CATEGORY */
@@ -85,6 +89,7 @@ body{
   padding:6px 14px;
   margin:5px;
   border-radius:20px;
+  white-space:nowrap;
   cursor:pointer;
 }
 
@@ -99,10 +104,16 @@ body{
   border-radius:14px;
   padding:10px;
   margin-bottom:15px;
-  position:relative;
 }
 
-/* NEW BADGE FIX */
+/* IMAGE */
+.img-wrap{
+  position:relative;
+  overflow:hidden;
+  border-radius:12px;
+}
+
+/* NEW BADGE */
 .new-badge{
   position:absolute;
   top:8px;
@@ -124,14 +135,16 @@ body{
 
 .carousel img{
   min-width:100%;
-  height:350px;
+  height:380px;
   object-fit:contain;
   scroll-snap-align:center;
+  background:white;
 }
+
+.carousel::-webkit-scrollbar{display:none;}
 
 /* DOTS */
 .dots{text-align:center;margin-top:5px;}
-
 .dot{
   height:8px;width:8px;
   margin:0 3px;
@@ -151,7 +164,7 @@ body{
   border-radius:8px;
 }
 
-/* BUY */
+/* BUY BUTTON FIXED */
 .buy-btn{
   background:#25D366;
   color:white;
@@ -165,9 +178,16 @@ body{
   align-items:center;
   justify-content:center;
   gap:10px;
+  cursor:pointer;
 }
 
-/* ADMIN */
+.buy-btn img{
+  width:20px;
+  height:20px;
+  display:block;
+}
+
+/* ADMIN PANEL */
 .admin{
   display:none;
   position:fixed;
@@ -194,44 +214,68 @@ input,select{
   color:white;
   border:none;
   margin-top:5px;
+  cursor:pointer;
 }
 
 .admin-item{
   display:flex;
-  gap:10px;
   align-items:center;
+  gap:10px;
   background:#f2f2f2;
   padding:8px;
   margin:5px 0;
   border-radius:6px;
+}
+
+.delete-btn{
+  background:red;
+  color:white;
+  border:none;
+  padding:6px;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="top-marquee">
   <img src="logo.jpeg" class="logo">
 
   <div class="marquee-wrapper">
-    <div class="marquee-text">✨ BOB TEXTILE ✨ Premium Fashion Store ✨</div>
+    <div class="marquee-text">
+      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨
+    </div>
   </div>
 
   <div class="admin-icon" onclick="openAdmin()">🔒</div>
 </div>
 
 <!-- CATEGORY -->
-<div class="category-bar" id="categoryBar"></div>
-
-<!-- ABOUT -->
-<div id="aboutView" class="view active-view">
-  <div class="card">
-    <h2>BOB TEXTILE</h2>
-  </div>
+<div class="category-bar">
+  <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
+  <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
+  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
+  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
+  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
+  <div class="category-btn" onclick="showView('yard',this)">YARD</div>
+  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
+  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>
 </div>
 
-<!-- PRODUCTS -->
-<div id="views"></div>
+<!-- VIEWS -->
+<div id="aboutView" class="view active-view">
+  <div class="card">Welcome to BOB TEXTILE</div>
+</div>
+
+<div id="shaddaView" class="view"></div>
+<div id="bagsView" class="view"></div>
+<div id="shoesView" class="view"></div>
+<div id="abayasView" class="view"></div>
+<div id="yardView" class="view"></div>
+<div id="capsView" class="view"></div>
+<div id="vailView" class="view"></div>
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
@@ -241,131 +285,102 @@ input,select{
 <input id="aName" placeholder="Product Name">
 <input id="aPrice" placeholder="Price">
 
-<select id="aCategory"></select>
+<select id="aCategory">
+  <option value="shadda">SHADDA</option>
+  <option value="bags">BAGS</option>
+  <option value="shoes">SHOES</option>
+  <option value="abayas">ABAYAS</option>
+  <option value="yard">YARD</option>
+  <option value="caps">CAPS</option>
+  <option value="vail">VAIL</option>
+</select>
 
 <button class="btn" onclick="uploadImage()">Upload Images</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
 
 <hr>
 
-<div id="adminList"></div>
+<h3>Delete Product</h3>
+<select id="delCat" onchange="loadDelete()"></select>
+<div id="delList"></div>
+
+<button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
 </div>
 
 <script>
 
-let products = JSON.parse(localStorage.getItem("products"))||[];
+let products=JSON.parse(localStorage.getItem("products"))||[];
 let uploadedImages=[];
-let categories=["shadda","bags","shoes","abayas","yard","caps","vail"];
 
-/* SAVE LAST PAGE */
+/* RESTORE ACTIVE */
 window.onload=()=>{
-let last = localStorage.getItem("lastCat") || "shadda";
-renderCategories();
-showProducts(last);
+  let saved=localStorage.getItem("activeView")||"about";
+  let btn=[...document.querySelectorAll(".category-btn")]
+    .find(b=>b.textContent.toLowerCase().includes(saved));
+  if(btn) showView(saved,btn);
 };
 
-/* CATEGORIES */
-function renderCategories(){
-let bar=document.getElementById("categoryBar");
-let sel=document.getElementById("aCategory");
+/* VIEW */
+function showView(type,el){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
+  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
 
-bar.innerHTML="";
-sel.innerHTML="";
+  el.classList.add("active");
+  localStorage.setItem("activeView",type);
 
-categories.forEach(c=>{
-bar.innerHTML+=`<div class="category-btn" onclick="showProducts('${c}')">${c}</div>`;
-sel.innerHTML+=`<option>${c}</option>`;
-});
+  if(type==="about"){
+    aboutView.classList.add("active-view");
+    return;
+  }
+
+  let list=products.filter(p=>p.category===type);
+  let html="";
+
+  list.forEach((p,i)=>{
+    let isNew=(Date.now()-p.date)<86400000;
+
+    html+=`
+    <div class="card">
+
+      <div class="img-wrap">
+        ${isNew?'<div class="new-badge">NEW</div>':''}
+
+        <div class="carousel car${type}${i}">
+          ${p.images.map(img=>`<img src="${img}">`).join('')}
+        </div>
+      </div>
+
+      <div class="dots dots${type}${i}"></div>
+
+      <div class="price">₦ ${p.price}</div>
+
+      <button class="buy-btn" onclick="buyNow(${i},'${type}')">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+        BUY NOW
+      </button>
+
+    </div>`;
+  });
+
+  document.getElementById(type+"View").innerHTML=html;
+  document.getElementById(type+"View").classList.add("active-view");
+
+  list.forEach((p,i)=>setupCarousel(type,i));
 }
 
-/* SHOW PRODUCTS */
-function showProducts(type){
+/* BUY NOW */
+function buyNow(i,type){
+  let list=products.filter(p=>p.category===type);
+  let p=list[i];
 
-localStorage.setItem("lastCat",type);
+  let car=document.querySelector(".car"+type+i);
+  let index=Math.round(car.scrollLeft/car.clientWidth);
+  let img=p.images[index];
 
-document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
+  let msg=`Hello 👋,
 
-let list = products.filter(p=>p.category===type);
-let html="";
-
-list.forEach((p,i)=>{
-
-let isNew = (Date.now()-p.id)<86400000;
-
-html+=`
-<div class="card">
-
-${isNew?'<div class="new-badge">NEW</div>':''}
-
-<div class="carousel car${type}${i}">
-${(p.images||[]).map(img=>`<img src="${img}">`).join("")}
-</div>
-
-<div class="dots dots${type}${i}"></div>
-
-<div class="price">₦ ${p.price}</div>
-
-<button class="buy-btn" onclick="buyNow('${type}',${i})">
-📱 BUY NOW
-</button>
-
-</div>`;
-});
-
-document.getElementById("views").innerHTML=html;
-setupCarousel(type,list);
-}
-
-/* CAROUSEL */
-function setupCarousel(type,list){
-
-list.forEach((p,i)=>{
-
-let c=document.querySelector(".car"+type+i);
-let box=document.querySelector(".dots"+type+i);
-
-if(!c||!box)return;
-
-let imgs=c.querySelectorAll("img");
-box.innerHTML="";
-
-imgs.forEach((_,x)=>{
-let d=document.createElement("span");
-d.className="dot";
-if(x===0)d.classList.add("active");
-box.appendChild(d);
-});
-
-let dots=box.querySelectorAll(".dot");
-
-c.addEventListener("scroll",()=>{
-let index=Math.round(c.scrollLeft/c.clientWidth);
-dots.forEach(d=>d.classList.remove("active"));
-if(dots[index])dots[index].classList.add("active");
-});
-});
-}
-
-/* WHATSAPP FIXED */
-function buyNow(type,i){
-
-let list = products.filter(p=>p.category===type);
-let p = list[i];
-
-let car=document.querySelector(".car"+type+i);
-let index=0;
-
-if(car){
-index=Math.round(car.scrollLeft/car.clientWidth);
-}
-
-let img = p.images?.[index] || "";
-
-let msg =
-`Hello 👋,
-
-I'm interested in this Product:
+I want to order from BOB TEXTILE:
 
 🧵 Category: ${type.toUpperCase()}
 🛍️ Product: ${p.name}
@@ -376,64 +391,101 @@ ${img}
 
 Is this available? I want to buy.`;
 
-window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
+  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
+}
+
+/* CAROUSEL */
+function setupCarousel(type,i){
+  let c=document.querySelector(".car"+type+i);
+  let box=document.querySelector(".dots"+type+i);
+  if(!c)return;
+
+  let imgs=c.querySelectorAll("img");
+  box.innerHTML="";
+
+  imgs.forEach((_,x)=>{
+    let d=document.createElement("span");
+    d.className="dot";
+    if(x===0)d.classList.add("active");
+    box.appendChild(d);
+  });
+
+  let dots=box.querySelectorAll(".dot");
+
+  c.addEventListener("scroll",()=>{
+    let index=Math.round(c.scrollLeft/c.clientWidth);
+    dots.forEach(d=>d.classList.remove("active"));
+    if(dots[index])dots[index].classList.add("active");
+  });
 }
 
 /* ADMIN */
 function openAdmin(){
-if(prompt("Password")==="1234"){
-adminPanel.style.display="block";
-renderAdmin();
+  if(prompt("Password")==="1234"){
+    adminPanel.style.display="block";
+    fillCats();
+  }
 }
+
+function closeAdmin(){
+  adminPanel.style.display="none";
+}
+
+function fillCats(){
+  let cats=["shadda","bags","shoes","abayas","yard","caps","vail"];
+  delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");
 }
 
 /* UPLOAD */
 function uploadImage(){
-cloudinary.openUploadWidget({
-cloudName:"db92r6j9z",
-uploadPreset:"ummuhalti",
-multiple:true
-},(e,r)=>{
-if(r.event==="success"){
-uploadedImages.push(r.info.secure_url);
-}
-});
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true
+  },(e,r)=>{
+    if(r&&r.event==="success"){
+      uploadedImages.push(r.info.secure_url);
+    }
+  });
 }
 
 /* SAVE */
 function addProduct(){
+  products.unshift({
+    name:aName.value,
+    price:aPrice.value,
+    category:aCategory.value,
+    images:[...uploadedImages],
+    date:Date.now()
+  });
 
-products.unshift({
-id:Date.now(),
-name:aName.value,
-price:aPrice.value,
-category:aCategory.value,
-images:[...uploadedImages]
-});
-
-localStorage.setItem("products",JSON.stringify(products));
-uploadedImages=[];
-renderAdmin();
+  localStorage.setItem("products",JSON.stringify(products));
+  uploadedImages=[];
 }
 
-/* ADMIN LIST */
-function renderAdmin(){
-let box=document.getElementById("adminList");
-box.innerHTML="";
+/* DELETE */
+function loadDelete(){
+  let cat=delCat.value;
+  let html="";
 
-products.forEach((p,i)=>{
-box.innerHTML+=`
-<div class="admin-item">
-<div style="flex:1">${p.name}</div>
-<button onclick="del(${i})">Delete</button>
-</div>`;
-});
+  products.forEach((p,i)=>{
+    if(p.category===cat){
+      html+=`
+      <div class="admin-item">
+        <img src="${p.images[0]}" width="40">
+        <div style="flex:1">${p.name}</div>
+        <button class="delete-btn" onclick="del(${i})">Delete</button>
+      </div>`;
+    }
+  });
+
+  delList.innerHTML=html;
 }
 
 function del(i){
-products.splice(i,1);
-localStorage.setItem("products",JSON.stringify(products));
-renderAdmin();
+  products.splice(i,1);
+  localStorage.setItem("products",JSON.stringify(products));
+  loadDelete();
 }
 
 </script>
