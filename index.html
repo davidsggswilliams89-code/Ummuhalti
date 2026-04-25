@@ -14,7 +14,7 @@ body{
   padding-top:80px;
 }
 
-/* HEADER */
+/* HEADER FIX */
 .top-marquee{
   background:#111;
   position:fixed;
@@ -27,10 +27,15 @@ body{
   z-index:3000;
 }
 
+/* LOGO FIX (NO LEFT GAP) */
 .logo{
   height:45px;
+  margin:0;
+  padding:0;
+  object-fit:contain;
 }
 
+/* MARQUEE */
 .marquee-wrapper{
   position:absolute;
   width:100%;
@@ -49,6 +54,7 @@ body{
   100%{transform:translateX(-100%);}
 }
 
+/* ADMIN ICON */
 .admin-icon{
   position:absolute;
   right:0;
@@ -93,6 +99,20 @@ body{
   border-radius:14px;
   padding:10px;
   margin-bottom:15px;
+  position:relative;
+}
+
+/* NEW BADGE FIX */
+.new-badge{
+  position:absolute;
+  top:8px;
+  left:8px;
+  background:red;
+  color:white;
+  font-size:11px;
+  padding:4px 6px;
+  border-radius:5px;
+  z-index:10;
 }
 
 /* CAROUSEL */
@@ -107,26 +127,18 @@ body{
   height:350px;
   object-fit:contain;
   scroll-snap-align:center;
-  background:white;
 }
-
-.carousel::-webkit-scrollbar{display:none;}
 
 /* DOTS */
-.dots{
-  text-align:center;
-  margin-top:5px;
-}
+.dots{text-align:center;margin-top:5px;}
 
 .dot{
-  height:8px;
-  width:8px;
+  height:8px;width:8px;
   margin:0 3px;
   background:#bbb;
   border-radius:50%;
   display:inline-block;
 }
-
 .dot.active{background:#000;}
 
 /* PRICE */
@@ -139,7 +151,7 @@ body{
   border-radius:8px;
 }
 
-/* BUY BUTTON */
+/* BUY */
 .buy-btn{
   background:#25D366;
   color:white;
@@ -153,10 +165,7 @@ body{
   align-items:center;
   justify-content:center;
   gap:10px;
-  cursor:pointer;
 }
-
-.buy-btn img{width:20px;}
 
 /* ADMIN */
 .admin{
@@ -196,19 +205,11 @@ input,select{
   margin:5px 0;
   border-radius:6px;
 }
-
-.delete-btn{
-  background:red;
-  color:white;
-  border:none;
-  padding:6px;
-}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="top-marquee">
   <img src="logo.jpeg" class="logo">
 
@@ -220,32 +221,17 @@ input,select{
 </div>
 
 <!-- CATEGORY -->
-<div class="category-bar">
-  <div class="category-btn active" onclick="showProducts('shadda',this)">SHADDA</div>
-  <div class="category-btn" onclick="showProducts('bags',this)">BAGS</div>
-  <div class="category-btn" onclick="showProducts('shoes',this)">SHOES</div>
-  <div class="category-btn" onclick="showProducts('abayas',this)">ABAYAS</div>
-  <div class="category-btn" onclick="showProducts('yard',this)">YARD</div>
-  <div class="category-btn" onclick="showProducts('caps',this)">CAPS</div>
-  <div class="category-btn" onclick="showProducts('vail',this)">VAIL</div>
-</div>
+<div class="category-bar" id="categoryBar"></div>
 
 <!-- ABOUT -->
 <div id="aboutView" class="view active-view">
   <div class="card">
-    <h2 style="text-align:center;">🧵 BOB TEXTILE</h2>
-    <p style="text-align:center;">Premium fabrics • Modern fashion • Trusted quality</p>
+    <h2>BOB TEXTILE</h2>
   </div>
 </div>
 
-<!-- PRODUCT VIEWS -->
-<div id="shaddaView" class="view"></div>
-<div id="bagsView" class="view"></div>
-<div id="shoesView" class="view"></div>
-<div id="abayasView" class="view"></div>
-<div id="yardView" class="view"></div>
-<div id="capsView" class="view"></div>
-<div id="vailView" class="view"></div>
+<!-- PRODUCTS -->
+<div id="views"></div>
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
@@ -255,15 +241,7 @@ input,select{
 <input id="aName" placeholder="Product Name">
 <input id="aPrice" placeholder="Price">
 
-<select id="aCategory">
-<option>shadda</option>
-<option>bags</option>
-<option>shoes</option>
-<option>abayas</option>
-<option>yard</option>
-<option>caps</option>
-<option>vail</option>
-</select>
+<select id="aCategory"></select>
 
 <button class="btn" onclick="uploadImage()">Upload Images</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
@@ -272,34 +250,53 @@ input,select{
 
 <div id="adminList"></div>
 
-<button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
-
 </div>
 
 <script>
 
 let products = JSON.parse(localStorage.getItem("products"))||[];
 let uploadedImages=[];
+let categories=["shadda","bags","shoes","abayas","yard","caps","vail"];
+
+/* SAVE LAST PAGE */
+window.onload=()=>{
+let last = localStorage.getItem("lastCat") || "shadda";
+renderCategories();
+showProducts(last);
+};
+
+/* CATEGORIES */
+function renderCategories(){
+let bar=document.getElementById("categoryBar");
+let sel=document.getElementById("aCategory");
+
+bar.innerHTML="";
+sel.innerHTML="";
+
+categories.forEach(c=>{
+bar.innerHTML+=`<div class="category-btn" onclick="showProducts('${c}')">${c}</div>`;
+sel.innerHTML+=`<option>${c}</option>`;
+});
+}
 
 /* SHOW PRODUCTS */
-function showProducts(type,el){
+function showProducts(type){
+
+localStorage.setItem("lastCat",type);
 
 document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
-document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
-
-el.classList.add("active");
-
-if(type==="about"){
-document.getElementById("aboutView").classList.add("active-view");
-return;
-}
 
 let list = products.filter(p=>p.category===type);
 let html="";
 
 list.forEach((p,i)=>{
+
+let isNew = (Date.now()-p.id)<86400000;
+
 html+=`
 <div class="card">
+
+${isNew?'<div class="new-badge">NEW</div>':''}
 
 <div class="carousel car${type}${i}">
 ${(p.images||[]).map(img=>`<img src="${img}">`).join("")}
@@ -310,21 +307,20 @@ ${(p.images||[]).map(img=>`<img src="${img}">`).join("")}
 <div class="price">₦ ${p.price}</div>
 
 <button class="buy-btn" onclick="buyNow('${type}',${i})">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-BUY NOW
+📱 BUY NOW
 </button>
 
 </div>`;
 });
 
-document.getElementById(type+"View").innerHTML=html;
-document.getElementById(type+"View").classList.add("active-view");
-
-list.forEach((p,i)=>setupCarousel(type,i));
+document.getElementById("views").innerHTML=html;
+setupCarousel(type,list);
 }
 
 /* CAROUSEL */
-function setupCarousel(type,i){
+function setupCarousel(type,list){
+
+list.forEach((p,i)=>{
 
 let c=document.querySelector(".car"+type+i);
 let box=document.querySelector(".dots"+type+i);
@@ -348,9 +344,10 @@ let index=Math.round(c.scrollLeft/c.clientWidth);
 dots.forEach(d=>d.classList.remove("active"));
 if(dots[index])dots[index].classList.add("active");
 });
+});
 }
 
-/* WHATSAPP BUY */
+/* WHATSAPP FIXED */
 function buyNow(type,i){
 
 let list = products.filter(p=>p.category===type);
@@ -368,7 +365,7 @@ let img = p.images?.[index] || "";
 let msg =
 `Hello 👋,
 
-I want to order from BOB TEXTILE:
+I'm interested in this Product:
 
 🧵 Category: ${type.toUpperCase()}
 🛍️ Product: ${p.name}
@@ -388,10 +385,6 @@ if(prompt("Password")==="1234"){
 adminPanel.style.display="block";
 renderAdmin();
 }
-}
-
-function closeAdmin(){
-adminPanel.style.display="none";
 }
 
 /* UPLOAD */
@@ -419,46 +412,28 @@ images:[...uploadedImages]
 });
 
 localStorage.setItem("products",JSON.stringify(products));
-
 uploadedImages=[];
-aName.value="";
-aPrice.value="";
-
 renderAdmin();
 }
 
 /* ADMIN LIST */
 function renderAdmin(){
-
 let box=document.getElementById("adminList");
 box.innerHTML="";
 
 products.forEach((p,i)=>{
 box.innerHTML+=`
 <div class="admin-item">
-
-<img src="${p.images?.[0]||''}" width="50">
-
-<div style="flex:1">
-<b>${p.name}</b><br>
-₦${p.price}
-</div>
-
-<button class="btn" style="background:red" onclick="deleteProduct(${i})">Del</button>
-
+<div style="flex:1">${p.name}</div>
+<button onclick="del(${i})">Delete</button>
 </div>`;
 });
 }
 
-/* DELETE */
-function deleteProduct(i){
+function del(i){
 products.splice(i,1);
 localStorage.setItem("products",JSON.stringify(products));
 renderAdmin();
-}
-
-window.onload=()=>{
-showProducts("shadda",document.querySelector(".category-btn"));
 }
 
 </script>
