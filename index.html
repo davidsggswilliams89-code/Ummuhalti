@@ -14,7 +14,7 @@ body{
   padding-top:80px;
 }
 
-/* HEADER FIXED LAYER SYSTEM */
+/* HEADER */
 .top-marquee{
   background:#111;
   position:fixed;
@@ -27,51 +27,31 @@ body{
   z-index:3000;
 }
 
-/* LOGO ABOVE TEXT */
-.logo{
-  height:45px;
-  margin:0;
-  padding:0;
-  position:relative;
-  z-index:5;
-  background:#111;
-}
+.logo{height:45px;}
 
-/* MARQUEE GOES BEHIND LOGO */
-.marquee-wrapper{
-  position:absolute;
-  width:100%;
-  overflow:hidden;
-  z-index:1;
-}
-
+.marquee-wrapper{position:absolute;width:100%;overflow:hidden;}
 .marquee-text{
   white-space:nowrap;
   animation:move 12s linear infinite;
   margin-left:120px;
   color:white;
-  position:relative;
-  z-index:1;
 }
-
 @keyframes move{
   0%{transform:translateX(100%);}
   100%{transform:translateX(-100%);}
 }
 
-/* ADMIN ICON ABOVE EVERYTHING */
 .admin-icon{
   position:absolute;
   right:0;
-  top:0;
   width:45px;
   height:45px;
   background:#222;
   display:flex;
   align-items:center;
   justify-content:center;
+  color:white;
   cursor:pointer;
-  z-index:10;
 }
 
 /* CATEGORY */
@@ -82,29 +62,21 @@ body{
   height:40px;
   background:#222;
   display:flex;
-  align-items:center;
   overflow-x:auto;
   z-index:2000;
 }
 
 .category-btn{
   color:white;
-  padding:0 16px;
-  height:30px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:20px;
+  padding:6px 14px;
   margin:5px;
-  cursor:pointer;
+  border-radius:20px;
   white-space:nowrap;
+  cursor:pointer;
 }
 
-.category-btn.active{
-  background:#25D366;
-}
+.category-btn.active{background:#25D366;}
 
-/* VIEW */
 .view{display:none;padding:10px;}
 .active-view{display:block;}
 
@@ -114,15 +86,11 @@ body{
   border-radius:14px;
   padding:10px;
   margin-bottom:15px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
-.img-wrap{
-  position:relative;
-  border-radius:12px;
-  overflow:hidden;
-}
+.img-wrap{position:relative;overflow:hidden;border-radius:12px;}
 
-/* NEW BADGE */
 .new-badge{
   position:absolute;
   top:5px;
@@ -144,7 +112,7 @@ body{
 
 .carousel img{
   min-width:100%;
-  height:400px;
+  height:380px;
   object-fit:contain;
   scroll-snap-align:center;
 }
@@ -172,7 +140,7 @@ body{
   border-radius:8px;
 }
 
-/* BUY BUTTON */
+/* BUY */
 .buy-btn{
   background:#25D366;
   color:white;
@@ -181,20 +149,15 @@ body{
   padding:12px;
   margin-top:10px;
   border-radius:12px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:8px;
-  cursor:pointer;
+  font-weight:bold;
 }
-
-.buy-btn img{width:18px;}
 
 /* ADMIN */
 .admin{
   display:none;
   position:fixed;
   top:0;
+  left:0;
   width:100%;
   height:100%;
   background:white;
@@ -222,14 +185,18 @@ input,select{
   display:flex;
   align-items:center;
   gap:10px;
-  background:#eee;
+  background:#f2f2f2;
   padding:8px;
   margin:5px 0;
   border-radius:6px;
 }
 
-.delete-btn{background:red;color:white;border:none;padding:5px;}
-.edit-btn{background:orange;color:white;border:none;padding:5px;}
+.delete-btn{
+  background:red;
+  color:white;
+  border:none;
+  padding:6px;
+}
 
 </style>
 </head>
@@ -242,7 +209,7 @@ input,select{
 
   <div class="marquee-wrapper">
     <div class="marquee-text">
-      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨ Affordable Luxury ✨
+      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨
     </div>
   </div>
 
@@ -252,13 +219,13 @@ input,select{
 <!-- CATEGORY -->
 <div class="category-bar">
   <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
-  <div class="category-btn" onclick="showView('kaftan',this)">KAFTAN</div>
-  <div class="category-btn" onclick="showView('lace',this)">LACE</div>
+  <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
   <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
   <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
   <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
   <div class="category-btn" onclick="showView('yard',this)">YARD</div>
   <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
+  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>
 </div>
 
 <!-- VIEWS -->
@@ -266,22 +233,54 @@ input,select{
   <div class="card">Welcome to BOB TEXTILE</div>
 </div>
 
-<div id="kaftanView" class="view"></div>
-<div id="laceView" class="view"></div>
+<div id="shaddaView" class="view"></div>
 <div id="bagsView" class="view"></div>
 <div id="shoesView" class="view"></div>
 <div id="abayasView" class="view"></div>
 <div id="yardView" class="view"></div>
 <div id="capsView" class="view"></div>
+<div id="vailView" class="view"></div>
+
+<!-- ADMIN (RESTORED) -->
+<div class="admin" id="adminPanel">
+
+<h3>Admin Panel</h3>
+
+<input id="aName" placeholder="Product Name">
+<input id="aPrice" placeholder="Price">
+
+<select id="aCategory">
+  <option value="shadda">SHADDA</option>
+  <option value="bags">BAGS</option>
+  <option value="shoes">SHOES</option>
+  <option value="abayas">ABAYAS</option>
+  <option value="yard">YARD</option>
+  <option value="caps">CAPS</option>
+  <option value="vail">VAIL</option>
+</select>
+
+<button class="btn" onclick="uploadImage()">Upload Images</button>
+<button class="btn" onclick="addProduct()">Save Product</button>
+
+<hr>
+
+<h3>Delete Products</h3>
+<select id="delCat" onchange="loadDelete()"></select>
+<div id="delList"></div>
+
+</div>
 
 <script>
-let products=JSON.parse(localStorage.getItem("products"))||[];
 
+let products=JSON.parse(localStorage.getItem("products"))||[];
+let uploadedImages=[];
+
+/* VIEW */
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active");
 
+  el.classList.add("active");
   localStorage.setItem("activeView",type);
 
   if(type==="about"){
@@ -300,7 +299,6 @@ function showView(type,el){
 
       <div class="img-wrap">
         ${isNew?'<div class="new-badge">NEW</div>':''}
-
         <div class="carousel car${type}${i}">
           ${p.images.map(img=>`<img src="${img}">`).join('')}
         </div>
@@ -310,10 +308,7 @@ function showView(type,el){
 
       <div class="price">₦ ${p.price}</div>
 
-      <button class="buy-btn" onclick="buyNow(${i},'${type}')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-        BUY NOW
-      </button>
+      <button class="buy-btn">BUY NOW</button>
 
     </div>`;
   });
@@ -330,8 +325,8 @@ function setupCarousel(type,i){
   let box=document.querySelector(".dots"+type+i);
   if(!c)return;
 
-  let imgs=c.querySelectorAll("img");
   box.innerHTML="";
+  let imgs=c.querySelectorAll("img");
 
   imgs.forEach((_,x)=>{
     let d=document.createElement("span");
@@ -349,32 +344,71 @@ function setupCarousel(type,i){
   });
 }
 
-/* BUY */
-function buyNow(i,type){
-  let list=products.filter(p=>p.category===type);
-  let p=list[i];
-
-  let car=document.querySelector(".car"+type+i);
-  let imgs=car.querySelectorAll("img");
-  let index=Math.round(car.scrollLeft/car.clientWidth);
-
-  let msg=`Hello 👋
-Product: ${type}
-Price: ₦${p.price}
-Image: ${imgs[index].src}
-
-Is it available?`;
-
-  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
+/* ADMIN */
+function openAdmin(){
+  if(prompt("Password")==="1234"){
+    adminPanel.style.display="block";
+    fillCats();
+  }
 }
 
-/* RESTORE ACTIVE TAB */
-window.onload=()=>{
-  let saved=localStorage.getItem("activeView")||"about";
-  let btn=[...document.querySelectorAll(".category-btn")]
-    .find(b=>b.textContent.toLowerCase().includes(saved));
-  if(btn) showView(saved,btn);
-};
+function fillCats(){
+  let cats=["shadda","bags","shoes","abayas","yard","caps","vail"];
+  delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");
+}
+
+/* UPLOAD */
+function uploadImage(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true
+  },(e,r)=>{
+    if(r&&r.event==="success"){
+      uploadedImages.push(r.info.secure_url);
+    }
+  });
+}
+
+/* SAVE */
+function addProduct(){
+  products.unshift({
+    name:aName.value,
+    price:aPrice.value,
+    category:aCategory.value,
+    images:[...uploadedImages],
+    date:Date.now()
+  });
+
+  localStorage.setItem("products",JSON.stringify(products));
+  uploadedImages=[];
+}
+
+/* DELETE */
+function loadDelete(){
+  let cat=delCat.value;
+  let html="";
+
+  products.forEach((p,i)=>{
+    if(p.category===cat){
+      html+=`
+      <div class="admin-item">
+        <img src="${p.images[0]}" width="40">
+        <div style="flex:1">₦${p.price}</div>
+        <button class="delete-btn" onclick="del(${i})">X</button>
+      </div>`;
+    }
+  });
+
+  delList.innerHTML=html;
+}
+
+function del(i){
+  products.splice(i,1);
+  localStorage.setItem("products",JSON.stringify(products));
+  loadDelete();
+}
+
 </script>
 
 </body>
