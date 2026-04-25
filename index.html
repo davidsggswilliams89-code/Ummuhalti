@@ -6,76 +6,252 @@
 
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 
-  <style>
-    body{margin:0;font-family:Arial;background:#f5f5f5}
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f5f5f5;
+  padding-top:80px;
+}
 
-    .header{
-      display:flex;
-      align-items:center;
-      height:70px;
-      background:#fff;
-      padding:0;
-      position:fixed;
-      top:0;
-      width:100%;
-      z-index:10;
-    }
+/* HEADER */
+.top-marquee{
+  background:#111;
+  position:fixed;
+  top:0;
+  width:100%;
+  height:45px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  z-index:3000;
+}
 
-    .logo img{
-      height:70px;
-      margin:0;
-    }
+.logo{
+  height:45px;
+  margin:0;
+  padding:0;
+  object-fit:cover;
+  z-index:3;
+}
 
-    .tabs{display:flex;overflow:auto;margin-top:70px;background:#fff}
-    .tabs button{flex:1;padding:10px;border:none;background:#eee}
+.marquee-wrapper{
+  position:absolute;
+  width:100%;
+  overflow:hidden;
+  z-index:1;
+}
 
-    .view{display:none;padding:10px}
-    .active-view{display:block}
+.marquee-text{
+  white-space:nowrap;
+  animation:move 12s linear infinite;
+  margin-left:120px;
+  color:white;
+}
 
-    .card{background:#fff;margin-bottom:10px;padding:10px;border-radius:10px}
+@keyframes move{
+  0%{transform:translateX(100%);}
+  100%{transform:translateX(-100%);}
+}
 
-    .img-box{position:relative}
+.admin-icon{
+  position:absolute;
+  right:0;
+  top:0;
+  width:45px;
+  height:45px;
+  background:#222;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:4;
+}
 
-    .new-badge{
-      position:absolute;
-      top:0;
-      left:0;
-      background:red;
-      color:#fff;
-      font-size:10px;
-      padding:4px 6px;
-      border-bottom-right-radius:6px;
-    }
+/* CATEGORY */
+.category-bar{
+  position:fixed;
+  top:45px;
+  width:100%;
+  height:40px;
+  background:#222;
+  display:flex;
+  overflow-x:auto;
+  z-index:2000;
+}
 
-    .carousel{display:flex;overflow:auto}
-    .carousel img{width:100%;border-radius:10px}
+.category-btn{
+  color:white;
+  padding:8px 14px;
+  margin:5px;
+  border-radius:20px;
+  cursor:pointer;
+}
 
-    .dots{text-align:center}
-    .dot{display:inline-block;width:6px;height:6px;background:#ccc;border-radius:50%;margin:2px}
-    .dot.active{background:#000}
+.category-btn.active{background:#25D366;}
 
-    button{padding:10px;margin-top:5px;width:100%;border:none;background:#000;color:#fff;border-radius:5px}
+.view{display:none;padding:10px;}
+.active-view{display:block;}
 
-    #adminPanel{display:none;padding:10px;background:#fff}
-  </style>
+/* CARD */
+.card{
+  background:white;
+  border-radius:14px;
+  padding:10px;
+  margin-bottom:15px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.img-wrap{
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.new-badge{
+  position:absolute;
+  top:0;
+  left:0;
+  margin:6px;
+  background:red;
+  color:white;
+  font-size:11px;
+  padding:4px 6px;
+  border-radius:5px;
+  z-index:10;
+}
+
+/* CAROUSEL */
+.carousel{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+}
+
+.carousel img{
+  min-width:100%;
+  height:400px;
+  object-fit:contain;
+  background:white;
+  scroll-snap-align:center;
+}
+
+.carousel::-webkit-scrollbar{display:none;}
+
+.dots{text-align:center;margin-top:5px;}
+.dot{
+  height:8px;width:8px;margin:0 3px;
+  background:#bbb;border-radius:50%;
+  display:inline-block;
+}
+.dot.active{background:#000;}
+
+.price{
+  background:#111;
+  color:white;
+  text-align:center;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+.buy-btn{
+  background:#25D366;
+  color:white;
+  border:none;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:12px;
+  font-weight:bold;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+}
+
+.buy-btn img{width:18px;}
+
+/* ADMIN */
+.admin{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:white;
+  z-index:5000;
+  padding:15px;
+  overflow-y:auto;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+
+.btn{
+  width:100%;
+  padding:12px;
+  background:green;
+  color:white;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.admin-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#f2f2f2;
+  padding:8px;
+  border-radius:6px;
+  margin:5px 0;
+}
+
+.delete-btn{background:red;color:white;border:none;padding:6px;border-radius:6px;}
+.edit-btn{background:orange;color:white;border:none;padding:6px;border-radius:6px;}
+
+</style>
 </head>
+
 <body>
 
-<div class="header">
-  <div class="logo">
-    <img src="logo.jpeg">
+<!-- HEADER -->
+<div class="top-marquee">
+  <img src="logo.jpeg" class="logo">
+
+  <div class="marquee-wrapper">
+    <div class="marquee-text">
+      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨ Affordable Luxury ✨
+    </div>
   </div>
+
+  <div class="admin-icon" onclick="openAdmin()">🔒</div>
 </div>
 
-<div class="tabs">
-  <button onclick="showView('kaftan')">Kaftan</button>
-  <button onclick="showView('lace')">Lace</button>
-  <button onclick="showView('bags')">Bags</button>
-  <button onclick="showView('shoes')">Shoes</button>
-  <button onclick="showView('abayas')">Abayas</button>
-  <button onclick="showView('yard')">Yard</button>
-  <button onclick="showView('caps')">Caps</button>
-  <button onclick="showView('vail')">Vail</button>
+<!-- CATEGORY -->
+<div class="category-bar">
+  <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
+  <div class="category-btn" onclick="showView('kaftan',this)">KAFTAN</div>
+  <div class="category-btn" onclick="showView('lace',this)">LACE</div>
+  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
+  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
+  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
+  <div class="category-btn" onclick="showView('yard',this)">YARD</div>
+  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
+  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>
+</div>
+
+<!-- VIEWS -->
+<div id="aboutView" class="view active-view">
+  <div class="card">Welcome to BOB TEXTILE</div>
 </div>
 
 <div id="kaftanView" class="view"></div>
@@ -87,62 +263,100 @@
 <div id="capsView" class="view"></div>
 <div id="vailView" class="view"></div>
 
-<button onclick="openAdmin()">Admin</button>
+<!-- ADMIN -->
+<div class="admin" id="adminPanel">
 
-<div id="adminPanel">
-  <h3>Add Product</h3>
-  <input id="aName" placeholder="Name"><br>
-  <input id="aPrice" placeholder="Price"><br>
-  <select id="aCategory"></select><br>
-  <button onclick="uploadImage()">Upload Images</button>
-  <button onclick="addProduct()">Add</button>
+<h3>Admin Panel</h3>
 
-  <h3>Delete Product</h3>
-  <select id="deleteCategory"></select>
-  <div id="deleteList"></div>
+<input id="aName" placeholder="Product Name">
+<input id="aPrice" placeholder="Price">
 
-  <h3>Edit Product</h3>
-  <select id="editCategory"></select>
-  <div id="editList"></div>
-  <input id="editName">
-  <input id="editPrice">
-  <button onclick="saveEdit()">Save</button>
+<select id="aCategory">
+  <option value="kaftan">Kaftan</option>
+  <option value="lace">Lace</option>
+  <option value="bags">Bags</option>
+  <option value="shoes">Shoes</option>
+  <option value="abayas">Abayas</option>
+  <option value="yard">Yard</option>
+  <option value="caps">Caps</option>
+  <option value="vail">Vail</option>
+</select>
+
+<button class="btn" onclick="uploadImage()">Upload Images</button>
+<button class="btn" onclick="addProduct()">Save Product</button>
+
+<hr>
+
+<h3>Delete Product</h3>
+<select id="deleteCategory" onchange="loadDeleteList()"></select>
+<div id="deleteList"></div>
+
+<hr>
+
+<h3>Edit Product</h3>
+<select id="editCategory" onchange="loadEditList()"></select>
+<div id="editList"></div>
+
+<input id="editName">
+<input id="editPrice">
+<button class="btn" onclick="saveEdit()">Update</button>
+
 </div>
 
 <script>
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let uploadedImages = [];
-let editIndex = null;
 
-function showView(type){
-  localStorage.setItem("activeView", type);
+let products=JSON.parse(localStorage.getItem("products"))||[];
+let uploadedImages=[];
+let editIndex=null;
 
+window.onload=()=>{
+  let saved=localStorage.getItem("activeView")||"about";
+  let btn=[...document.querySelectorAll(".category-btn")]
+  .find(b=>b.textContent.toLowerCase().includes(saved));
+  if(btn) showView(saved,btn);
+};
+
+function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
+  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
 
-  let list = products.filter(p=>p.category===type);
+  localStorage.setItem("activeView",type);
+
+  if(type==="about"){aboutView.classList.add("active-view");return;}
+
+  let list=products.filter(p=>p.category===type);
   let html="";
 
   list.forEach((p,i)=>{
-    let isNew = (Date.now()-p.date)<86400000;
+    let isNew=(Date.now()-p.date)<86400000;
 
-    html+=`<div class="card">
-      <div class="img-box">
-        ${isNew?'<span class="new-badge">NEW</span>':''}
-        <div class="carousel car${type+i}">
-          ${p.images.map(img=>`<img src="${img}">`).join("")}
+    html+=`
+    <div class="card">
+      <div class="img-wrap">
+        ${isNew?'<div class="new-badge">NEW</div>':''}
+        <div class="carousel car${type}${i}">
+          ${p.images.map(img=>`<img src="${img}">`).join('')}
         </div>
       </div>
-      <div class="dots dots${type+i}"></div>
-      <p>${p.name}</p>
-      <p>₦${p.price}</p>
-      <button onclick="buyNow(${i},'${type}')">BUY NOW</button>
+
+      <div class="dots dots${type}${i}"></div>
+
+      <div class="price">₦ ${p.price}</div>
+
+      <button class="buy-btn" onclick="buyNow(${i},'${type}')">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+        BUY NOW
+      </button>
     </div>`;
   });
 
   document.getElementById(type+"View").innerHTML=html;
   document.getElementById(type+"View").classList.add("active-view");
 
-  list.forEach((p,i)=>setupCarousel(".car"+type+i,".dots"+type+i));
+  list.forEach((p,i)=>{
+    setupCarousel(".car"+type+i,".dots"+type+i);
+  });
 }
 
 function buyNow(i,type){
@@ -153,7 +367,14 @@ function buyNow(i,type){
   let imgs=car.querySelectorAll("img");
   let index=Math.round(car.scrollLeft/car.clientWidth);
 
-  let msg=`Hello 👋\nI want to order this product:\n\nCategory: ${type}\nName: ${p.name}\nPrice: ₦${p.price}\nImage: ${imgs[index].src}\n\nIs it available?`;
+  let msg=`Hello 👋
+I want to order this product:
+
+Category: ${type}
+Price: ₦${p.price}
+Image: ${imgs[index].src}
+
+Is it available?`;
 
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
@@ -191,13 +412,8 @@ function openAdmin(){
 
 function fill(){
   let cats=["kaftan","lace","bags","shoes","abayas","yard","caps","vail"];
-  aCategory.innerHTML=cats.map(x=>`<option>${x}</option>`).join("");
   deleteCategory.innerHTML=cats.map(x=>`<option>${x}</option>`).join("");
   editCategory.innerHTML=cats.map(x=>`<option>${x}</option>`).join("");
-
-  deleteCategory.onchange=loadDeleteList;
-  editCategory.onchange=loadEditList;
-
   loadDeleteList();
   loadEditList();
 }
@@ -222,21 +438,19 @@ function addProduct(){
     images:[...uploadedImages],
     date:Date.now()
   });
-
   localStorage.setItem("products",JSON.stringify(products));
   uploadedImages=[];
-  showView(aCategory.value);
 }
 
 function loadDeleteList(){
   let cat=deleteCategory.value;
   deleteList.innerHTML="";
-
   products.forEach((p,i)=>{
     if(p.category===cat){
-      deleteList.innerHTML+=`<div>
+      deleteList.innerHTML+=`
+      <div class="admin-item">
         <img src="${p.images[0]}" width="40">
-        <button onclick="del(${i})">Delete</button>
+        <button class="delete-btn" onclick="del(${i})">Delete</button>
       </div>`;
     }
   });
@@ -251,12 +465,12 @@ function del(i){
 function loadEditList(){
   let cat=editCategory.value;
   editList.innerHTML="";
-
   products.forEach((p,i)=>{
     if(p.category===cat){
-      editList.innerHTML+=`<div>
+      editList.innerHTML+=`
+      <div class="admin-item">
         <img src="${p.images[0]}" width="40">
-        <button onclick="startEdit(${i})">Edit</button>
+        <button onclick="startEdit(${i})" class="edit-btn">Edit</button>
       </div>`;
     }
   });
@@ -271,16 +485,10 @@ function startEdit(i){
 function saveEdit(){
   products[editIndex].name=editName.value;
   products[editIndex].price=editPrice.value;
-  products[editIndex].date=Date.now();
-
   localStorage.setItem("products",JSON.stringify(products));
   loadEditList();
 }
 
-window.onload=function(){
-  let saved=localStorage.getItem("activeView")||"kaftan";
-  showView(saved);
-}
 </script>
 
 </body>
