@@ -406,18 +406,21 @@ if(car){
 index=Math.round(car.scrollLeft/car.clientWidth);
 }
 
-let img=p.images?.[index]||"";
+let img = p.images?.[index] || "";
 
-let msg=`
-🛍 ORDER FROM BOB TEXTILE
+let msg =
+`Hello 👋,
 
-📦 ${p.name}
-📂 ${type.toUpperCase()}
-💰 ₦${p.price}
+I'm interested in this product:
 
-🖼 Image:
+🧵 Category: ${type.toUpperCase()}
+🛍️ Product: ${p.name}
+💰 Price: ₦${p.price}
+
+🖼️ Selected Image:
 ${img}
-`;
+
+Is this available? I want to buy.`;
 
 window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
