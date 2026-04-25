@@ -89,6 +89,7 @@ body{
   padding:6px 14px;
   margin:5px;
   border-radius:20px;
+  white-space:nowrap;
   cursor:pointer;
 }
 
@@ -104,7 +105,7 @@ body{
   margin-bottom:15px;
 }
 
-/* CAROUSEL */
+/* PRODUCT */
 .carousel{
   display:flex;
   overflow-x:auto;
@@ -113,10 +114,10 @@ body{
 
 .carousel img{
   min-width:100%;
-  height:250px;
-  object-fit:cover;
-  border-radius:12px;
+  height:380px;
+  object-fit:contain;
   scroll-snap-align:center;
+  background:white;
 }
 
 .carousel::-webkit-scrollbar{display:none;}
@@ -131,7 +132,38 @@ body{
 }
 .dot.active{background:#000;}
 
-/* FORM */
+.buy-btn{
+  background:#25D366;
+  color:white;
+  border:none;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:12px;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  cursor:pointer;
+}
+
+.buy-btn img{width:20px;}
+
+/* ADMIN */
+.admin{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  z-index:5000;
+  padding:15px;
+  overflow:auto;
+}
+
 input,textarea,select{
   width:100%;
   padding:10px;
@@ -146,19 +178,6 @@ input,textarea,select{
   border:none;
   margin-top:5px;
   cursor:pointer;
-}
-
-.admin{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:white;
-  z-index:5000;
-  padding:15px;
-  overflow:auto;
 }
 
 .admin-item{
@@ -176,6 +195,13 @@ input,textarea,select{
   color:white;
   border:none;
   padding:6px;
+}
+
+/* ABOUT IMAGE TESTIMONIAL */
+.carousel img{
+  height:250px;
+  object-fit:cover;
+  border-radius:12px;
 }
 </style>
 </head>
@@ -199,7 +225,14 @@ input,textarea,select{
 
 <!-- CATEGORY -->
 <div class="category-bar">
-  <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
+  <div class="category-btn active" onclick="showView('about',this)">ABOUT</div>
+  <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
+  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
+  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
+  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
+  <div class="category-btn" onclick="showView('yard',this)">YARD</div>
+  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
+  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>
 </div>
 
 <!-- ABOUT -->
@@ -231,12 +264,21 @@ input,textarea,select{
 
 </div>
 
+<!-- OTHER VIEWS (UNCHANGED PRODUCTS) -->
+<div id="shaddaView" class="view"></div>
+<div id="bagsView" class="view"></div>
+<div id="shoesView" class="view"></div>
+<div id="abayasView" class="view"></div>
+<div id="yardView" class="view"></div>
+<div id="capsView" class="view"></div>
+<div id="vailView" class="view"></div>
+
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
 
 <h3>Admin Panel</h3>
 
-<h3>🛠 Pending Reviews</h3>
+<h3>🛠 Reviews</h3>
 <div id="reviewList"></div>
 
 <hr>
@@ -250,6 +292,10 @@ input,textarea,select{
 
 <script>
 
+/* STORAGE */
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let uploadedImages = [];
+
 let imageTestimonials = JSON.parse(localStorage.getItem("imageTestimonials")) || [];
 let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
 let pendingReviews = JSON.parse(localStorage.getItem("pendingReviews")) || [];
@@ -259,9 +305,12 @@ let hasNewReview = localStorage.getItem("hasNewReview")==="true";
 function showView(type,el){
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
   document.getElementById(type+"View").classList.add("active-view");
+
+  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
 }
 
-/* SUBMIT REVIEW + WHATSAPP ALERT */
+/* REVIEW SUBMIT + WHATSAPP ALERT */
 function submitReview(){
   if(!revName.value || !revMsg.value){
     alert("Fill all fields");
@@ -277,7 +326,7 @@ function submitReview(){
   hasNewReview=true;
   localStorage.setItem("hasNewReview","true");
 
-  // 🔔 WHATSAPP ALERT
+  // WhatsApp alert
   let text = `🚨 NEW REVIEW 🚨
 
 Name: ${name}
@@ -302,6 +351,7 @@ function openAdmin(){
   if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
     loadReviews();
+    loadImages();
 
     hasNewReview=false;
     localStorage.setItem("hasNewReview","false");
@@ -313,7 +363,7 @@ function closeAdmin(){
   adminPanel.style.display="none";
 }
 
-/* LOAD REVIEWS */
+/* REVIEWS */
 function loadReviews(){
   let box=document.getElementById("reviewList");
   box.innerHTML="";
@@ -329,9 +379,10 @@ function loadReviews(){
       <button class="delete-btn" onclick="reject(${i})">X</button>
     </div>`;
   });
+
+  loadTextReviews();
 }
 
-/* APPROVE */
 function approve(i){
   let r = pendingReviews.splice(i,1)[0];
   reviews.unshift(r);
@@ -340,10 +391,9 @@ function approve(i){
   localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
 
   loadReviews();
-  loadText();
+  loadTextReviews();
 }
 
-/* REJECT */
 function reject(i){
   pendingReviews.splice(i,1);
   localStorage.setItem("pendingReviews",JSON.stringify(pendingReviews));
@@ -351,7 +401,7 @@ function reject(i){
 }
 
 /* TEXT REVIEWS */
-function loadText(){
+function loadTextReviews(){
   let box=document.getElementById("textReviews");
   if(!box) return;
 
@@ -378,14 +428,14 @@ function loadImages(){
     box.innerHTML+=`<img src="${img}">`;
   });
 
-  let dArr=[];
+  let arr=[];
 
   imageTestimonials.forEach((_,i)=>{
     let d=document.createElement("span");
     d.className="dot";
     if(i===0)d.classList.add("active");
     dots.appendChild(d);
-    dArr.push(d);
+    arr.push(d);
   });
 
   let index=0;
@@ -401,8 +451,8 @@ function loadImages(){
       behavior:"smooth"
     });
 
-    dArr.forEach(x=>x.classList.remove("active"));
-    if(dArr[index]) dArr[index].classList.add("active");
+    arr.forEach(x=>x.classList.remove("active"));
+    if(arr[index]) arr[index].classList.add("active");
 
   },3000);
 }
@@ -424,8 +474,9 @@ function uploadImage(){
 
 /* INIT */
 window.onload=()=>{
+  loadReviews();
   loadImages();
-  loadText();
+  loadTextReviews();
   updateNotif();
 };
 
