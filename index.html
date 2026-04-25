@@ -27,7 +27,7 @@ body{
   z-index:3000;
 }
 
-/* LOGO FIX (NO LEFT GAP) */
+/* LOGO */
 .logo{
   height:45px;
   margin:0;
@@ -38,7 +38,7 @@ body{
   position:relative;
 }
 
-/* MARQUEE BEHIND LOGO */
+/* MARQUEE */
 .marquee-wrapper{
   position:absolute;
   width:100%;
@@ -113,7 +113,7 @@ body{
   border-radius:12px;
 }
 
-/* NEW BADGE FIXED TOP LEFT */
+/* NEW BADGE */
 .new-badge{
   position:absolute;
   top:8px;
@@ -164,7 +164,7 @@ body{
   border-radius:8px;
 }
 
-/* BUY */
+/* BUY BUTTON */
 .buy-btn{
   background:#25D366;
   color:white;
@@ -174,6 +174,10 @@ body{
   margin-top:10px;
   border-radius:12px;
   font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
 }
 
 /* ADMIN */
@@ -205,7 +209,6 @@ input,select{
   margin-top:5px;
 }
 
-/* ADMIN ITEM */
 .admin-item{
   display:flex;
   align-items:center;
@@ -218,13 +221,6 @@ input,select{
 
 .delete-btn{
   background:red;
-  color:white;
-  border:none;
-  padding:6px;
-}
-
-.edit-btn{
-  background:orange;
   color:white;
   border:none;
   padding:6px;
@@ -350,7 +346,8 @@ function showView(type,el){
       <div class="price">₦ ${p.price}</div>
 
       <button class="buy-btn" onclick="buyNow(${i},'${type}')">
-        🟢 BUY NOW
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+        BUY NOW
       </button>
 
     </div>`;
@@ -371,12 +368,19 @@ function buyNow(i,type){
   let index=Math.round(car.scrollLeft/car.clientWidth);
   let img=p.images[index];
 
-  let msg=`Hello 👋
-Product: ${p.name}
-Price: ₦${p.price}
-Image: ${img}
+  let msg=`Hello 👋,
 
-Is it available?`;
+I am interested in this product from BOB TEXTILE:
+
+🧵 Category: ${type.toUpperCase()}
+🛍️ Product Name: ${p.name}
+💰 Price: ₦${p.price}
+
+🖼️ Selected Image:
+${img}
+
+Please is this item still available?
+I would like to place an order.`;
 
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
