@@ -29,15 +29,12 @@ body{
 
 .logo{
   height:45px;
-  position:relative;
-  z-index:5;
 }
 
 .marquee-wrapper{
   position:absolute;
   width:100%;
   overflow:hidden;
-  z-index:1;
 }
 
 .marquee-text{
@@ -90,6 +87,7 @@ body{
 .view{display:none;padding:10px;}
 .active-view{display:block;}
 
+/* CARD */
 .card{
   background:white;
   border-radius:14px;
@@ -160,38 +158,6 @@ body{
 
 .buy-btn img{width:20px;}
 
-/* SOCIAL */
-.social-btn{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border:none;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  color:white;
-  font-weight:bold;
-}
-
-.social-btn img{width:20px;}
-.fb{background:#1877F2;}
-.ig{background:#E1306C;}
-.tk{background:#000;}
-.wa{background:#25D366;}
-
-a{text-decoration:none;}
-
-/* REVIEW */
-.review-box{
-  background:#f7f7f7;
-  padding:10px;
-  margin:8px 0;
-  border-radius:10px;
-  border-left:4px solid #25D366;
-}
-
 /* ADMIN */
 .admin{
   display:none;
@@ -206,7 +172,7 @@ a{text-decoration:none;}
   overflow:auto;
 }
 
-input,textarea,select{
+input,select{
   width:100%;
   padding:10px;
   margin:5px 0;
@@ -255,8 +221,7 @@ input,textarea,select{
 
 <!-- CATEGORY -->
 <div class="category-bar">
-  <div class="category-btn active" onclick="showProducts('about',this)">ABOUT</div>
-  <div class="category-btn" onclick="showProducts('shadda',this)">SHADDA</div>
+  <div class="category-btn active" onclick="showProducts('shadda',this)">SHADDA</div>
   <div class="category-btn" onclick="showProducts('bags',this)">BAGS</div>
   <div class="category-btn" onclick="showProducts('shoes',this)">SHOES</div>
   <div class="category-btn" onclick="showProducts('abayas',this)">ABAYAS</div>
@@ -267,28 +232,10 @@ input,textarea,select{
 
 <!-- ABOUT -->
 <div id="aboutView" class="view active-view">
-
-<div class="card">
-  <h2 style="text-align:center;">🧵 BOB TEXTILE</h2>
-  <p style="text-align:center;">Premium fabrics • Modern fashion • Trusted quality</p>
-</div>
-
-<div class="card">
-  <h3>📍 Kano Branch</h3>
-  <p>Shop 12, Gidan Zeeta, Kantin Kwari Market<br>Muwaffaq House, Isyaka Rabiu Road</p>
-
-  <h3>📍 Zamfara Branch</h3>
-  <p>Magizawa Plaza, Ahmadu Bello Way, Gusau<br>T/Wada Area, Opp Gamzaki Road</p>
-
-  <h3>📍 Sokoto Branch</h3>
-  <p>Gidan Yadi, Maiduguri Road<br>Central Market Area</p>
-</div>
-
-<div class="card">
-  <h3>📞 Contact</h3>
-  <p>09114738932</p>
-</div>
-
+  <div class="card">
+    <h2 style="text-align:center;">🧵 BOB TEXTILE</h2>
+    <p style="text-align:center;">Premium fabrics • Modern fashion • Trusted quality</p>
+  </div>
 </div>
 
 <!-- PRODUCT VIEWS -->
@@ -302,10 +249,12 @@ input,textarea,select{
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
+
 <h3>Admin Panel</h3>
 
-<input id="aName" placeholder="Name">
+<input id="aName" placeholder="Product Name">
 <input id="aPrice" placeholder="Price">
+
 <select id="aCategory">
 <option>shadda</option>
 <option>bags</option>
@@ -316,13 +265,21 @@ input,textarea,select{
 <option>vail</option>
 </select>
 
+<button class="btn" onclick="uploadImage()">Upload Images</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
+
+<hr>
+
+<div id="adminList"></div>
+
 <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
+
 </div>
 
 <script>
 
 let products = JSON.parse(localStorage.getItem("products"))||[];
+let uploadedImages=[];
 
 /* SHOW PRODUCTS */
 function showProducts(type,el){
@@ -345,7 +302,7 @@ html+=`
 <div class="card">
 
 <div class="carousel car${type}${i}">
-${p.images?.map(img=>`<img src="${img}">`).join("")||""}
+${(p.images||[]).map(img=>`<img src="${img}">`).join("")}
 </div>
 
 <div class="dots dots${type}${i}"></div>
@@ -366,7 +323,7 @@ document.getElementById(type+"View").classList.add("active-view");
 list.forEach((p,i)=>setupCarousel(type,i));
 }
 
-/* DOT SYSTEM */
+/* CAROUSEL */
 function setupCarousel(type,i){
 
 let c=document.querySelector(".car"+type+i);
@@ -411,7 +368,7 @@ let img = p.images?.[index] || "";
 let msg =
 `Hello 👋,
 
-I'm interested in this product:
+I want to order from BOB TEXTILE:
 
 🧵 Category: ${type.toUpperCase()}
 🛍️ Product: ${p.name}
@@ -429,6 +386,7 @@ window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 function openAdmin(){
 if(prompt("Password")==="1234"){
 adminPanel.style.display="block";
+renderAdmin();
 }
 }
 
@@ -436,23 +394,71 @@ function closeAdmin(){
 adminPanel.style.display="none";
 }
 
-/* SAVE PRODUCT */
+/* UPLOAD */
+function uploadImage(){
+cloudinary.openUploadWidget({
+cloudName:"db92r6j9z",
+uploadPreset:"ummuhalti",
+multiple:true
+},(e,r)=>{
+if(r.event==="success"){
+uploadedImages.push(r.info.secure_url);
+}
+});
+}
+
+/* SAVE */
 function addProduct(){
 
 products.unshift({
+id:Date.now(),
 name:aName.value,
 price:aPrice.value,
 category:aCategory.value,
-images:[]
+images:[...uploadedImages]
 });
 
 localStorage.setItem("products",JSON.stringify(products));
+
+uploadedImages=[];
 aName.value="";
 aPrice.value="";
+
+renderAdmin();
+}
+
+/* ADMIN LIST */
+function renderAdmin(){
+
+let box=document.getElementById("adminList");
+box.innerHTML="";
+
+products.forEach((p,i)=>{
+box.innerHTML+=`
+<div class="admin-item">
+
+<img src="${p.images?.[0]||''}" width="50">
+
+<div style="flex:1">
+<b>${p.name}</b><br>
+₦${p.price}
+</div>
+
+<button class="btn" style="background:red" onclick="deleteProduct(${i})">Del</button>
+
+</div>`;
+});
+}
+
+/* DELETE */
+function deleteProduct(i){
+products.splice(i,1);
+localStorage.setItem("products",JSON.stringify(products));
+renderAdmin();
 }
 
 window.onload=()=>{
-showProducts("about",document.querySelector(".category-btn"));
+showProducts("shadda",document.querySelector(".category-btn"));
 }
 
 </script>
