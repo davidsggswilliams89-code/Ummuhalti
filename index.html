@@ -14,7 +14,7 @@ body{
   padding-top:80px;
 }
 
-/* HEADER FIX (TEXT BEHIND LOGO) */
+/* HEADER */
 .top-marquee{
   background:#111;
   position:fixed;
@@ -27,25 +27,30 @@ body{
   z-index:3000;
 }
 
+/* LOGO FIX (NO LEFT GAP) */
 .logo{
   height:45px;
+  margin:0;
+  padding:0;
+  object-fit:contain;
+  background:#111;
   z-index:10;
   position:relative;
-  background:#111;
 }
 
+/* MARQUEE BEHIND LOGO */
 .marquee-wrapper{
   position:absolute;
   width:100%;
   overflow:hidden;
-  z-index:1; /* BEHIND LOGO */
+  z-index:1;
 }
 
 .marquee-text{
   white-space:nowrap;
   animation:move 12s linear infinite;
-  margin-left:120px;
   color:white;
+  margin-left:120px;
 }
 
 @keyframes move{
@@ -63,6 +68,7 @@ body{
   align-items:center;
   justify-content:center;
   color:white;
+  cursor:pointer;
   z-index:10;
 }
 
@@ -100,6 +106,26 @@ body{
   margin-bottom:15px;
 }
 
+/* IMAGE WRAP */
+.img-wrap{
+  position:relative;
+  overflow:hidden;
+  border-radius:12px;
+}
+
+/* NEW BADGE FIXED TOP LEFT */
+.new-badge{
+  position:absolute;
+  top:8px;
+  left:8px;
+  background:red;
+  color:white;
+  font-size:11px;
+  padding:4px 6px;
+  border-radius:5px;
+  z-index:10;
+}
+
 /* CAROUSEL */
 .carousel{
   display:flex;
@@ -112,6 +138,7 @@ body{
   height:380px;
   object-fit:contain;
   scroll-snap-align:center;
+  background:white;
 }
 
 .carousel::-webkit-scrollbar{display:none;}
@@ -178,12 +205,29 @@ input,select{
   margin-top:5px;
 }
 
-/* EDIT PANEL */
-.edit-box{
+/* ADMIN ITEM */
+.admin-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
   background:#f2f2f2;
-  padding:10px;
-  margin-top:10px;
-  border-radius:10px;
+  padding:8px;
+  margin:5px 0;
+  border-radius:6px;
+}
+
+.delete-btn{
+  background:red;
+  color:white;
+  border:none;
+  padding:6px;
+}
+
+.edit-btn{
+  background:orange;
+  color:white;
+  border:none;
+  padding:6px;
 }
 
 </style>
@@ -252,12 +296,9 @@ input,select{
 
 <hr>
 
-<h3>Edit Product</h3>
-<div id="editList"></div>
-
-<input id="editName" placeholder="Edit Name">
-<input id="editPrice" placeholder="Edit Price">
-<button class="btn" onclick="saveEdit()">Update</button>
+<h3>Delete Product</h3>
+<select id="delCat" onchange="loadDelete()"></select>
+<div id="delList"></div>
 
 </div>
 
@@ -265,7 +306,14 @@ input,select{
 
 let products=JSON.parse(localStorage.getItem("products"))||[];
 let uploadedImages=[];
-let editIndex=null;
+
+/* RESTORE ACTIVE */
+window.onload=()=>{
+  let saved=localStorage.getItem("activeView")||"about";
+  let btn=[...document.querySelectorAll(".category-btn")]
+    .find(b=>b.textContent.toLowerCase().includes(saved));
+  if(btn) showView(saved,btn);
+};
 
 /* VIEW */
 function showView(type,el){
@@ -289,8 +337,12 @@ function showView(type,el){
     html+=`
     <div class="card">
 
-      <div class="carousel car${type}${i}">
-        ${p.images.map(img=>`<img src="${img}">`).join('')}
+      <div class="img-wrap">
+        ${isNew?'<div class="new-badge">NEW</div>':''}
+
+        <div class="carousel car${type}${i}">
+          ${p.images.map(img=>`<img src="${img}">`).join('')}
+        </div>
       </div>
 
       <div class="dots dots${type}${i}"></div>
@@ -301,8 +353,6 @@ function showView(type,el){
         🟢 BUY NOW
       </button>
 
-      <button class="btn" onclick="startEdit(${i},'${type}')">EDIT</button>
-
     </div>`;
   });
 
@@ -312,7 +362,7 @@ function showView(type,el){
   list.forEach((p,i)=>setupCarousel(type,i));
 }
 
-/* BUY NOW (LIVE IMAGE) */
+/* BUY NOW */
 function buyNow(i,type){
   let list=products.filter(p=>p.category===type);
   let p=list[i];
@@ -322,8 +372,6 @@ function buyNow(i,type){
   let img=p.images[index];
 
   let msg=`Hello 👋
-I want to order:
-
 Product: ${p.name}
 Price: ₦${p.price}
 Image: ${img}
@@ -362,7 +410,13 @@ function setupCarousel(type,i){
 function openAdmin(){
   if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
+    fillCats();
   }
+}
+
+function fillCats(){
+  let cats=["shadda","bags","shoes","abayas","yard","caps","vail"];
+  delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");
 }
 
 /* UPLOAD */
@@ -392,23 +446,29 @@ function addProduct(){
   uploadedImages=[];
 }
 
-/* EDIT */
-function startEdit(i,type){
-  let list=products.filter(p=>p.category===type);
-  editIndex=products.indexOf(list[i]);
+/* DELETE */
+function loadDelete(){
+  let cat=delCat.value;
+  let html="";
 
-  editName.value=list[i].name;
-  editPrice.value=list[i].price;
+  products.forEach((p,i)=>{
+    if(p.category===cat){
+      html+=`
+      <div class="admin-item">
+        <img src="${p.images[0]}" width="40">
+        <div style="flex:1">₦${p.price}</div>
+        <button class="delete-btn" onclick="del(${i})">X</button>
+      </div>`;
+    }
+  });
+
+  delList.innerHTML=html;
 }
 
-function saveEdit(){
-  if(editIndex==null)return;
-
-  products[editIndex].name=editName.value;
-  products[editIndex].price=editPrice.value;
-
+function del(i){
+  products.splice(i,1);
   localStorage.setItem("products",JSON.stringify(products));
-  alert("Updated!");
+  loadDelete();
 }
 
 </script>
