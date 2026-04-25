@@ -35,10 +35,9 @@ body{
   object-fit:contain;
   background:#111;
   z-index:10;
-  position:relative;
 }
 
-/* MARQUEE */
+/* MOVING TEXT */
 .marquee-wrapper{
   position:absolute;
   width:100%;
@@ -58,6 +57,7 @@ body{
   100%{transform:translateX(-100%);}
 }
 
+/* ADMIN ICON */
 .admin-icon{
   position:absolute;
   right:0;
@@ -106,7 +106,7 @@ body{
   margin-bottom:15px;
 }
 
-/* IMAGE WRAP */
+/* IMAGE */
 .img-wrap{
   position:relative;
   overflow:hidden;
@@ -164,7 +164,7 @@ body{
   border-radius:8px;
 }
 
-/* BUY BUTTON */
+/* BUY BUTTON FIXED */
 .buy-btn{
   background:#25D366;
   color:white;
@@ -177,10 +177,17 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:8px;
+  gap:10px;
+  cursor:pointer;
 }
 
-/* ADMIN */
+.buy-btn img{
+  width:20px;
+  height:20px;
+  display:block;
+}
+
+/* ADMIN PANEL */
 .admin{
   display:none;
   position:fixed;
@@ -207,6 +214,7 @@ input,select{
   color:white;
   border:none;
   margin-top:5px;
+  cursor:pointer;
 }
 
 .admin-item{
@@ -224,8 +232,8 @@ input,select{
   color:white;
   border:none;
   padding:6px;
+  cursor:pointer;
 }
-
 </style>
 </head>
 
@@ -295,6 +303,8 @@ input,select{
 <h3>Delete Product</h3>
 <select id="delCat" onchange="loadDelete()"></select>
 <div id="delList"></div>
+
+<button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
 </div>
 
@@ -370,17 +380,16 @@ function buyNow(i,type){
 
   let msg=`Hello 👋,
 
-I am interested in this product👇:
+I want to order from BOB TEXTILE:
 
 🧵 Category: ${type.toUpperCase()}
-🛍️ Product Name: ${p.name}
+🛍️ Product: ${p.name}
 💰 Price: ₦${p.price}
 
 🖼️ Selected Image:
 ${img}
 
-Please is this item still available?
-I would like to place an order.`;
+Is this available? I want to buy.`;
 
   window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
@@ -416,6 +425,10 @@ function openAdmin(){
     adminPanel.style.display="block";
     fillCats();
   }
+}
+
+function closeAdmin(){
+  adminPanel.style.display="none";
 }
 
 function fillCats(){
@@ -460,8 +473,8 @@ function loadDelete(){
       html+=`
       <div class="admin-item">
         <img src="${p.images[0]}" width="40">
-        <div style="flex:1">₦${p.price}</div>
-        <button class="delete-btn" onclick="del(${i})">X</button>
+        <div style="flex:1">${p.name}</div>
+        <button class="delete-btn" onclick="del(${i})">Delete</button>
       </div>`;
     }
   });
