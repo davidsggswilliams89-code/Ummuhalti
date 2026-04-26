@@ -647,12 +647,13 @@ function restoreActiveView(){
 
   let btn = [...document.querySelectorAll(".category-btn")]
     .find(b => b.textContent.trim().toLowerCase() === saved.toLowerCase());
+
   if(btn){
     showView(saved, btn);
   } else {
-  document.querySelectorAll(".view").forEach(v => v.classList.remove("active-view"));
-  document.getElementById("aboutView").classList.add("active-view");
-}
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active-view"));
+    document.getElementById("aboutView").classList.add("active-view");
+  }
 }
     
 function initApp(){  
