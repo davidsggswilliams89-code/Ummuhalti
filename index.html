@@ -3,6 +3,7 @@
 <head>
   <title>BOB TEXTILE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 
 <style>
@@ -26,17 +27,22 @@ body{
   z-index:3000;
 }
 
+/* LOGO */
 .logo{
   height:45px;
   margin:0;
   padding:0;
-  object-fit:cover;
+  object-fit:contain;
+  background:#111;
+  z-index:10;
 }
 
+/* MOVING TEXT */
 .marquee-wrapper{
   position:absolute;
   width:100%;
   overflow:hidden;
+  z-index:1;
 }
 
 .marquee-text{
@@ -51,6 +57,7 @@ body{
   100%{transform:translateX(-100%);}
 }
 
+/* ADMIN ICON */
 .admin-icon{
   position:absolute;
   right:0;
@@ -62,6 +69,7 @@ body{
   justify-content:center;
   color:white;
   cursor:pointer;
+  z-index:10;
 }
 
 /* CATEGORY */
@@ -81,8 +89,8 @@ body{
   padding:6px 14px;
   margin:5px;
   border-radius:20px;
-  cursor:pointer;
   white-space:nowrap;
+  cursor:pointer;
 }
 
 .category-btn.active{background:#25D366;}
@@ -99,28 +107,52 @@ body{
 }
 
 /* IMAGE */
-.carousel{
+.img-wrap{
   position:relative;
-}
-
-.carousel img{
-  width:100%;
-  height:380px;
-  object-fit:contain;
-  background:white;
+  overflow:hidden;
+  border-radius:12px;
 }
 
 /* NEW BADGE */
 .new-badge{
   position:absolute;
-  top:10px;
-  left:10px;
+  top:8px;
+  left:8px;
   background:red;
   color:white;
-  padding:5px 8px;
-  font-size:12px;
+  font-size:11px;
+  padding:4px 6px;
   border-radius:5px;
+  z-index:10;
 }
+
+/* CAROUSEL */
+.carousel{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+}
+
+.carousel img{
+  min-width:100%;
+  height:380px;
+  object-fit:contain;
+  scroll-snap-align:center;
+  background:white;
+}
+
+.carousel::-webkit-scrollbar{display:none;}
+
+/* DOTS */
+.dots{text-align:center;margin-top:5px;}
+.dot{
+  height:8px;width:8px;
+  margin:0 3px;
+  background:#bbb;
+  border-radius:50%;
+  display:inline-block;
+}
+.dot.active{background:#000;}
 
 /* PRICE */
 .price{
@@ -132,7 +164,7 @@ body{
   border-radius:8px;
 }
 
-/* BUTTON */
+/* BUY BUTTON FIXED */
 .buy-btn{
   background:#25D366;
   color:white;
@@ -142,28 +174,20 @@ body{
   margin-top:10px;
   border-radius:12px;
   font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   cursor:pointer;
 }
 
-.edit-btn{
-  width:100%;
-  padding:8px;
-  background:#444;
-  color:white;
-  border:none;
-  margin-top:5px;
+.buy-btn img{
+  width:20px;
+  height:20px;
+  display:block;
 }
 
-.delete-btn{
-  width:100%;
-  padding:8px;
-  background:red;
-  color:white;
-  border:none;
-  margin-top:5px;
-}
-
-/* ADMIN */
+/* ADMIN PANEL */
 .admin{
   display:none;
   position:fixed;
@@ -190,6 +214,25 @@ input,select{
   color:white;
   border:none;
   margin-top:5px;
+  cursor:pointer;
+}
+
+.admin-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#f2f2f2;
+  padding:8px;
+  margin:5px 0;
+  border-radius:6px;
+}
+
+.delete-btn{
+  background:red;
+  color:white;
+  border:none;
+  padding:6px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -214,18 +257,25 @@ input,select{
   <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
   <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
   <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
-  <div class="category-btn" onclick="showView('yards',this)">YARDS</div>
-  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
   <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
+  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
+  <div class="category-btn" onclick="showView('yard',this)">YARD</div>
+  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
+  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>
 </div>
 
 <!-- VIEWS -->
-<div id="aboutView" class="view active-view"></div>
+<div id="aboutView" class="view active-view">
+  <div class="card">Welcome to BOB TEXTILE</div>
+</div>
+
 <div id="shaddaView" class="view"></div>
 <div id="bagsView" class="view"></div>
-<div id="yardsView" class="view"></div>
-<div id="capsView" class="view"></div>
 <div id="shoesView" class="view"></div>
+<div id="abayasView" class="view"></div>
+<div id="yardView" class="view"></div>
+<div id="capsView" class="view"></div>
+<div id="vailView" class="view"></div>
 
 <!-- ADMIN -->
 <div class="admin" id="adminPanel">
@@ -238,150 +288,204 @@ input,select{
 <select id="aCategory">
   <option value="shadda">SHADDA</option>
   <option value="bags">BAGS</option>
-  <option value="yards">YARDS</option>
-  <option value="caps">CAPS</option>
   <option value="shoes">SHOES</option>
+  <option value="abayas">ABAYAS</option>
+  <option value="yard">YARD</option>
+  <option value="caps">CAPS</option>
+  <option value="vail">VAIL</option>
 </select>
 
-<button class="btn" onclick="uploadImage()">Upload Image</button>
+<button class="btn" onclick="uploadImage()">Upload Images</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
 
-<button class="btn" style="background:red;" onclick="closeAdmin()">Close</button>
+<hr>
+
+<h3>Delete Product</h3>
+<select id="delCat" onchange="loadDelete()"></select>
+<div id="delList"></div>
+
+<button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
 </div>
 
 <script>
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let activeImage = "";
+let products=JSON.parse(localStorage.getItem("products"))||[];
+let uploadedImages=[];
 
-/* TAB SYSTEM */
-function showView(view,el){
-  localStorage.setItem("activeTab",view);
-
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
-  document.getElementById(view+"View").classList.add("active-view");
-
-  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active");
-}
-
-/* RESTORE TAB */
-window.onload=function(){
-  loadProducts();
-  let last = localStorage.getItem("activeTab");
-  if(last){
-    let btn=[...document.querySelectorAll(".category-btn")]
-      .find(b=>b.innerText.toLowerCase()==last);
-    if(btn) btn.click();
-  }
+/* RESTORE ACTIVE */
+window.onload=()=>{
+  let saved=localStorage.getItem("activeView")||"about";
+  let btn=[...document.querySelectorAll(".category-btn")]
+    .find(b=>b.textContent.toLowerCase().includes(saved));
+  if(btn) showView(saved,btn);
 };
 
-/* UPLOAD IMAGE */
-function uploadImage(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:false
-  },(e,r)=>{
-    if(r && r.event==="success"){
-      activeImage = r.info.secure_url;
-      alert("Image uploaded ✔");
-    }
-  });
-}
+/* VIEW */
+function showView(type,el){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
+  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
 
-/* ADD PRODUCT */
-function addProduct(){
-  if(!activeImage){
-    alert("Upload image first ❗");
+  el.classList.add("active");
+  localStorage.setItem("activeView",type);
+
+  if(type==="about"){
+    aboutView.classList.add("active-view");
     return;
   }
 
-  let p={
-    name:aName.value,
-    price:aPrice.value,
-    category:aCategory.value,
-    image:activeImage,
-    time:Date.now()
-  };
+  let list=products.filter(p=>p.category===type);
+  let html="";
 
-  products.push(p);
-  localStorage.setItem("products",JSON.stringify(products));
+  list.forEach((p,i)=>{
+    let isNew=(Date.now()-p.date)<86400000;
 
-  activeImage="";
-  aName.value="";
-  aPrice.value="";
+    html+=`
+    <div class="card">
 
-  loadProducts();
-}
+      <div class="img-wrap">
+        ${isNew?'<div class="new-badge">NEW</div>':''}
 
-/* RENDER */
-function loadProducts(){
-  ["shadda","bags","yards","caps","shoes"].forEach(c=>{
-    document.getElementById(c+"View").innerHTML="";
-  });
-
-  products.forEach((p,i)=>{
-    let isNew = (Date.now()-p.time)<86400000;
-
-    let html=`
-      <div class="card">
-        <div class="carousel">
-          ${isNew?'<div class="new-badge">NEW</div>':''}
-          <img src="${p.image || ''}">
+        <div class="carousel car${type}${i}">
+          ${p.images.map(img=>`<img src="${img}">`).join('')}
         </div>
-
-        <h3>${p.name}</h3>
-        <div class="price">${p.price}</div>
-
-        <button class="buy-btn" onclick="buy('${p.name}','${p.price}','${p.image}')">
-          BUY ON WHATSAPP
-        </button>
-
-        <button class="edit-btn" onclick="editProduct(${i})">Edit</button>
-        <button class="delete-btn" onclick="deleteProduct(${i})">Delete</button>
       </div>
-    `;
 
-    document.getElementById(p.category+"View").innerHTML += html;
+      <div class="dots dots${type}${i}"></div>
+
+      <div class="price">₦ ${p.price}</div>
+
+      <button class="buy-btn" onclick="buyNow(${i},'${type}')">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+        BUY NOW
+      </button>
+
+    </div>`;
   });
+
+  document.getElementById(type+"View").innerHTML=html;
+  document.getElementById(type+"View").classList.add("active-view");
+
+  list.forEach((p,i)=>setupCarousel(type,i));
 }
 
-/* WHATSAPP */
-function buy(name,price,img){
-  let msg=`Hello, I want:%0AProduct: ${name}%0APrice: ${price}%0AImage: ${img}%0AIs it available?`;
-  window.open(`https://wa.me/2349114738932?text=${msg}`);
+/* BUY NOW */
+function buyNow(i,type){
+  let list=products.filter(p=>p.category===type);
+  let p=list[i];
+
+  let car=document.querySelector(".car"+type+i);
+  let index=Math.round(car.scrollLeft/car.clientWidth);
+  let img=p.images[index];
+
+  let msg=`Hello 👋,
+
+I want to order from BOB TEXTILE:
+
+🧵 Category: ${type.toUpperCase()}
+🛍️ Product: ${p.name}
+💰 Price: ₦${p.price}
+
+🖼️ Selected Image:
+${img}
+
+Is this available? I want to buy.`;
+
+  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
 }
 
-/* DELETE */
-function deleteProduct(i){
-  products.splice(i,1);
-  localStorage.setItem("products",JSON.stringify(products));
-  loadProducts();
-}
+/* CAROUSEL */
+function setupCarousel(type,i){
+  let c=document.querySelector(".car"+type+i);
+  let box=document.querySelector(".dots"+type+i);
+  if(!c)return;
 
-/* EDIT */
-function editProduct(i){
-  let p=products[i];
-  aName.value=p.name;
-  aPrice.value=p.price;
-  aCategory.value=p.category;
-  activeImage=p.image;
+  let imgs=c.querySelectorAll("img");
+  box.innerHTML="";
 
-  products.splice(i,1);
-  loadProducts();
+  imgs.forEach((_,x)=>{
+    let d=document.createElement("span");
+    d.className="dot";
+    if(x===0)d.classList.add("active");
+    box.appendChild(d);
+  });
+
+  let dots=box.querySelectorAll(".dot");
+
+  c.addEventListener("scroll",()=>{
+    let index=Math.round(c.scrollLeft/c.clientWidth);
+    dots.forEach(d=>d.classList.remove("active"));
+    if(dots[index])dots[index].classList.add("active");
+  });
 }
 
 /* ADMIN */
 function openAdmin(){
-  if(prompt("Password")=="1234"){
+  if(prompt("Password")==="1234"){
     adminPanel.style.display="block";
+    fillCats();
   }
 }
 
 function closeAdmin(){
   adminPanel.style.display="none";
+}
+
+function fillCats(){
+  let cats=["shadda","bags","shoes","abayas","yard","caps","vail"];
+  delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");
+}
+
+/* UPLOAD */
+function uploadImage(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true
+  },(e,r)=>{
+    if(r&&r.event==="success"){
+      uploadedImages.push(r.info.secure_url);
+    }
+  });
+}
+
+/* SAVE */
+function addProduct(){
+  products.unshift({
+    name:aName.value,
+    price:aPrice.value,
+    category:aCategory.value,
+    images:[...uploadedImages],
+    date:Date.now()
+  });
+
+  localStorage.setItem("products",JSON.stringify(products));
+  uploadedImages=[];
+}
+
+/* DELETE */
+function loadDelete(){
+  let cat=delCat.value;
+  let html="";
+
+  products.forEach((p,i)=>{
+    if(p.category===cat){
+      html+=`
+      <div class="admin-item">
+        <img src="${p.images[0]}" width="40">
+        <div style="flex:1">${p.name}</div>
+        <button class="delete-btn" onclick="del(${i})">Delete</button>
+      </div>`;
+    }
+  });
+
+  delList.innerHTML=html;
+}
+
+function del(i){
+  products.splice(i,1);
+  localStorage.setItem("products",JSON.stringify(products));
+  loadDelete();
 }
 
 </script>
