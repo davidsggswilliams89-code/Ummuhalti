@@ -631,8 +631,7 @@ function uploadTestimonials(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
     uploadPreset:"ummuhalti",
-    multiple:true,
-    sources:["local","camera"]
+    multiple:true
   },(error,result)=>{
 
     if(!error && result && result.event === "success"){
@@ -647,7 +646,7 @@ function restoreActiveView(){
   let saved = localStorage.getItem("activeView") || "about";
 
   let btn = [...document.querySelectorAll(".category-btn")]
-    .find(b => b.textContent.trim().toLowerCase() === saved);
+    .find(b => b.textContent.trim().toLowerCase() === saved.toLowerCase());
   if(btn){
     showView(saved, btn);
   } else {
