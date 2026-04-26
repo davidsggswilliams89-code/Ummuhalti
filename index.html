@@ -650,8 +650,9 @@ function restoreActiveView(){
   if(btn){
     showView(saved, btn);
   } else {
-    document.getElementById("aboutView").classList.add("active-view");
-  }
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active-view"));
+  document.getElementById("aboutView").classList.add("active-view");
+}
 }
     
 function initApp(){  
