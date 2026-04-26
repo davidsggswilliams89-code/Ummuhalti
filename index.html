@@ -613,19 +613,21 @@ function loadDelete(){
   delList.innerHTML=html;  
 }  
   
-function del(i){
-  let cat = delCat.value;
+function deleteTestimonial(i){
+  let list = JSON.parse(localStorage.getItem("testimonials")) || [];
 
-  let filtered = products.filter(p => p.category === cat);
-  let item = filtered[i];
+  // remove item
+  list.splice(i, 1);
 
-  let realIndex = products.indexOf(item);
+  // save back to storage
+  localStorage.setItem("testimonials", JSON.stringify(list));
 
-  if(realIndex !== -1){
-    products.splice(realIndex,1);
-    localStorage.setItem("products",JSON.stringify(products));
-    loadDelete();
-  }
+  // update global variable
+  testimonials = list;
+
+  // refresh BOTH UI sections
+  loadTestimonials();
+  loadTestimonialAdmin();
 }
 
 
