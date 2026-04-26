@@ -613,11 +613,23 @@ function loadDelete(){
   delList.innerHTML=html;  
 }  
   
-function del(i){  
-  products.splice(i,1);  
-  localStorage.setItem("products",JSON.stringify(products));  
-  loadDelete();  
-}  
+function del(i){
+  let cat = delCat.value;
+
+  let filtered = products.filter(p => p.category === cat);
+  let item = filtered[i];
+
+  let realIndex = products.indexOf(item);
+
+  if(realIndex !== -1){
+    products.splice(realIndex,1);
+    localStorage.setItem("products",JSON.stringify(products));
+    loadDelete();
+  }
+}
+
+
+  
 let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
 let tIndex = 0;
 let tAuto;
