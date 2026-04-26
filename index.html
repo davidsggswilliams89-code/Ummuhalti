@@ -3,7 +3,6 @@
 <head>
   <title>BOB TEXTILE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 
 <style>
@@ -27,10 +26,12 @@ body{
   z-index:3000;
 }
 
+/* FIX LOGO */
 .logo{
   height:45px;
-  object-fit:contain;
-  background:#111;
+  margin:0;
+  padding:0;
+  object-fit:cover;
 }
 
 .marquee-wrapper{
@@ -89,29 +90,7 @@ body{
 
 .view{display:none;padding:10px;}
 .active-view{display:block;}
-  
-.social-btn{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:12px;
-  border-radius:8px;
-  color:#fff;
-  font-size:16px;
-}
 
-.social-btn img{
-  width:22px;
-  height:22px;
-}
-
-.fb{background:#1877F2;}
-.ig{background:#E1306C;}
-.tt{background:#000;}
-.wa{background:#25D366;}
-  
 /* CARD */
 .card{
   background:white;
@@ -120,33 +99,28 @@ body{
   margin-bottom:15px;
 }
 
-/* CAROUSEL */
+/* IMAGE */
 .carousel{
-  display:flex;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
+  position:relative;
 }
-
 .carousel img{
-  min-width:100%;
+  width:100%;
   height:380px;
   object-fit:contain;
-  scroll-snap-align:center;
   background:white;
 }
 
-.carousel::-webkit-scrollbar{display:none;}
-
-/* DOTS */
-.dots{text-align:center;margin-top:5px;}
-.dot{
-  height:8px;width:8px;
-  margin:0 3px;
-  background:#bbb;
-  border-radius:50%;
-  display:inline-block;
+/* NEW BADGE */
+.new-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:red;
+  color:white;
+  padding:5px 8px;
+  font-size:12px;
+  border-radius:5px;
 }
-.dot.active{background:#000;}
 
 /* PRICE */
 .price{
@@ -168,44 +142,8 @@ body{
   margin-top:10px;
   border-radius:12px;
   font-weight:bold;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
   cursor:pointer;
 }
-
-/* TESTIMONIAL */
-.testimonial-card{
-  background:#fff;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:15px;
-}
-
-.testimonial-slide{display:none;}
-.testimonial-slide.active{display:block;}
-
-.testimonial-slide img{
-  width:100%;
-  border-radius:10px;
-}
-
-.testimonial-dots{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  margin-top:10px;
-}
-
-.testimonial-dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#ccc;
-  cursor:pointer;
-}
-.testimonial-dot.active{background:#1877F2;}
 
 /* ADMIN */
 .admin{
@@ -235,6 +173,14 @@ input,select{
   border:none;
   margin-top:5px;
 }
+.delete-btn{
+  background:red;
+  margin-top:5px;
+}
+.edit-btn{
+  background:#444;
+  margin-top:5px;
+}
 </style>
 </head>
 
@@ -243,13 +189,11 @@ input,select{
 <!-- HEADER -->
 <div class="top-marquee">
   <img src="logo.jpeg" class="logo">
-
   <div class="marquee-wrapper">
     <div class="marquee-text">
       ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨
     </div>
   </div>
-
   <div class="admin-icon" onclick="openAdmin()">🔒</div>
 </div>
 
@@ -258,109 +202,20 @@ input,select{
   <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
   <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
   <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
+  <div class="category-btn" onclick="showView('yards',this)">YARDS</div>
+  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
+  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
 </div>
 
-<!-- ABOUT -->
-<div id="aboutView" class="view active-view">
-  <div class="card">
-
-    <!-- TESTIMONIAL (TOP) -->
-    <h3 style="text-align:center;">What Our Customers Say 💬</h3>
-
-    <div class="testimonial-card">
-      <div id="testimonialCarousel"></div>
-      <div id="testimonialDots" class="testimonial-dots"></div>
-    </div>
-
-    <hr>
-
-    <h2 style="text-align:center;">Welcome to BOB TEXTILE 👋</h2>
-    <p style="text-align:center;">
-      Your trusted destination for premium fabrics and modern fashion styles.
-    </p>
-
-    <hr>
-
-    <h3>About Us</h3>
-    <p>
-      BOB TEXTILE is a professional textile brand specializing in high-quality fabrics,
-      traditional attire, and modern fashion designs.
-      We are committed to delivering durable, stylish, and affordable materials to our customers.
-    </p>
-
-    <hr>
-
-    <h3>Our Locations</h3>
-
-    <p><strong>📍 Kano</strong><br>
-      1. Shop No. 12, Gidan Zeeta, IBB Way, Kantin Kwari Market, Kano<br>
-      2. Muwaffaq House, Isyaka Rabiu Road, Kano
-    </p>
-
-    <p><strong>📍 Zamfara (Gusau)</strong><br>
-      1. No. 5A/6A Magizawa Plaza, Ahmadu Bello Way, Gusau<br>
-      2. T/Wada, Opp. Gamzaki Road, Gusau<br>
-      3. Shop No. 8B, Magizawa Plaza, Gusau
-    </p>
-
-    <p><strong>📍 Sokoto</strong><br>
-      1. Gidan Yadi, Maiduguri Road, Sokoto<br>
-      2. Central Market, Sokoto
-    </p>
-
-    <hr>
-
-    <h3>Contact & Business Info</h3>
-    <p>
-      📞 09114738932<br>
-      🕒 Monday – Saturday (9:00AM – 6:00PM)<br>
-      🚚 Nationwide delivery available<br>
-      💬 Fast WhatsApp support
-    </p>
-
-    <hr>
-
-    <h3>Connect With Us</h3>
-
-    <div style="display:flex; flex-direction:column; gap:10px;">
-
-      <a href="https://www.facebook.com/share/17RD54HCzq/" target="_blank" style="text-decoration:none;">
-        <div class="social-btn fb">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
-          Facebook
-        </div>
-      </a>
-
-      <a href="https://www.instagram.com/bob__textile/" target="_blank" style="text-decoration:none;">
-        <div class="social-btn ig">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png">
-          Instagram
-        </div>
-      </a>
-
-      <a href="https://www.tiktok.com/@bob__textile" target="_blank" style="text-decoration:none;">
-        <div class="social-btn tt">
-          <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-          TikTok
-        </div>
-      </a>
-
-      <a href="https://wa.me/2349114738932" target="_blank" style="text-decoration:none;">
-        <div class="social-btn wa">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-          WhatsApp
-        </div>
-      </a>
-
-    </div>
-
-  </div>
-</div>
-
+<!-- VIEWS -->
+<div id="aboutView" class="view active-view"></div>
 <div id="shaddaView" class="view"></div>
-<div id="bagsView" class="view"></div>  
+<div id="bagsView" class="view"></div>
+<div id="yardsView" class="view"></div>
+<div id="capsView" class="view"></div>
+<div id="shoesView" class="view"></div>
+
 <!-- ADMIN -->
- 
 <div class="admin" id="adminPanel">
 
 <h3>Admin Panel</h3>
@@ -371,15 +226,13 @@ input,select{
 <select id="aCategory">
   <option value="shadda">SHADDA</option>
   <option value="bags">BAGS</option>
+  <option value="yards">YARDS</option>
+  <option value="caps">CAPS</option>
+  <option value="shoes">SHOES</option>
 </select>
 
-<button class="btn" onclick="uploadImage()">Upload Images</button>
+<button class="btn" onclick="uploadImage()">Upload Image</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
-
-<hr>
-
-<h3>Upload Testimonials</h3>
-<button class="btn" onclick="uploadTestimonials()">Upload Customer Images</button>
 
 <button class="btn" style="background:red;" onclick="closeAdmin()">Close</button>
 
@@ -387,101 +240,104 @@ input,select{
 
 <script>
 
-let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
 let products = JSON.parse(localStorage.getItem("products")) || [];
+let activeImage = "";
 
-let tIndex = 0;
-let tAuto;
-let tPaused = false;
+/* SAVE TAB */
+function showView(view,el){
+  localStorage.setItem("activeTab",view);
 
-/* ---------------- TESTIMONIALS ---------------- */
-function loadTestimonials(){
-  const box = document.getElementById("testimonialCarousel");
-  const dots = document.getElementById("testimonialDots");
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
+  document.getElementById(view+"View").classList.add("active-view");
 
-  box.innerHTML = "";
-  dots.innerHTML = "";
+  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+}
 
-  if(testimonials.length === 0){
-    box.innerHTML = "<p style='text-align:center;'>No testimonials yet</p>";
-    return;
-  }
+/* RESTORE TAB */
+window.onload = function(){
+  let last = localStorage.getItem("activeTab") || "about";
+  let btn = [...document.querySelectorAll(".category-btn")].find(b=>b.innerText.toLowerCase()==last);
+  if(btn) btn.click();
+  renderProducts();
+};
 
-  testimonials.forEach((img,i)=>{
-    let slide = document.createElement("div");
-    slide.className = "testimonial-slide" + (i===0?" active":"");
-    slide.innerHTML = `<img src="${img}">`;
-    box.appendChild(slide);
+/* ADD PRODUCT */
+function addProduct(){
+  let name = aName.value;
+  let price = aPrice.value;
+  let cat = aCategory.value;
 
-    let dot = document.createElement("div");
-    dot.className = "testimonial-dot" + (i===0?" active":"");
-    dot.onclick = ()=>showTestimonial(i);
-    dots.appendChild(dot);
+  let newP = {
+    name,
+    price,
+    category:cat,
+    image:activeImage,
+    time:Date.now()
+  };
+
+  products.push(newP);
+  localStorage.setItem("products",JSON.stringify(products));
+  renderProducts();
+}
+
+/* RENDER */
+function renderProducts(){
+  ["shadda","bags","yards","caps","shoes"].forEach(c=>{
+    document.getElementById(c+"View").innerHTML="";
   });
 
-  startTestimonial();
-}
+  products.forEach((p,i)=>{
+    let isNew = (Date.now()-p.time)<86400000;
 
-function showTestimonial(i){
-  let slides=document.querySelectorAll(".testimonial-slide");
-  let dots=document.querySelectorAll(".testimonial-dot");
-
-  slides.forEach(s=>s.classList.remove("active"));
-  dots.forEach(d=>d.classList.remove("active"));
-
-  if(slides[i])slides[i].classList.add("active");
-  if(dots[i])dots[i].classList.add("active");
-
-  tIndex=i;
-}
-
-function startTestimonial(){
-  clearInterval(tAuto);
-
-  if(testimonials.length === 0) return;
-
-  tAuto=setInterval(()=>{
-    if(!tPaused){
-      tIndex=(tIndex+1)%testimonials.length;
-      showTestimonial(tIndex);
-    }
-  },4000);
-}
-
-/* ---------------- PRODUCTS ---------------- */
-function renderProducts(){
-  let shaddaBox = document.getElementById("shaddaView");
-  let bagsBox = document.getElementById("bagsView");
-
-  shaddaBox.innerHTML = "";
-  bagsBox.innerHTML = "";
-
-  if(products.length === 0){
-    shaddaBox.innerHTML = "<p>No products in SHADDA</p>";
-    bagsBox.innerHTML = "<p>No products in BAGS</p>";
-    return;
-  }
-
-  products.forEach(p=>{
     let html = `
       <div class="card">
-        <img src="${p.image}" style="width:100%;border-radius:10px;">
+        <div class="carousel" onclick="setActiveImage('${p.image}')">
+          ${isNew?'<div class="new-badge">NEW</div>':''}
+          <img src="${p.image}">
+        </div>
+
         <h3>${p.name}</h3>
         <div class="price">${p.price}</div>
+
+        <button class="buy-btn" onclick="buy('${p.name}','${p.price}','${p.image}')">
+          BUY ON WHATSAPP
+        </button>
+
+        <button class="edit-btn" onclick="editProduct(${i})">Edit</button>
+        <button class="delete-btn" onclick="deleteProduct(${i})">Delete</button>
       </div>
     `;
 
-    if(p.category === "shadda"){
-      shaddaBox.innerHTML += html;
-    } else {
-      bagsBox.innerHTML += html;
-    }
+    document.getElementById(p.category+"View").innerHTML += html;
   });
 }
 
-/* ---------------- ADMIN (FIXED SIMPLE VERSION) ---------------- */
-let tempImage = "";
+/* WHATSAPP */
+function buy(name,price,img){
+  let msg = `Hello, I want to order:%0AProduct: ${name}%0APrice: ${price}%0AImage: ${img}%0AIs it available?`;
+  window.open(`https://wa.me/2349114738932?text=${msg}`);
+}
 
+/* DELETE */
+function deleteProduct(i){
+  products.splice(i,1);
+  localStorage.setItem("products",JSON.stringify(products));
+  renderProducts();
+}
+
+/* EDIT */
+function editProduct(i){
+  let p = products[i];
+  aName.value = p.name;
+  aPrice.value = p.price;
+  aCategory.value = p.category;
+  activeImage = p.image;
+  products.splice(i,1);
+  renderProducts();
+}
+
+/* IMAGE UPLOAD */
 function uploadImage(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
@@ -489,53 +345,12 @@ function uploadImage(){
     multiple:false
   },(e,r)=>{
     if(r && r.event==="success"){
-      tempImage = r.info.secure_url;
+      activeImage = r.info.secure_url;
       alert("Image uploaded");
     }
   });
 }
 
-function addProduct(){
-  let name = document.getElementById("aName").value;
-  let price = document.getElementById("aPrice").value;
-  let category = document.getElementById("aCategory").value;
-
-  if(!name || !price || !tempImage){
-    alert("Fill all fields + upload image");
-    return;
-  }
-
-  products.push({
-    name,
-    price,
-    category,
-    image: tempImage
-  });
-
-  localStorage.setItem("products",JSON.stringify(products));
-
-  tempImage = "";
-  renderProducts();
-
-  alert("Product saved");
-}
-
-/* ---------------- VIEW SWITCH ---------------- */
-function showView(view,el){
-  document.querySelectorAll(".view").forEach(v=>{
-    v.classList.remove("active-view");
-  });
-
-  document.getElementById(view+"View").classList.add("active-view");
-
-  document.querySelectorAll(".category-btn").forEach(b=>{
-    b.classList.remove("active");
-  });
-
-  el.classList.add("active");
-}
-
-/* ---------------- ADMIN PANEL ---------------- */
 function openAdmin(){
   if(prompt("Password")=="1234"){
     adminPanel.style.display="block";
@@ -545,12 +360,6 @@ function openAdmin(){
 function closeAdmin(){
   adminPanel.style.display="none";
 }
-
-/* ---------------- INIT (IMPORTANT FIX) ---------------- */
-window.onload = function(){
-  loadTestimonials();
-  renderProducts();
-};
 
 </script>
 
