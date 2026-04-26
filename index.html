@@ -251,13 +251,33 @@ input,select{
   padding:6px;  
   cursor:pointer;  
 }  
-@media (max-width:600px){
-  .testimonial-slide img{
-    max-height:180px;
-  }
+
+.testimonial-carousel{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  border-radius:12px;
 }
+
+.testimonial-carousel::-webkit-scrollbar{
+  display:none;
+}
+
+.testimonial-carousel img{
+  min-width:100%;
+  height:380px;      /* same as product images */
+  object-fit:contain;
+  scroll-snap-align:center;
+  background:white;
+  border-radius:12px;
+}
+
     
-</style>  </head>  <body>  <!-- HEADER -->  <div class="top-marquee">  
+</style> 
+
+
+</head>  <body>  <!-- HEADER -->  <div class="top-marquee">  
   <img src="logo.jpeg" class="logo">    <div class="marquee-wrapper">  
     <div class="marquee-text">  
       ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨  
@@ -275,14 +295,10 @@ input,select{
 </div>  <!-- VIEWS -->  <div id="aboutView" class="view active-view">  
   <div class="card">  <!-- TESTIMONIAL -->  
 <h3 style="text-align:center;">What Our Customers Say 💬</h3>  
-
-<div class="testimonial-card">  
-  <div id="testimonialCarousel"></div>  
-  <div id="testimonialDots" class="testimonial-dots"></div>  
-</div>  
-
+<div class="carousel testimonial-carousel" id="testimonialCarousel"></div>
+<div class="dots" id="testimonialDots"></div>
 <hr>  
-
+    
 <!-- WELCOME -->  
 <h2 style="text-align:center;">Welcome to BOB TEXTILE 👋</h2>  
 <p style="text-align:center;">  
@@ -623,31 +639,51 @@ function showTestimonial(i) {
 }  
   
 /* AUTO SLIDE */  
-function startTestimonial() {  
-  clearInterval(tAuto);  
-  
-  if (testimonials.length <= 1) return;  
-  
-  tAuto = setInterval(() => {  
-    tIndex = (tIndex + 1) % testimonials.length;  
-    showTestimonial(tIndex);  
-  }, 4000);  
-}  
-function uploadTestimonials(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:true
-  },(error,result)=>{
+function startTestimonialScroll(){
+  clearInterval(tAuto);
 
-    if(!error && result && result.event === "success"){
-      testimonials.push(result.info.secure_url);
-      localStorage.setItem("testimonials", JSON.stringify(testimonials));
-      loadTestimonials();
-    }
+  if(testimonials.length <= 1) return;
 
-  });
+  tAuto = setInterval(() => {
+    tIndex = (tIndex + 1) % testimonials.length;
+    scrollTestimonial(tIndex);
+  }, 4000);
 }
+function loadTestimonials() {
+  const box = document.getElementById("testimonialCarousel");
+  const dots = document.getElementById("testimonialDots");
+
+  box.innerHTML = "";
+  dots.innerHTML = "";
+
+  if (testimonials.length === 0) {
+    box.innerHTML = `<p style="text-align:center;color:#777;">No testimonials yet</p>`;
+    return;
+  }
+
+  testimonials.forEach((img, i) => {
+    box.innerHTML += `<img src="${img}" />`;
+
+    let dot = document.createElement("span");
+    dot.className = "dot" + (i === 0 ? " active" : "");
+    dot.onclick = () => scrollTestimonial(i);
+    dots.appendChild(dot);
+  });
+
+  startTestimonialScroll();
+}
+  function scrollTestimonial(i){
+  const box = document.getElementById("testimonialCarousel");
+  const dots = document.querySelectorAll("#testimonialDots .dot");
+
+  box.scrollLeft = box.clientWidth * i;
+
+  dots.forEach(d => d.classList.remove("active"));
+  if(dots[i]) dots[i].classList.add("active");
+
+  tIndex = i;
+}
+  
 function restoreActiveView(){
   let saved = localStorage.getItem("activeView") || "about";
 
