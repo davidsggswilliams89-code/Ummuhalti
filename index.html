@@ -273,6 +273,22 @@ input,select{
   background:white;
   border-radius:12px;
 }
+ .testimonial-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#f2f2f2;
+  padding:8px;
+  margin:5px 0;
+  border-radius:6px;
+}
+
+.testimonial-item img{
+  width:40px;
+  height:40px;
+  object-fit:cover;
+  border-radius:5px;
+}   
 
     
 </style> 
@@ -395,7 +411,12 @@ input,select{
 <div id="abayasView" class="view"></div>  
 <div id="yardView" class="view"></div>  
 <div id="capsView" class="view"></div>  
-<div id="vailView" class="view"></div>  <!-- ADMIN -->  <div class="admin" id="adminPanel">  <h3>Admin Panel</h3>  <input id="aName" placeholder="Product Name">  
+<div id="vailView" class="view"></div> 
+  
+<!-- ADMIN --> 
+  
+  
+  <div class="admin" id="adminPanel">  <h3>Admin Panel</h3>  <input id="aName" placeholder="Product Name">  
 <input id="aPrice" placeholder="Price">  <select id="aCategory">  
   <option value="shadda">SHADDA</option>  
   <option value="bags">BAGS</option>  
@@ -411,7 +432,10 @@ input,select{
 <select id="delCat" onchange="loadDelete()"></select>  
 <div id="delList"></div>  <hr>  <h3>Testimonials</h3>  
 <button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>  <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
+<hr>
 
+<h3>Manage Testimonials (Delete)</h3>
+<div id="testimonialList"></div>
 </div>    
 
 <script>  
@@ -530,6 +554,7 @@ function openAdmin(){
   if(prompt("Password")==="1234"){  
     adminPanel.style.display="block";  
     fillCats();  
+    loadTestimonialAdmin();
   }  
 }  
   
@@ -673,6 +698,27 @@ function initApp(){
 }  
   
 document.addEventListener("DOMContentLoaded", initApp);  
-     
+
+function loadTestimonialAdmin(){
+  let list = JSON.parse(localStorage.getItem("testimonials")) || [];
+  let box = document.getElementById("testimonialList");
+
+  let html = "";
+
+  list.forEach((img,i)=>{
+    html += `
+      <div class="testimonial-item">
+        <img src="${img}">
+        <div style="flex:1">Testimonial ${i+1}</div>
+        <button class="delete-btn" onclick="deleteTestimonial(${i})">Delete</button>
+      </div>
+    `;
+  });
+
+  box.innerHTML = html;
+}
+
+  
+  
 </script>  </body>  
 </html>
