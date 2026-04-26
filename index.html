@@ -122,19 +122,20 @@ body{
 }  
   
 /* CAROUSEL */  
-.carousel{  
-  display:flex;  
-  overflow-x:auto;  
-  scroll-snap-type:x mandatory;  
-}  
+.carousel{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  border-radius:12px;
+}
   
-.carousel img{  
-  min-width:100%;  
-  height:380px;  
-  object-fit:contain;  
-  scroll-snap-align:center;  
-  background:white;  
-}  
+.carousel img{
+  min-width:100%;
+  height:380px;
+  object-fit:cover;   /* fills container properly */
+  scroll-snap-align:center;
+  border-radius:12px; /* smooth rounded look */
+}
     
 .social-btn img{  
   width:22px;  
