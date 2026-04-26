@@ -186,6 +186,52 @@ body{
   height:20px;
   display:block;
 }
+/* TESTIMONIAL */
+.testimonial-card{
+  background:#fff;
+  padding:15px;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+.testimonial-carousel{
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+}
+
+.testimonial-slide{
+  display:none;
+}
+
+.testimonial-slide img{
+  width:100%;
+  border-radius:10px;
+}
+
+.testimonial-slide.active{
+  display:block;
+}
+
+.testimonial-dots{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:10px;
+}
+
+.testimonial-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ccc;
+  cursor:pointer;
+}
+
+.testimonial-dot.active{
+  background:#1877F2;
+}
+  
 
 /* ADMIN PANEL */
 .admin{
@@ -402,6 +448,19 @@ input,select{
     </div>
 
   </div>
+
+<hr>
+
+<h3 style="text-align:center;">What Our Customers Say 💬</h3>
+
+<div class="testimonial-card">
+
+  <div class="testimonial-carousel" id="testimonialCarousel"></div>
+
+  <div class="testimonial-dots" id="testimonialDots"></div>
+
+</div>
+  
 </div>
 
 <div id="shaddaView" class="view"></div>
@@ -442,7 +501,15 @@ input,select{
 <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
 </div>
+    
+<hr>
+    
+<h3>Upload Testimonials</h3>
 
+<button class="btn" onclick="uploadTestimonials()">
+  Upload Customer Images
+</button>
+    
 <script>
 
 let products=JSON.parse(localStorage.getItem("products"))||[];
@@ -622,7 +689,101 @@ function del(i){
   localStorage.setItem("products",JSON.stringify(products));
   loadDelete();
 }
+  
+let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
 
+let tIndex = 0;
+let tAuto;
+let tPaused = false;
+
+/* UPLOAD TESTIMONIALS (CLOUDINARY) */
+function uploadTestimonials(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true
+  }, (error, result) => {
+    if(!error && result && result.event === "success"){
+      testimonials.push(result.info.secure_url);
+      localStorage.setItem("testimonials", JSON.stringify(testimonials));
+      loadTestimonials();
+    }
+  });
+}
+
+/* LOAD TESTIMONIALS */
+function loadTestimonials(){
+  const box = document.getElementById("testimonialCarousel");
+  const dotsBox = document.getElementById("testimonialDots");
+
+  if(!box) return;
+
+  box.innerHTML = "";
+  dotsBox.innerHTML = "";
+
+  testimonials.forEach((img, i)=>{
+
+    let slide = document.createElement("div");
+    slide.className = "testimonial-slide" + (i===0 ? " active" : "");
+    slide.innerHTML = `<img src="${img}">`;
+
+    slide.onclick = stopTestimonial;
+
+    box.appendChild(slide);
+
+    let dot = document.createElement("div");
+    dot.className = "testimonial-dot" + (i===0 ? " active" : "");
+    dot.onclick = ()=>{
+      stopTestimonial();
+      showTestimonial(i);
+    };
+
+    dotsBox.appendChild(dot);
+  });
+
+  startTestimonial();
+}
+
+/* SHOW SLIDE */
+function showTestimonial(i){
+  let slides = document.querySelectorAll(".testimonial-slide");
+  let dots = document.querySelectorAll(".testimonial-dot");
+
+  slides.forEach(s=>s.classList.remove("active"));
+  dots.forEach(d=>d.classList.remove("active"));
+
+  if(slides[i]) slides[i].classList.add("active");
+  if(dots[i]) dots[i].classList.add("active");
+
+  tIndex = i;
+}
+
+/* NEXT */
+function nextTestimonial(){
+  if(testimonials.length === 0) return;
+  tIndex = (tIndex + 1) % testimonials.length;
+  showTestimonial(tIndex);
+}
+
+/* AUTO PLAY */
+function startTestimonial(){
+  clearInterval(tAuto);
+  tAuto = setInterval(()=>{
+    if(!tPaused){
+      nextTestimonial();
+    }
+  }, 4000);
+}
+
+/* STOP ON CLICK */
+function stopTestimonial(){
+  tPaused = true;
+}
+
+/* INIT */
+window.addEventListener("load", ()=>{
+  loadTestimonials();
+});
 </script>
 
 </body>
