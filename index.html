@@ -732,8 +732,6 @@ function loadTestimonialAdmin(){
   box.innerHTML = html;
 }
 function uploadTestimonials(){
-  let tempList = JSON.parse(localStorage.getItem("testimonials")) || [];
-
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
     uploadPreset:"ummuhalti",
@@ -745,23 +743,26 @@ function uploadTestimonials(){
       return;
     }
 
-    // IMPORTANT: handle EACH uploaded image
     if(result && result.event === "success"){
-      tempList.push(result.info.secure_url);
-    }
+      // get current list
+      let list = JSON.parse(localStorage.getItem("testimonials")) || [];
 
-    // When user closes widget → save everything
-    if(result && result.event === "close"){
-      localStorage.setItem("testimonials", JSON.stringify(tempList));
-      testimonials = tempList;
+      // add new image
+      list.push(result.info.secure_url);
 
+      // save immediately
+      localStorage.setItem("testimonials", JSON.stringify(list));
+
+      // update global
+      testimonials = list;
+
+      // refresh UI instantly
       loadTestimonials();
       loadTestimonialAdmin();
     }
 
   });
-}
-      
+}      
   function uploadImage(){
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
@@ -777,7 +778,6 @@ function uploadTestimonials(){
 
     if(result && result.event === "success"){
       uploadedImages.push(result.info.secure_url);
-      console.log("Uploaded:", result.info.secure_url);
     }
   });
 }
