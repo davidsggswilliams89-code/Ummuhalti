@@ -732,21 +732,33 @@ function loadTestimonialAdmin(){
   box.innerHTML = html;
 }
 function uploadTestimonials(){
+  let tempList = JSON.parse(localStorage.getItem("testimonials")) || [];
+
   cloudinary.openUploadWidget({
     cloudName:"db92r6j9z",
     uploadPreset:"ummuhalti",
     multiple:true
   }, (error, result) => {
-    if(result && result.event === "success"){
-      let list = JSON.parse(localStorage.getItem("testimonials")) || [];
-      list.push(result.info.secure_url);
 
-      localStorage.setItem("testimonials", JSON.stringify(list));
-      testimonials = list;
+    if(error){
+      console.log("Upload error:", error);
+      return;
+    }
+
+    // IMPORTANT: handle EACH uploaded image
+    if(result && result.event === "success"){
+      tempList.push(result.info.secure_url);
+    }
+
+    // When user closes widget → save everything
+    if(result && result.event === "close"){
+      localStorage.setItem("testimonials", JSON.stringify(tempList));
+      testimonials = tempList;
 
       loadTestimonials();
       loadTestimonialAdmin();
     }
+
   });
 }
       
