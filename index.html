@@ -1,693 +1,667 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>BOB TEXTILE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#f5f5f5;
-  padding-top:80px;
-}
-
-/* HEADER */
-.top-marquee{
-  background:#111;
-  position:fixed;
-  top:0;
-  width:100%;
-  height:45px;
-  display:flex;
-  align-items:center;
-  overflow:hidden;
-  z-index:3000;
-}
-
-/* LOGO */
-.logo{
-  height:45px;
-  margin:0;
-  padding:0;
-  object-fit:contain;
-  background:#111;
-  z-index:10;
-}
-
-/* MOVING TEXT */
-.marquee-wrapper{
-  position:absolute;
-  width:100%;
-  overflow:hidden;
-  z-index:1;
-}
-
-.marquee-text{
-  white-space:nowrap;
-  animation:move 12s linear infinite;
-  color:white;
-  margin-left:120px;
-}
-
-@keyframes move{
-  0%{transform:translateX(100%);}
-  100%{transform:translateX(-100%);}
-}
-
-/* ADMIN ICON */
-.admin-icon{
-  position:absolute;
-  right:0;
-  width:45px;
-  height:45px;
-  background:#222;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  cursor:pointer;
-  z-index:10;
-}
-
-/* CATEGORY */
-.category-bar{
-  position:fixed;
-  top:45px;
-  width:100%;
-  height:40px;
-  background:#222;
-  display:flex;
-  overflow-x:auto;
-  z-index:2000;
-}
-
-.category-btn{
-  color:white;
-  padding:6px 14px;
-  margin:5px;
-  border-radius:20px;
-  white-space:nowrap;
-  cursor:pointer;
-}
-
-.category-btn.active{background:#25D366;}
-
-.view{display:none;padding:10px;}
-.active-view{display:block;}
-
-/* CARD */
-.card{
-  background:white;
-  border-radius:14px;
-  padding:10px;
-  margin-bottom:15px;
-}
-
-/* IMAGE */
-.img-wrap{
-  position:relative;
-  overflow:hidden;
-  border-radius:12px;
-}
-
-/* NEW BADGE */
-.new-badge{
-  position:absolute;
-  top:8px;
-  left:8px;
-  background:red;
-  color:white;
-  font-size:11px;
-  padding:4px 6px;
-  border-radius:5px;
-  z-index:10;
-}
-
-/* CAROUSEL */
-.carousel{
-  display:flex;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-}
-
-.carousel img{
-  min-width:100%;
-  height:380px;
-  object-fit:contain;
-  scroll-snap-align:center;
-  background:white;
-}
+<!DOCTYPE html>  <html>  
+<head>  
+  <title>BOB TEXTILE</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">    <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>  <style>  
+body{  
+  margin:0;  
+  font-family:Arial;  
+  background:#f5f5f5;  
+  padding-top:80px;  
+}  
   
-.social-btn img{
-  width:22px;
-  height:22px;
-}
-  .social-btn{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:10px;
-  color:#fff;
-  font-size:14px;
-  font-weight:500;
-}
+/* HEADER */  
+.top-marquee{  
+  background:#111;  
+  position:fixed;  
+  top:0;  
+  width:100%;  
+  height:45px;  
+  display:flex;  
+  align-items:center;  
+  overflow:hidden;  
+  z-index:3000;  
+}  
+  
+/* LOGO */  
+.logo{  
+  height:45px;  
+  margin:0;  
+  padding:0;  
+  object-fit:contain;  
+  background:#111;  
+  z-index:10;  
+}  
+  
+/* MOVING TEXT */  
+.marquee-wrapper{  
+  position:absolute;  
+  width:100%;  
+  overflow:hidden;  
+  z-index:1;  
+}  
+  
+.marquee-text{  
+  white-space:nowrap;  
+  animation:move 12s linear infinite;  
+  color:white;  
+  margin-left:120px;  
+}  
+  
+@keyframes move{  
+  0%{transform:translateX(100%);}  
+  100%{transform:translateX(-100%);}  
+}  
+  
+/* ADMIN ICON */  
+.admin-icon{  
+  position:absolute;  
+  right:0;  
+  width:45px;  
+  height:45px;  
+  background:#222;  
+  display:flex;  
+  align-items:center;  
+  justify-content:center;  
+  color:white;  
+  cursor:pointer;  
+  z-index:10;  
+}  
+  
+/* CATEGORY */  
+.category-bar{  
+  position:fixed;  
+  top:45px;  
+  width:100%;  
+  height:40px;  
+  background:#222;  
+  display:flex;  
+  overflow-x:auto;  
+  z-index:2000;  
+}  
+  
+.category-btn{  
+  color:white;  
+  padding:6px 14px;  
+  margin:5px;  
+  border-radius:20px;  
+  white-space:nowrap;  
+  cursor:pointer;  
+}  
+  
+.category-btn.active{background:#25D366;}  
+  
+.view{display:none;padding:10px;}  
+.active-view{display:block;}  
+  
+/* CARD */  
+.card{  
+  background:white;  
+  border-radius:14px;  
+  padding:10px;  
+  margin-bottom:15px;  
+}  
+  
+/* IMAGE */  
+.img-wrap{  
+  position:relative;  
+  overflow:hidden;  
+  border-radius:12px;  
+}  
+  
+/* NEW BADGE */  
+.new-badge{  
+  position:absolute;  
+  top:8px;  
+  left:8px;  
+  background:red;  
+  color:white;  
+  font-size:11px;  
+  padding:4px 6px;  
+  border-radius:5px;  
+  z-index:10;  
+}  
+  
+/* CAROUSEL */  
+.carousel{  
+  display:flex;  
+  overflow-x:auto;  
+  scroll-snap-type:x mandatory;  
+}  
+  
+.carousel img{  
+  min-width:100%;  
+  height:380px;  
+  object-fit:contain;  
+  scroll-snap-align:center;  
+  background:white;  
+}  
+    
+.social-btn img{  
+  width:22px;  
+  height:22px;  
+}  
+  .social-btn{  
+  width:100%;  
+  display:flex;  
+  align-items:center;  
+  justify-content:flex-start;  
+  gap:8px;  
+  padding:10px 12px;  
+  border-radius:10px;  
+  color:#fff;  
+  font-size:14px;  
+  font-weight:500;  
+}  
+  
+.social-btn img{  
+  width:18px;  
+  height:18px;  
+  object-fit:contain;  
+}  
+.carousel::-webkit-scrollbar{display:none;}  
+  
+/* DOTS */  
+.dots{text-align:center;margin-top:5px;}  
+.dot{  
+  height:8px;width:8px;  
+  margin:0 3px;  
+  background:#bbb;  
+  border-radius:50%;  
+  display:inline-block;  
+}  
+.dot.active{background:#000;}  
+  
+/* PRICE */  
+.price{  
+  background:#111;  
+  color:white;  
+  text-align:center;  
+  padding:10px;  
+  margin-top:10px;  
+  border-radius:8px;  
+}  
+  
+/* BUY BUTTON FIXED */  
+.buy-btn{  
+  background:#25D366;  
+  color:white;  
+  border:none;  
+  width:100%;  
+  padding:12px;  
+  margin-top:10px;  
+  border-radius:12px;  
+  font-weight:bold;  
+  display:flex;  
+  align-items:center;  
+  justify-content:center;  
+  gap:10px;  
+  cursor:pointer;  
+}  
+  
+.buy-btn img{  
+  width:20px;  
+  height:20px;  
+  display:block;  
+}  
+  
+/* ADMIN PANEL */  
+.admin{  
+  display:none;  
+  position:fixed;  
+  top:0;  
+  left:0;  
+  width:100%;  
+  height:100%;  
+  background:white;  
+  z-index:5000;  
+  padding:15px;  
+  overflow:auto;  
+}  
+  
+input,select{  
+  width:100%;  
+  padding:10px;  
+  margin:5px 0;  
+}  
+  
+.btn{  
+  width:100%;  
+  padding:10px;  
+  background:green;  
+  color:white;  
+  border:none;  
+  margin-top:5px;  
+  cursor:pointer;  
+}  
+  
+.admin-item{  
+  display:flex;  
+  align-items:center;  
+  gap:10px;  
+  background:#f2f2f2;  
+  padding:8px;  
+  margin:5px 0;  
+  border-radius:6px;  
+}  
+  
+.delete-btn{  
+  background:red;  
+  color:white;  
+  border:none;  
+  padding:6px;  
+  cursor:pointer;  
+}  
+</style>  </head>  <body>  <!-- HEADER -->  <div class="top-marquee">  
+  <img src="logo.jpeg" class="logo">    <div class="marquee-wrapper">  
+    <div class="marquee-text">  
+      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨  
+    </div>  
+  </div>    <div class="admin-icon" onclick="openAdmin()">🔒</div>  
+</div>  <!-- CATEGORY -->  <div class="category-bar">  
+  <div class="category-btn" onclick="showView('about',this)">ABOUT</div>  
+  <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>  
+  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>  
+  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>  
+  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>  
+  <div class="category-btn" onclick="showView('yard',this)">YARD</div>  
+  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>  
+  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>  
+</div>  <!-- VIEWS -->  <div id="aboutView" class="view active-view">  
+  <div class="card">  <!-- TESTIMONIAL -->  
+<h3 style="text-align:center;">What Our Customers Say 💬</h3>  
 
-.social-btn img{
-  width:18px;
-  height:18px;
-  object-fit:contain;
-}
-.carousel::-webkit-scrollbar{display:none;}
-
-/* DOTS */
-.dots{text-align:center;margin-top:5px;}
-.dot{
-  height:8px;width:8px;
-  margin:0 3px;
-  background:#bbb;
-  border-radius:50%;
-  display:inline-block;
-}
-.dot.active{background:#000;}
-
-/* PRICE */
-.price{
-  background:#111;
-  color:white;
-  text-align:center;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-}
-
-/* BUY BUTTON FIXED */
-.buy-btn{
-  background:#25D366;
-  color:white;
-  border:none;
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:12px;
-  font-weight:bold;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  cursor:pointer;
-}
-
-.buy-btn img{
-  width:20px;
-  height:20px;
-  display:block;
-}
-
-/* ADMIN PANEL */
-.admin{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:white;
-  z-index:5000;
-  padding:15px;
-  overflow:auto;
-}
-
-input,select{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-}
-
-.btn{
-  width:100%;
-  padding:10px;
-  background:green;
-  color:white;
-  border:none;
-  margin-top:5px;
-  cursor:pointer;
-}
-
-.admin-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:#f2f2f2;
-  padding:8px;
-  margin:5px 0;
-  border-radius:6px;
-}
-
-.delete-btn{
-  background:red;
-  color:white;
-  border:none;
-  padding:6px;
-  cursor:pointer;
-}
-</style>
-</head>
-
-<body>
-
-<!-- HEADER -->
-<div class="top-marquee">
-  <img src="logo.jpeg" class="logo">
-
-  <div class="marquee-wrapper">
-    <div class="marquee-text">
-      ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨
-    </div>
-  </div>
-
-  <div class="admin-icon" onclick="openAdmin()">🔒</div>
-</div>
-
-<!-- CATEGORY -->
-<div class="category-bar">
-  <div class="category-btn" onclick="showView('about',this)">ABOUT</div>
-  <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
-  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>
-  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>
-  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>
-  <div class="category-btn" onclick="showView('yard',this)">YARD</div>
-  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>
-  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>
-</div>
-
-<!-- VIEWS -->
-<div id="aboutView" class="view active-view">
-  <div class="card">
-
-    <!-- TESTIMONIAL -->
-    <h3 style="text-align:center;">What Our Customers Say 💬</h3>
-
-    <div class="testimonial-card">
-      <div id="testimonialCarousel"></div>
-      <div id="testimonialDots" class="testimonial-dots"></div>
-    </div>
-
-    <hr>
-
-    <!-- WELCOME -->
-    <h2 style="text-align:center;">Welcome to BOB TEXTILE 👋</h2>
-    <p style="text-align:center;">
-      Your trusted destination for premium fabrics, modern fashion styles, and quality textile products across Nigeria.
-    </p>
-
-    <hr>
-
-    <!-- ABOUT -->
-    <h3>About Us</h3>
-    <p>
-      BOB TEXTILE is a professional textile brand specializing in high-quality fabrics,
-      traditional attire, and modern fashion designs. We are committed to delivering
-      durable, stylish, and affordable materials to our customers.
-      <br><br>
-      We serve individuals, tailors, and fashion designers with premium materials
-      that stand out in quality and style.
-    </p>
-
-    <hr>
-
-    <!-- LOCATIONS -->
-    <h3>Our Locations</h3>
-
-    <p><strong>📍 Kano</strong><br>
-      • Shop No. 12, Gidan Zeeta, IBB Way, Kantin Kwari Market, Kano<br>
-      • Muwaffaq House, Isyaka Rabiu Road, Kano
-    </p>
-
-    <p><strong>📍 Zamfara (Gusau)</strong><br>
-      • No. 5A/6A Magizawa Plaza, Ahmadu Bello Way, Gusau<br>
-      • T/Wada, Opp. Gamzaki Road, Gusau<br>
-      • Shop No. 8B, Magizawa Plaza, Gusau
-    </p>
-
-    <p><strong>📍 Sokoto</strong><br>
-      • Gidan Yadi, Maiduguri Road, Sokoto<br>
-      • Central Market, Sokoto
-    </p>
-
-    <hr>
-
-    <!-- CONTACT -->
-    <h3>Contact & Business Info</h3>
-    <p>
-      📞 09114738932<br>
-      🕒 Monday – Saturday (9:00AM – 6:00PM)<br>
-      🚚 Nationwide delivery available<br>
-      💬 Fast WhatsApp support
-    </p>
-
-    <hr>
-
-    <!-- SOCIAL -->
-    <h3>Connect With Us</h3>
-
-    <div style="display:flex; flex-direction:column; gap:10px;">
-
-      <a href="https://www.facebook.com/share/17RD54HCzq/" target="_blank" style="text-decoration:none;">
-        <div class="social-btn fb">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">
-          Facebook
-        </div>
-      </a>
-
-      <a href="https://www.instagram.com/bob__textile/" target="_blank" style="text-decoration:none;">
-        <div class="social-btn ig">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png">
-          Instagram
-        </div>
-      </a>
-
-      <a href="https://www.tiktok.com/@bob__textile" target="_blank" style="text-decoration:none;">
-        <div class="social-btn tt">
-          <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-          TikTok
-        </div>
-      </a>
-
-      <a href="https://wa.me/2349114738932" target="_blank" style="text-decoration:none;">
-        <div class="social-btn wa">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-          WhatsApp
-        </div>
-      </a>
-
-    </div>
-
-  </div>
-</div>
-
-<div id="shaddaView" class="view"></div>
-<div id="bagsView" class="view"></div>
-<div id="shoesView" class="view"></div>
-<div id="abayasView" class="view"></div>
-<div id="yardView" class="view"></div>
-<div id="capsView" class="view"></div>
-<div id="vailView" class="view"></div>
-
-<!-- ADMIN -->
-<div class="admin" id="adminPanel">
-
-<h3>Admin Panel</h3>
-
-<input id="aName" placeholder="Product Name">
-<input id="aPrice" placeholder="Price">
-
-<select id="aCategory">
-  <option value="shadda">SHADDA</option>
-  <option value="bags">BAGS</option>
-  <option value="shoes">SHOES</option>
-  <option value="abayas">ABAYAS</option>
-  <option value="yard">YARD</option>
-  <option value="caps">CAPS</option>
-  <option value="vail">VAIL</option>
-</select>
-
-<button class="btn" onclick="uploadImage()">Upload Images</button>
-<button class="btn" onclick="addProduct()">Save Product</button>
-
-<hr>
-
-<h3>Delete Product</h3>
-<select id="delCat" onchange="loadDelete()"></select>
-<div id="delList"></div>
-
-<hr>
-
-<h3>Testimonials</h3>
-<button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>
-
-<button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
-
+<div class="testimonial-card">  
+  <div id="testimonialCarousel"></div>  
+  <div id="testimonialDots" class="testimonial-dots"></div>  
 </div>  
 
-<script>
+<hr>  
 
-let products=JSON.parse(localStorage.getItem("products"))||[];
-let uploadedImages=[];
+<!-- WELCOME -->  
+<h2 style="text-align:center;">Welcome to BOB TEXTILE 👋</h2>  
+<p style="text-align:center;">  
+  Your trusted destination for premium fabrics, modern fashion styles, and quality textile products across Nigeria.  
+</p>  
 
-/* RESTORE ACTIVE */
-window.onload=()=>{
-  let saved=localStorage.getItem("activeView")||"about";
-  let btn=[...document.querySelectorAll(".category-btn")]
-    .find(b=>b.textContent.toLowerCase().includes(saved));
-  if(btn) showView(saved,btn);
-};
+<hr>  
 
-/* VIEW */
-function showView(type,el){
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));
-  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+<!-- ABOUT -->  
+<h3>About Us</h3>  
+<p>  
+  BOB TEXTILE is a professional textile brand specializing in high-quality fabrics,  
+  traditional attire, and modern fashion designs. We are committed to delivering  
+  durable, stylish, and affordable materials to our customers.  
+  <br><br>  
+  We serve individuals, tailors, and fashion designers with premium materials  
+  that stand out in quality and style.  
+</p>  
 
-  el.classList.add("active");
-  localStorage.setItem("activeView",type);
+<hr>  
 
-  if(type==="about"){
-    aboutView.classList.add("active-view");
-    return;
-  }
+<!-- LOCATIONS -->  
+<h3>Our Locations</h3>  
 
-  let list=products.filter(p=>p.category===type);
-  let html="";
+<p><strong>📍 Kano</strong><br>  
+  • Shop No. 12, Gidan Zeeta, IBB Way, Kantin Kwari Market, Kano<br>  
+  • Muwaffaq House, Isyaka Rabiu Road, Kano  
+</p>  
 
-  list.forEach((p,i)=>{
-    let isNew=(Date.now()-p.date)<86400000;
+<p><strong>📍 Zamfara (Gusau)</strong><br>  
+  • No. 5A/6A Magizawa Plaza, Ahmadu Bello Way, Gusau<br>  
+  • T/Wada, Opp. Gamzaki Road, Gusau<br>  
+  • Shop No. 8B, Magizawa Plaza, Gusau  
+</p>  
 
-    html+=`
-    <div class="card">
+<p><strong>📍 Sokoto</strong><br>  
+  • Gidan Yadi, Maiduguri Road, Sokoto<br>  
+  • Central Market, Sokoto  
+</p>  
 
-      <div class="img-wrap">
-        ${isNew?'<div class="new-badge">NEW</div>':''}
+<hr>  
 
-        <div class="carousel car${type}${i}">
-          ${p.images.map(img=>`<img src="${img}">`).join('')}
-        </div>
-      </div>
+<!-- CONTACT -->  
+<h3>Contact & Business Info</h3>  
+<p>  
+  📞 09114738932<br>  
+  🕒 Monday – Saturday (9:00AM – 6:00PM)<br>  
+  🚚 Nationwide delivery available<br>  
+  💬 Fast WhatsApp support  
+</p>  
 
-      <div class="dots dots${type}${i}"></div>
+<hr>  
 
-      <div class="price">₦ ${p.price}</div>
+<!-- SOCIAL -->  
+<h3>Connect With Us</h3>  
 
-      <button class="buy-btn" onclick="buyNow(${i},'${type}')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-        BUY NOW
-      </button>
+<div style="display:flex; flex-direction:column; gap:10px;">  
 
-    </div>`;
-  });
+  <a href="https://www.facebook.com/share/17RD54HCzq/" target="_blank" style="text-decoration:none;">  
+    <div class="social-btn fb">  
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png">  
+      Facebook  
+    </div>  
+  </a>  
 
-  document.getElementById(type+"View").innerHTML=html;
-  document.getElementById(type+"View").classList.add("active-view");
+  <a href="https://www.instagram.com/bob__textile/" target="_blank" style="text-decoration:none;">  
+    <div class="social-btn ig">  
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png">  
+      Instagram  
+    </div>  
+  </a>  
 
-  list.forEach((p,i)=>setupCarousel(type,i));
-}
+  <a href="https://www.tiktok.com/@bob__textile" target="_blank" style="text-decoration:none;">  
+    <div class="social-btn tt">  
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">  
+      TikTok  
+    </div>  
+  </a>  
 
-/* BUY NOW */
-function buyNow(i,type){
-  let list=products.filter(p=>p.category===type);
-  let p=list[i];
+  <a href="https://wa.me/2349114738932" target="_blank" style="text-decoration:none;">  
+    <div class="social-btn wa">  
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">  
+      WhatsApp  
+    </div>  
+  </a>  
 
-  let car=document.querySelector(".car"+type+i);
-  let index=Math.round(car.scrollLeft/car.clientWidth);
-  let img=p.images[index];
+</div>
 
-  let msg=`Hello 👋,
+  </div>  
+</div>  <div id="shaddaView" class="view"></div>  
+<div id="bagsView" class="view"></div>  
+<div id="shoesView" class="view"></div>  
+<div id="abayasView" class="view"></div>  
+<div id="yardView" class="view"></div>  
+<div id="capsView" class="view"></div>  
+<div id="vailView" class="view"></div>  <!-- ADMIN -->  <div class="admin" id="adminPanel">  <h3>Admin Panel</h3>  <input id="aName" placeholder="Product Name">  
+<input id="aPrice" placeholder="Price">  <select id="aCategory">  
+  <option value="shadda">SHADDA</option>  
+  <option value="bags">BAGS</option>  
+  <option value="shoes">SHOES</option>  
+  <option value="abayas">ABAYAS</option>  
+  <option value="yard">YARD</option>  
+  <option value="caps">CAPS</option>  
+  <option value="vail">VAIL</option>  
+</select>  <button class="btn" onclick="uploadImage()">Upload Images</button>
+<button class="btn" onclick="addProduct()">Save Product</button>
 
-I want to order from BOB TEXTILE:
+<hr>  <h3>Delete Product</h3>  
+<select id="delCat" onchange="loadDelete()"></select>  
+<div id="delList"></div>  <hr>  <h3>Testimonials</h3>  
+<button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>  <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
-🧵 Category: ${type.toUpperCase()}
-🛍️ Product: ${p.name}
-💰 Price: ₦${p.price}
+</div>    
 
-🖼️ Selected Image:
-${img}
-
-Is this available? I want to buy.`;
-
-  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));
-}
-
-/* CAROUSEL */
-function setupCarousel(type,i){
-  let c=document.querySelector(".car"+type+i);
-  let box=document.querySelector(".dots"+type+i);
-  if(!c)return;
-
-  let imgs=c.querySelectorAll("img");
-  box.innerHTML="";
-
-  imgs.forEach((_,x)=>{
-    let d=document.createElement("span");
-    d.className="dot";
-    if(x===0)d.classList.add("active");
-    box.appendChild(d);
-  });
-
-  let dots=box.querySelectorAll(".dot");
-
-  c.addEventListener("scroll",()=>{
-    let index=Math.round(c.scrollLeft/c.clientWidth);
-    dots.forEach(d=>d.classList.remove("active"));
-    if(dots[index])dots[index].classList.add("active");
-  });
-}
-
-/* ADMIN */
-function openAdmin(){
-  if(prompt("Password")==="1234"){
-    adminPanel.style.display="block";
-    fillCats();
-  }
-}
-
-function closeAdmin(){
-  adminPanel.style.display="none";
-}
-
-function fillCats(){
-  let cats=["shadda","bags","shoes","abayas","yard","caps","vail"];
-  delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");
-}
-
-/* UPLOAD */
-function uploadImage(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:true
-  },(e,r)=>{
-    if(r&&r.event==="success"){
-      uploadedImages.push(r.info.secure_url);
-    }
-  });
-}
-
-/* SAVE */
-function addProduct(){
-  products.unshift({
-    name:aName.value,
-    price:aPrice.value,
-    category:aCategory.value,
-    images:[...uploadedImages],
-    date:Date.now()
-  });
-
-  localStorage.setItem("products",JSON.stringify(products));
-  uploadedImages=[];
-}
-
-/* DELETE */
-function loadDelete(){
-  let cat=delCat.value;
-  let html="";
-
-  products.forEach((p,i)=>{
-    if(p.category===cat){
-      html+=`
-      <div class="admin-item">
-        <img src="${p.images[0]}" width="40">
-        <div style="flex:1">${p.name}</div>
-        <button class="delete-btn" onclick="del(${i})">Delete</button>
-      </div>`;
-    }
-  });
-
-  delList.innerHTML=html;
-}
-
-function del(i){
-  products.splice(i,1);
-  localStorage.setItem("products",JSON.stringify(products));
-  loadDelete();
-}
-let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
-let tIndex = 0;
-let tAuto;
-
-/* LOAD TESTIMONIALS */
-function loadTestimonials() {
-  const box = document.getElementById("testimonialCarousel");
-  const dots = document.getElementById("testimonialDots");
-
-  box.innerHTML = "";
-  dots.innerHTML = "";
-
-  if (testimonials.length === 0) {
-    box.innerHTML = `<p style="text-align:center;color:#777;">No testimonials yet</p>`;
-    return;
-  }
-
-  testimonials.forEach((img, i) => {
-    let slide = document.createElement("div");
-    slide.className = "testimonial-slide" + (i === 0 ? " active" : "");
-    slide.innerHTML = `<img src="${img}">`;
-    box.appendChild(slide);
-
-    let dot = document.createElement("div");
-    dot.className = "testimonial-dot" + (i === 0 ? " active" : "");
-    dot.onclick = () => showTestimonial(i);
-    dots.appendChild(dot);
-  });
-
-  startTestimonial();
-}
-
-/* SHOW */
-function showTestimonial(i) {
-  let slides = document.querySelectorAll(".testimonial-slide");
-  let dots = document.querySelectorAll(".testimonial-dot");
-
-  slides.forEach(s => s.classList.remove("active"));
-  dots.forEach(d => d.classList.remove("active"));
-
-  if (slides[i]) slides[i].classList.add("active");
-  if (dots[i]) dots[i].classList.add("active");
-
-  tIndex = i;
-}
-
-/* AUTO SLIDE */
-function startTestimonial() {
-  clearInterval(tAuto);
-
-  if (testimonials.length <= 1) return;
-
-  tAuto = setInterval(() => {
-    tIndex = (tIndex + 1) % testimonials.length;
-    showTestimonial(tIndex);
-  }, 4000);
-}
-function uploadTestimonials(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:true,
-    sources:["local","camera"]
-  },(error,result)=>{
-    if(!error && result && result.event === "success"){
-      testimonials.push(result.info.secure_url);
-      localStorage.setItem("testimonials", JSON.stringify(testimonials));
-      loadTestimonials();
-      alert("Testimonial uploaded successfully!");
-    }
-  });
-}
+<script>  
   
-</script>
+let products=JSON.parse(localStorage.getItem("products"))||[];  
+let uploadedImages=[];
+let adminPanel = document.getElementById("adminPanel");
+let delCat = document.getElementById("delCat");
+let delList = document.getElementById("delList");
+let aName = document.getElementById("aName");
+let aPrice = document.getElementById("aPrice");
+let aCategory = document.getElementById("aCategory");
+let aboutView = document.getElementById("aboutView");
+  
+ 
+/* VIEW */  
+function showView(type,el){  
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));  
+  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));  
+  
+  el.classList.add("active");  
+  localStorage.setItem("activeView",type);  
+  
+  if(type==="about"){  
+    aboutView.classList.add("active-view");  
+    return;  
+  }  
+  
+  let list=products.filter(p=>p.category===type);  
+  let html="";  
+  
+  list.forEach((p,i)=>{  
+    let isNew=(Date.now()-p.date)<86400000;  
+  
+    html+=`  
+    <div class="card">  
+  
+      <div class="img-wrap">  
+        ${isNew?'<div class="new-badge">NEW</div>':''}  
+  
+        <div class="carousel car${type}${i}">  
+          ${p.images.map(img=>`<img src="${img}">`).join('')}  
+        </div>  
+      </div>  
+  
+      <div class="dots dots${type}${i}"></div>  
+  
+      <div class="price">₦ ${p.price}</div>  
+  
+      <button class="buy-btn" onclick="buyNow(${i},'${type}')">  
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">  
+        BUY NOW  
+      </button>  
+  
+    </div>`;  
+  });  
+  
+  document.getElementById(type+"View").innerHTML=html;  
+  document.getElementById(type+"View").classList.add("active-view");  
+  
+  list.forEach((p,i)=>setupCarousel(type,i));  
+}  
+  
+/* BUY NOW */  
+function buyNow(i,type){  
+  let list=products.filter(p=>p.category===type);  
+  let p=list[i];  
+  
+  let car=document.querySelector(".car"+type+i);  
+  let index=Math.round(car.scrollLeft/car.clientWidth);  
+  let img=p.images[index];  
+  
+  let msg=`Hello 👋,  
+  
+I want to order from BOB TEXTILE:  
+  
+🧵 Category: ${type.toUpperCase()}  
+🛍️ Product: ${p.name}  
+💰 Price: ₦${p.price}  
+  
+🖼️ Selected Image:  
+${img}  
+  
+Is this available? I want to buy.`;  
+  
+  window.open("https://wa.me/2349114738932?text="+encodeURIComponent(msg));  
+}  
+  
+/* CAROUSEL */  
+function setupCarousel(type,i){  
+  let c=document.querySelector(".car"+type+i);  
+  let box=document.querySelector(".dots"+type+i);  
+  if(!c)return;  
+  
+  let imgs=c.querySelectorAll("img");  
+  box.innerHTML="";  
+  
+  imgs.forEach((_,x)=>{  
+    let d=document.createElement("span");  
+    d.className="dot";  
+    if(x===0)d.classList.add("active");  
+    box.appendChild(d);  
+  });  
+  
+  let dots=box.querySelectorAll(".dot");  
+  
+  c.addEventListener("scroll",()=>{  
+    let index=Math.round(c.scrollLeft/c.clientWidth);  
+    dots.forEach(d=>d.classList.remove("active"));  
+    if(dots[index])dots[index].classList.add("active");  
+  });  
+}  
+  
+/* ADMIN */  
+function openAdmin(){  
+  if(prompt("Password")==="1234"){  
+    adminPanel.style.display="block";  
+    fillCats();  
+  }  
+}  
+  
+function closeAdmin(){  
+  adminPanel.style.display="none";  
+}  
+  
+function fillCats(){  
+  let cats=["shadda","bags","shoes","abayas","yard","caps","vail"];  
+  delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");  
+}  
+  
+/* UPLOAD */  
+function uploadImage(){  
+  cloudinary.openUploadWidget({  
+    cloudName:"db92r6j9z",  
+    uploadPreset:"ummuhalti",  
+    multiple:true  
+  },(e,r)=>{  
+    if(r&&r.event==="success"){  
+      uploadedImages.push(r.info.secure_url);  
+    }  
+  });  
+}  
+  
+/* SAVE */  
+function addProduct(){  
+  products.unshift({  
+    name:aName.value,  
+    price:aPrice.value,  
+    category:aCategory.value,  
+    images:[...uploadedImages],  
+    date:Date.now()  
+  });  
+  
+  localStorage.setItem("products",JSON.stringify(products));  
+  uploadedImages=[];  
+}  
+  
+/* DELETE */  
+function loadDelete(){  
+  let cat=delCat.value;  
+  let html="";  
+  
+  products.forEach((p,i)=>{  
+    if(p.category===cat){  
+      html+=`  
+      <div class="admin-item">  
+        <img src="${p.images[0]}" width="40">  
+        <div style="flex:1">${p.name}</div>  
+        <button class="delete-btn" onclick="del(${i})">Delete</button>  
+      </div>`;  
+    }  
+  });  
+  
+  delList.innerHTML=html;  
+}  
+  
+function del(i){  
+  products.splice(i,1);  
+  localStorage.setItem("products",JSON.stringify(products));  
+  loadDelete();  
+}  
+let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];  
+let tIndex = 0;  
+let tAuto;  
+  
+/* LOAD TESTIMONIALS */  
+function loadTestimonials() {  
+  const box = document.getElementById("testimonialCarousel");  
+  const dots = document.getElementById("testimonialDots");  
+  
+  box.innerHTML = "";  
+  dots.innerHTML = "";  
+  
+  if (testimonials.length === 0) {  
+    box.innerHTML = `<p style="text-align:center;color:#777;">No testimonials yet</p>`;  
+    return;  
+  }  
+  
+  testimonials.forEach((img, i) => {  
+    let slide = document.createElement("div");  
+    slide.className = "testimonial-slide" + (i === 0 ? " active" : "");  
+    slide.innerHTML = `<img src="${img}">`;  
+    box.appendChild(slide);  
+  
+    let dot = document.createElement("div");  
+    dot.className = "testimonial-dot" + (i === 0 ? " active" : "");  
+    dot.onclick = () => showTestimonial(i);  
+    dots.appendChild(dot);  
+  });  
+  
+  startTestimonial();  
+}  
+  
+/* SHOW */  
+function showTestimonial(i) {  
+  let slides = document.querySelectorAll(".testimonial-slide");  
+  let dots = document.querySelectorAll(".testimonial-dot");  
+  
+  slides.forEach(s => s.classList.remove("active"));  
+  dots.forEach(d => d.classList.remove("active"));  
+  
+  if (slides[i]) slides[i].classList.add("active");  
+  if (dots[i]) dots[i].classList.add("active");  
+  
+  tIndex = i;  
+}  
+  
+/* AUTO SLIDE */  
+function startTestimonial() {  
+  clearInterval(tAuto);  
+  
+  if (testimonials.length <= 1) return;  
+  
+  tAuto = setInterval(() => {  
+    tIndex = (tIndex + 1) % testimonials.length;  
+    showTestimonial(tIndex);  
+  }, 4000);  
+}  
+function uploadTestimonials(){  
+  cloudinary.openUploadWidget({  
+    cloudName:"db92r6j9z",  
+    uploadPreset:"ummuhalti",  
+    multiple:true,  
+    sources:["local","camera"]  
+  },(error,result)=>{  
+    if(!error && result && result.event === "success"){  
+      testimonials.push(result.info.secure_url);  
+      localStorage.setItem("testimonials", JSON.stringify(testimonials));  
+      loadTestimonials();  
+      alert("Testimonial uploaded successfully!");  
+    }  
+  });  
+}  
+function restoreActiveView(){
+  let saved = localStorage.getItem("activeView") || "about";
 
-</body>
+  let btn = [...document.querySelectorAll(".category-btn")]
+    .find(b => b.textContent.trim().toLowerCase() === saved);
+
+  if(btn){
+    showView(saved, btn);
+  } else {
+    aboutView.classList.add("active-view");
+  }
+}
+    
+function initApp(){  
+  loadTestimonials();  
+  restoreActiveView();  
+  fillCats();  
+}  
+  
+document.addEventListener("DOMContentLoaded", initApp);  
+     
+</script>  </body>  
 </html>
