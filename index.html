@@ -467,7 +467,50 @@ function closeAdmin(){
 }
 
 window.onload=loadTestimonials;
+  
+function showView(view,el){
+  document.querySelectorAll(".view").forEach(v=>{
+    v.classList.remove("active-view");
+  });
 
+  document.getElementById(view+"View").classList.add("active-view");
+
+  document.querySelectorAll(".category-btn").forEach(b=>{
+    b.classList.remove("active");
+  });
+
+  el.classList.add("active");
+}
+
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function renderProducts(){
+  document.getElementById("shaddaView").innerHTML = "";
+  document.getElementById("bagsView").innerHTML = "";
+
+  products.forEach(p=>{
+    let html = `
+      <div class="card">
+        <img src="${p.image}" style="width:100%;border-radius:10px;">
+        <h3>${p.name}</h3>
+        <div class="price">${p.price}</div>
+      </div>
+    `;
+
+    if(p.category === "shadda"){
+      document.getElementById("shaddaView").innerHTML += html;
+    } else {
+      document.getElementById("bagsView").innerHTML += html;
+    }
+  });
+}
+
+window.onload = function(){
+  loadTestimonials();
+  renderProducts();
+};
+
+  
 </script>
 
 </body>
