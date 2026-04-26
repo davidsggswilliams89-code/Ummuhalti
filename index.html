@@ -388,17 +388,24 @@ input,select{
 <script>
 
 let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
 let tIndex = 0;
 let tAuto;
 let tPaused = false;
 
-/* LOAD TESTIMONIALS */
+/* ---------------- TESTIMONIALS ---------------- */
 function loadTestimonials(){
   const box = document.getElementById("testimonialCarousel");
   const dots = document.getElementById("testimonialDots");
 
   box.innerHTML = "";
   dots.innerHTML = "";
+
+  if(testimonials.length === 0){
+    box.innerHTML = "<p style='text-align:center;'>No testimonials yet</p>";
+    return;
+  }
 
   testimonials.forEach((img,i)=>{
     let slide = document.createElement("div");
@@ -415,7 +422,6 @@ function loadTestimonials(){
   startTestimonial();
 }
 
-/* SHOW */
 function showTestimonial(i){
   let slides=document.querySelectorAll(".testimonial-slide");
   let dots=document.querySelectorAll(".testimonial-dot");
@@ -429,9 +435,11 @@ function showTestimonial(i){
   tIndex=i;
 }
 
-/* AUTO */
 function startTestimonial(){
   clearInterval(tAuto);
+
+  if(testimonials.length === 0) return;
+
   tAuto=setInterval(()=>{
     if(!tPaused){
       tIndex=(tIndex+1)%testimonials.length;
@@ -440,34 +448,79 @@ function startTestimonial(){
   },4000);
 }
 
-/* ADMIN UPLOAD */
-function uploadTestimonials(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    multiple:true
-  },(e,r)=>{
-    if(r && r.event==="success"){
-      testimonials.push(r.info.secure_url);
-      localStorage.setItem("testimonials",JSON.stringify(testimonials));
-      loadTestimonials();
+/* ---------------- PRODUCTS ---------------- */
+function renderProducts(){
+  let shaddaBox = document.getElementById("shaddaView");
+  let bagsBox = document.getElementById("bagsView");
+
+  shaddaBox.innerHTML = "";
+  bagsBox.innerHTML = "";
+
+  if(products.length === 0){
+    shaddaBox.innerHTML = "<p>No products in SHADDA</p>";
+    bagsBox.innerHTML = "<p>No products in BAGS</p>";
+    return;
+  }
+
+  products.forEach(p=>{
+    let html = `
+      <div class="card">
+        <img src="${p.image}" style="width:100%;border-radius:10px;">
+        <h3>${p.name}</h3>
+        <div class="price">${p.price}</div>
+      </div>
+    `;
+
+    if(p.category === "shadda"){
+      shaddaBox.innerHTML += html;
+    } else {
+      bagsBox.innerHTML += html;
     }
   });
 }
 
-/* ADMIN */
-function openAdmin(){
-  if(prompt("Password")=="1234"){
-    adminPanel.style.display="block";
+/* ---------------- ADMIN (FIXED SIMPLE VERSION) ---------------- */
+let tempImage = "";
+
+function uploadImage(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:false
+  },(e,r)=>{
+    if(r && r.event==="success"){
+      tempImage = r.info.secure_url;
+      alert("Image uploaded");
+    }
+  });
+}
+
+function addProduct(){
+  let name = document.getElementById("aName").value;
+  let price = document.getElementById("aPrice").value;
+  let category = document.getElementById("aCategory").value;
+
+  if(!name || !price || !tempImage){
+    alert("Fill all fields + upload image");
+    return;
   }
+
+  products.push({
+    name,
+    price,
+    category,
+    image: tempImage
+  });
+
+  localStorage.setItem("products",JSON.stringify(products));
+
+  tempImage = "";
+  renderProducts();
+
+  alert("Product saved");
 }
 
-function closeAdmin(){
-  adminPanel.style.display="none";
-}
-
-window.onload=loadTestimonials;
-  
+/* ---------------- VIEW SWITCH ---------------- */
 function showView(view,el){
   document.querySelectorAll(".view").forEach(v=>{
     v.classList.remove("active-view");
@@ -482,35 +535,23 @@ function showView(view,el){
   el.classList.add("active");
 }
 
-  let products = JSON.parse(localStorage.getItem("products")) || [];
-
-function renderProducts(){
-  document.getElementById("shaddaView").innerHTML = "";
-  document.getElementById("bagsView").innerHTML = "";
-
-  products.forEach(p=>{
-    let html = `
-      <div class="card">
-        <img src="${p.image}" style="width:100%;border-radius:10px;">
-        <h3>${p.name}</h3>
-        <div class="price">${p.price}</div>
-      </div>
-    `;
-
-    if(p.category === "shadda"){
-      document.getElementById("shaddaView").innerHTML += html;
-    } else {
-      document.getElementById("bagsView").innerHTML += html;
-    }
-  });
+/* ---------------- ADMIN PANEL ---------------- */
+function openAdmin(){
+  if(prompt("Password")=="1234"){
+    adminPanel.style.display="block";
+  }
 }
 
+function closeAdmin(){
+  adminPanel.style.display="none";
+}
+
+/* ---------------- INIT (IMPORTANT FIX) ---------------- */
 window.onload = function(){
   loadTestimonials();
   renderProducts();
 };
 
-  
 </script>
 
 </body>
