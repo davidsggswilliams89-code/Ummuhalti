@@ -251,6 +251,34 @@ input,select{
   padding:6px;  
   cursor:pointer;  
 }  
+.testimonial-card{
+  position:relative;
+  max-width:100%;
+  overflow:hidden;
+  border-radius:12px;
+  background:#fff;
+  padding:10px;
+}
+
+/* each slide */
+.testimonial-slide{
+  display:none;
+  text-align:center;
+}
+
+/* active slide */
+.testimonial-slide.active{
+  display:block;
+}
+
+/* testimonial image */
+.testimonial-slide img{
+  width:100%;
+  max-height:220px;   /* 👈 controls height */
+  object-fit:cover;   /* keeps image neat */
+  border-radius:10px;
+}
+    
 </style>  </head>  <body>  <!-- HEADER -->  <div class="top-marquee">  
   <img src="logo.jpeg" class="logo">    <div class="marquee-wrapper">  
     <div class="marquee-text">  
