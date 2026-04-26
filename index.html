@@ -430,6 +430,8 @@ input,select{
 
 </div>
 
+<button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>  
+
 <script>
 
 let products=JSON.parse(localStorage.getItem("products"))||[];
@@ -609,7 +611,79 @@ function del(i){
   localStorage.setItem("products",JSON.stringify(products));
   loadDelete();
 }
+let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
+let tIndex = 0;
+let tAuto;
 
+/* LOAD TESTIMONIALS */
+function loadTestimonials() {
+  const box = document.getElementById("testimonialCarousel");
+  const dots = document.getElementById("testimonialDots");
+
+  box.innerHTML = "";
+  dots.innerHTML = "";
+
+  if (testimonials.length === 0) {
+    box.innerHTML = `<p style="text-align:center;color:#777;">No testimonials yet</p>`;
+    return;
+  }
+
+  testimonials.forEach((img, i) => {
+    let slide = document.createElement("div");
+    slide.className = "testimonial-slide" + (i === 0 ? " active" : "");
+    slide.innerHTML = `<img src="${img}">`;
+    box.appendChild(slide);
+
+    let dot = document.createElement("div");
+    dot.className = "testimonial-dot" + (i === 0 ? " active" : "");
+    dot.onclick = () => showTestimonial(i);
+    dots.appendChild(dot);
+  });
+
+  startTestimonial();
+}
+
+/* SHOW */
+function showTestimonial(i) {
+  let slides = document.querySelectorAll(".testimonial-slide");
+  let dots = document.querySelectorAll(".testimonial-dot");
+
+  slides.forEach(s => s.classList.remove("active"));
+  dots.forEach(d => d.classList.remove("active"));
+
+  if (slides[i]) slides[i].classList.add("active");
+  if (dots[i]) dots[i].classList.add("active");
+
+  tIndex = i;
+}
+
+/* AUTO SLIDE */
+function startTestimonial() {
+  clearInterval(tAuto);
+
+  if (testimonials.length <= 1) return;
+
+  tAuto = setInterval(() => {
+    tIndex = (tIndex + 1) % testimonials.length;
+    showTestimonial(tIndex);
+  }, 4000);
+}
+function uploadTestimonials(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true,
+    sources:["local","camera"]
+  },(error,result)=>{
+    if(!error && result && result.event === "success"){
+      testimonials.push(result.info.secure_url);
+      localStorage.setItem("testimonials", JSON.stringify(testimonials));
+      loadTestimonials();
+      alert("Testimonial uploaded successfully!");
+    }
+  });
+}
+  
 </script>
 
 </body>
