@@ -1,4 +1,4 @@
-<!DOCTYPE html>  <html>  
+hi<!DOCTYPE html>  <html>  
 <head>  
   <title>BOB TEXTILE</title>  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">    <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>  <style>  
@@ -627,31 +627,32 @@ function startTestimonial() {
     showTestimonial(tIndex);  
   }, 4000);  
 }  
-function uploadTestimonials(){  
-  cloudinary.openUploadWidget({  
-    cloudName:"db92r6j9z",  
-    uploadPreset:"ummuhalti",  
-    multiple:true,  
-    sources:["local","camera"]  
-  },(error,result)=>{  
-    if(!error && result && result.event === "success"){  
-      testimonials.push(result.info.secure_url);  
-      localStorage.setItem("testimonials", JSON.stringify(testimonials));  
-      loadTestimonials();  
-      alert("Testimonial uploaded successfully!");  
-    }  
-  });  
-}  
+function uploadTestimonials(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true,i
+    sources:["local","camera"]
+  },(error,result)=>{
+
+    if(!error && result && result.event === "success"){
+      testimonials.push(result.info.secure_url);
+      localStorage.setItem("testimonials", JSON.stringify(testimonials));
+      loadTestimonials();
+    }
+
+  });
+}
 function restoreActiveView(){
   let saved = localStorage.getItem("activeView") || "about";
 
   let btn = [...document.querySelectorAll(".category-btn")]
-    .find(b => b.textContent.trim().toLowerCase() === saved);
+    .find(b => b.textContent.trim().toLowerCase().includes(saved)
 
   if(btn){
     showView(saved, btn);
   } else {
-    aboutView.classList.add("active-view");
+    document.getElementById("aboutView").classList.add("active-view");
   }
 }
     
