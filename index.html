@@ -731,7 +731,44 @@ function loadTestimonialAdmin(){
 
   box.innerHTML = html;
 }
-  
+function uploadTestimonials(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    multiple:true
+  }, (error, result) => {
+    if(result && result.event === "success"){
+      let list = JSON.parse(localStorage.getItem("testimonials")) || [];
+      list.push(result.info.secure_url);
+
+      localStorage.setItem("testimonials", JSON.stringify(list));
+      testimonials = list;
+
+      loadTestimonials();
+      loadTestimonialAdmin();
+    }
+  });
+}
+      
+  function uploadImage(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    sources:["local","camera"],
+    multiple:true
+  }, (error, result) => {
+
+    if(error){
+      console.log("Upload error:", error);
+      return;
+    }
+
+    if(result && result.event === "success"){
+      uploadedImages.push(result.info.secure_url);
+      console.log("Uploaded:", result.info.secure_url);
+    }
+  });
+}
   
 </script>  </body>  
 </html>
