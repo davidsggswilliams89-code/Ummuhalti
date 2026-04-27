@@ -316,6 +316,7 @@ div::-webkit-scrollbar{
   <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>  
   <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>  
   <div class="category-btn" onclick="showView('yard',this)">YARD</div>  
+  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>  
   <div class="category-btn" onclick="showView('caps',this)">CAPS</div>  
   <div class="category-btn" onclick="showView('vail',this)">VAIL</div>  
 </div>  <!-- VIEWS -->  <div id="aboutView" class="view active-view">  
@@ -422,7 +423,8 @@ div::-webkit-scrollbar{
 </div>  <div id="shaddaView" class="view"></div>  
 <div id="shoesView" class="view"></div>  
 <div id="abayasView" class="view"></div>  
-<div id="yardView" class="view"></div>  
+<div id="yardView" class="view"></div>
+<div id="bagsView" class="view"></div>
 <div id="capsView" class="view"></div>  
 <div id="vailView" class="view"></div> 
   
@@ -434,7 +436,8 @@ div::-webkit-scrollbar{
   <option value="shadda">SHADDA</option>  
   <option value="shoes">SHOES</option>  
   <option value="abayas">ABAYAS</option>  
-  <option value="yard">YARD</option>  
+  <option value="yard">YARD</option> 
+  <option value="yard">BAGS</option>  
   <option value="caps">CAPS</option>  
   <option value="vail">VAIL</option>  
 </select>  <button class="btn" onclick="uploadImage()">Upload Images</button>
@@ -576,7 +579,7 @@ function closeAdmin(){
 }  
   
 function fillCats(){  
-  let cats=["shadda","shoes","abayas","yard","caps","vail"];  
+  let cats=["shadda","shoes","abayas","yard","bags","caps","vail"];  
   delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");  
 }  
   
