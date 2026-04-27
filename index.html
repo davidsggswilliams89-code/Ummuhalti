@@ -584,17 +584,24 @@ function fillCats(){
 }  
   
 /* UPLOAD */  
-function uploadImage(){  
-  cloudinary.openUploadWidget({  
-    cloudName:"db92r6j9z",  
-    uploadPreset:"ummuhalti",  
-    multiple:true  
-  },(e,r)=>{  
-    if(r&&r.event==="success"){  
-      uploadedImages.push(r.info.secure_url);  
-    }  
-  });  
-}  
+function uploadImage(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    sources:["local","camera"],
+    multiple:true
+  }, (error, result) => {
+
+    if(error){
+      console.log("Upload error:", error);
+      return;
+    }
+
+    if(result && result.event === "success"){
+      uploadedImages.push(result.info.secure_url);
+    }
+  });
+}
   
 /* SAVE */  
 function addProduct(){
@@ -801,24 +808,6 @@ function uploadTestimonials(){
 
   });
 }      
-  function uploadImage(){
-  cloudinary.openUploadWidget({
-    cloudName:"db92r6j9z",
-    uploadPreset:"ummuhalti",
-    sources:["local","camera"],
-    multiple:true
-  }, (error, result) => {
-
-    if(error){
-      console.log("Upload error:", error);
-      return;
-    }
-
-    if(result && result.event === "success"){
-      uploadedImages.push(result.info.secure_url);
-    }
-  });
-}
   
 </script>  </body>  
 </html>
