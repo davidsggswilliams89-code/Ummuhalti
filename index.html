@@ -141,20 +141,20 @@ body{
   width:22px;  
   height:22px;  
 }  
-  .social-btn{
+ .social-btn{
   display:flex;
   align-items:center;
-  justify-content:center;
   gap:6px;
-  padding:8px 12px;
+  padding:8px 10px;
   border-radius:20px;
   color:#fff;
-  font-size:13px;
+  font-size:12px;
   font-weight:500;
   width:auto;
   white-space:nowrap;
-}
-}  
+  flex-shrink:0; /* prevents squeezing */
+ 
+ }
   
 .social-btn img{  
   width:18px;  
@@ -295,7 +295,12 @@ input,select{
 .ig{background:#E1306C;}
 .tt{background:#000;}
 .wa{background:#25D366;}
+
+div::-webkit-scrollbar{
+  display:none;
+}
     
+  
 </style> 
 
 
@@ -379,9 +384,9 @@ input,select{
 
 <div style="
   display:flex;
-  flex-wrap:wrap;
   gap:10px;
-  justify-content:center;
+  overflow-x:auto;
+  padding-bottom:5px;
 ">
   
   <a href="https://www.facebook.com/share/17RD54HCzq/" target="_blank" style="text-decoration:none;">  
