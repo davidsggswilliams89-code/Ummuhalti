@@ -473,6 +473,7 @@ function showView(type,el){
   
   el.classList.add("active");  
   localStorage.setItem("activeView",type);  
+  console.log("Showing category:", type);
   
   if(type==="about"){  
     aboutView.classList.add("active-view");  
@@ -596,18 +597,40 @@ function uploadImage(){
 }  
   
 /* SAVE */  
-function addProduct(){  
-  products.unshift({  
-    name:aName.value,  
-    price:aPrice.value,  
-    category:aCategory.value,  
-    images:[...uploadedImages],  
-    date:Date.now()  
-  });  
-  
-  localStorage.setItem("products",JSON.stringify(products));  
-  uploadedImages=[];  
-}  
+function addProduct(){
+  if(uploadedImages.length === 0){
+    alert("Upload images first");
+    return;
+  }
+
+  products.unshift({
+    name:aName.value,
+    price:aPrice.value,
+    category:aCategory.value,
+    images:[...uploadedImages],
+    date:Date.now()
+  });
+
+  localStorage.setItem("products", JSON.stringify(products));
+
+  uploadedImages=[];
+
+  // ✅ CLEAR INPUTS
+  aName.value="";
+  aPrice.value="";
+
+  // ✅ RELOAD CURRENT VIEW
+  let activeType = localStorage.getItem("activeView") || "about";
+  let btn = [...document.querySelectorAll(".category-btn")]
+    .find(b => b.textContent.trim().toLowerCase() === activeType);
+
+  if(btn){
+    showView(activeType, btn);
+  }
+
+  // ✅ REFRESH DELETE LIST
+  loadDelete();
+}
   
 /* DELETE */  
 function loadDelete(){  
@@ -709,15 +732,15 @@ function startAuto() {
 function restoreActiveView(){
   let saved = localStorage.getItem("activeView") || "about";
 
-  let btn = [...document.querySelectorAll(".category-btn")]
-    .find(b => b.textContent.trim().toLowerCase() === saved.toLowerCase());
+  let buttons = document.querySelectorAll(".category-btn");
 
-  if(btn){
-    showView(saved, btn);
-  } else {
-    document.querySelectorAll(".view").forEach(v => v.classList.remove("active-view"));
-    document.getElementById("aboutView").classList.add("active-view");
-  }
+  buttons.forEach(btn=>{
+    let name = btn.textContent.trim().toLowerCase();
+
+    if(name === saved){
+      showView(saved, btn);
+    }
+  });
 }
     
 function initApp(){  
