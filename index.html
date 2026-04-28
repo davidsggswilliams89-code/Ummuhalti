@@ -702,7 +702,13 @@ function closeAdmin(){
 }  
   
 function fillCats(){
-  delCat.innerHTML = categories.map(c=>`<option value="${c}">${c.toUpperCase()}</option>`).join("");
+  let html = categories
+    .map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
+    .join("");
+
+  delCat.innerHTML = html;
+
+  document.getElementById("catDelete").innerHTML = html;
 }
   
 /* UPLOAD */  
