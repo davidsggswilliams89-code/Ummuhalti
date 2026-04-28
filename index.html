@@ -516,7 +516,7 @@ let aboutView = document.getElementById("aboutView");
 
   // ABOUT BUTTON
   let aboutBtn = document.createElement("div");
-  aboutBtn.className = "category-btn active";
+  aboutBtn.className = "category-btn";
   aboutBtn.innerText = "ABOUT";
   aboutBtn.onclick = function () {
     showView("about", aboutBtn);
@@ -863,7 +863,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   loadCategories();
   loadTestimonials();
   restoreActiveView();
-  loadCategoryOptions();
 });  
 
 function loadTestimonialAdmin(){
