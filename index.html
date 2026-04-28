@@ -746,13 +746,20 @@ function loadDelete(){
       <div class="admin-item">
         <img src="${p.images[0]}" width="40">
         <div style="flex:1">${p.name}</div>
-        <button class="delete-btn" onclick="del(${i})">Delete</button>
+        <button class="delete-btn" onclick="delProduct(${i})">Delete</button>
       </div>`;
     }
   });
 
   delList.innerHTML = html;
 }
+
+function delProduct(i){
+  products.splice(i,1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadDelete();
+}
+  
   
 function deleteTestimonial(i){
   let list = JSON.parse(localStorage.getItem("testimonials")) || [];
