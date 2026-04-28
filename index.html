@@ -631,13 +631,16 @@ let aboutView = document.getElementById("aboutView");
   document.getElementById("catDelete").innerHTML = html;    
 }    
       
-function deleteCategory(){    
-  let cat = document.getElementById("catDelete").value;    
-    
-  categories = categories.filter(c=>c!==cat);    
-  localStorage.setItem("categories", JSON.stringify(categories));    
-    
-  loadCategories();    
+function deleteCategory(){
+  let cat = document.getElementById("catDelete").value;
+
+  categories = categories.filter(c=>c!==cat);
+  localStorage.setItem("categories", JSON.stringify(categories));
+
+  loadCategories();
+  fillCats();
+
+  showNotify("Category deleted successfully 🗑️", "#e74c3c");
 }    
      
 /* VIEW */      
@@ -774,23 +777,28 @@ function closeAdmin(){
 }     
       
 /* UPLOAD */      
-function uploadImage(){    
-  cloudinary.openUploadWidget({    
-    cloudName:"db92r6j9z",    
-    uploadPreset:"ummuhalti",    
-    sources:["local","camera"],    
-    multiple:true    
-  }, (error, result) => {    
-    
-    if(error){    
-      console.log("Upload error:", error);    
-      return;    
-    }    
-    
-    if(result && result.event === "success"){    
-      uploadedImages.push(result.info.secure_url);    
-    }    
-  });    
+function uploadImage(){
+  cloudinary.openUploadWidget({
+    cloudName:"db92r6j9z",
+    uploadPreset:"ummuhalti",
+    sources:["local","camera"],
+    multiple:true
+  }, (error, result) => {
+
+    if(error){
+      console.log("Upload error:", error);
+      return;
+    }
+
+    if(result && result.event === "success"){
+      uploadedImages.push(result.info.secure_url);
+    }
+
+    if(result && result.event === "close"){
+      showNotify("Images uploaded successfully ✅", "#25D366");
+    }
+
+  });
 }    
     
       
@@ -816,30 +824,26 @@ function loadDelete(){
   delList.innerHTML = html;    
 }    
     
-function delProduct(i){    
-  products.splice(i, 1);    
-  localStorage.setItem("products", JSON.stringify(products));    
-  loadDelete();    
-  showView(delCat.value, document.querySelector(".category-btn.active"));    
-}    
+function delProduct(i){
+  products.splice(i, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadDelete();
+  showNotify("Product deleted successfully 🗑️", "#e74c3c");
+}   
       
-function deleteTestimonial(i){    
-  let list = JSON.parse(localStorage.getItem("testimonials")) || [];    
-    
-  // remove item    
-  list.splice(i, 1);    
-    
-  // save back to storage    
-  localStorage.setItem("testimonials", JSON.stringify(list));    
-    
-  // update global variable    
-  testimonials = list;    
-    
-  // refresh BOTH UI sections    
-  loadTestimonials();    
-  loadTestimonialAdmin();    
-}    
-function del(i){    
+function deleteTestimonial(i){
+  let list = JSON.parse(localStorage.getItem("testimonials")) || [];
+
+  list.splice(i, 1);
+
+  localStorage.setItem("testimonials", JSON.stringify(list));
+  testimonials = list;
+
+  loadTestimonials();
+  loadTestimonialAdmin();
+
+  showNotify("Testimonial deleted successfully 🗑️", "#e74c3c");
+}function del(i){    
   let cat = delCat.value;    
     
   // find products in selected category    
@@ -999,30 +1003,29 @@ function uploadTestimonials(){
     }    
     
   });    
+  showNotify("Testimonial uploaded successfully 💬", "#25D366");
 }        
     
-  function addProduct(){    
-  if(uploadedImages.length === 0){    
-    alert("Upload images first");    
-    return;    
-  }    
-    
-  products.unshift({    
-    name: aName.value,    
-    price: aPrice.value,    
-    category: aCategory.value.toLowerCase(),    
-    images: [...uploadedImages],    
-    date: Date.now()    
-  });    
-    
-  localStorage.setItem("products", JSON.stringify(products));    
-    
-  uploadedImages = [];    
-  aName.value = "";    
-  aPrice.value = "";    
-    
-  loadDelete();    
- }      
+  function addCategory(){
+  let newCat = document.getElementById("newCat").value.trim().toLowerCase();
+
+  if(!newCat) return;
+
+  if(categories.includes(newCat)){
+    showNotify("Category already exists ⚠️", "#f39c12");
+    return;
+  }
+
+  categories.push(newCat);
+  localStorage.setItem("categories", JSON.stringify(categories));
+
+  document.getElementById("newCat").value = "";
+
+  loadCategories();
+  fillCats();
+
+  showNotify("New category created successfully ✅", "#25D366");
+}      
       
 </script>     
 <div id="notify" class="notify"></div>
