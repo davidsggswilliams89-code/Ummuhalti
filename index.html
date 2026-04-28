@@ -493,7 +493,17 @@ function loadCategories(){
   bar.innerHTML = "";
   sel.innerHTML = "";
   delSel.innerHTML = "";
+  
+// ABOUT BUTTON
+let aboutBtn = document.createElement("div");
+aboutBtn.className = "category-btn active";
+aboutBtn.innerText = "ABOUT";
 
+aboutBtn.onclick = function(){
+  showView("about", aboutBtn);
+};
+
+bar.appendChild(aboutBtn);
   categories.forEach(cat=>{
 
     // CATEGORY BUTTON
@@ -540,8 +550,11 @@ function deleteCategory(){
  
 /* VIEW */  
 function showView(type,el){  
-  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active-view"));  
-  document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));  
+  document.querySelectorAll(".category-btn").forEach(b=>{
+  if(b.innerText.toLowerCase() !== type){
+    b.classList.remove("active");
+  }
+});
   
   el.classList.add("active");  
   localStorage.setItem("activeView",type);  
@@ -779,6 +792,12 @@ function startAuto() {
 function restoreActiveView(){
   let saved = localStorage.getItem("activeView") || "about";
 
+  if(saved === "about"){
+    document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+    aboutView.classList.add("active-view");
+    return;
+  }
+
   let buttons = document.querySelectorAll(".category-btn");
 
   buttons.forEach(btn=>{
@@ -878,23 +897,7 @@ function uploadTestimonials(){
 }
   let list = products.filter(p => p.category === type);
 
-  
-function addCategory(){
-  let name = document.getElementById("newCat").value.toLowerCase().trim();
-
-  if(!name) return alert("Enter category name");
-
-  if(categories.includes(name)){
-    alert("Category already exists");
-    return;
-  }
-
-  categories.push(name);
-  localStorage.setItem("categories", JSON.stringify(categories));
-
-  document.getElementById("newCat").value = "";
-  loadCategories();
-}
+ 
   function del(index){
   products.splice(index,1);
   localStorage.setItem("products", JSON.stringify(products));
