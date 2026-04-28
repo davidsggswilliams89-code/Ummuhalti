@@ -51,24 +51,6 @@ body{
   0%{transform:translateX(100%);}  
   100%{transform:translateX(-100%);}  
 }  
-
-/* 🔧 ADMIN INPUT SIZE FIX */
-..admin{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:white;
-  z-index:5000;
-  padding:20px;
-  overflow:auto;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
     
 /* ALIGN INPUTS + BUTTONS */
 .admin h3{
@@ -87,15 +69,26 @@ body{
   border-radius:8px;
   margin-bottom:8px;
 }
+.admin input,
+.admin select{
+  width:100%;
+  max-width:300px;
+  padding:8px;
+  font-size:13px;
+  margin:4px 0 10px;
+}
 
 .admin .btn{
-  width:100%;
-  max-width:320px;
+  max-width:300px;
   padding:8px;
-  font-size:14px;
-  border-radius:8px;
-  margin-bottom:10px;
+  font-size:13px;
 }
+
+.admin label{
+  font-size:13px;
+  font-weight:bold;
+}
+    
     
 /* ADMIN ICON */  
 .admin-icon{  
@@ -253,24 +246,21 @@ body{
 }  
   
 /* ADMIN PANEL */  
-.admin{  
-  display:none;  
-  position:fixed;  
-  top:0;  
-  left:0;  
-  width:100%;  
-  height:100%;  
-  background:white;  
-  z-index:5000;  
-  padding:15px;  
-  overflow:auto;  
-}  
-  
-input,select{  
-  width:100%;  
-  padding:10px;  
-  margin:5px 0;  
-}  
+.admin{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  z-index:5000;
+  padding:20px;
+  overflow:auto;
+
+  flex-direction:column;
+  align-items:center;
+}
   
 .btn{  
   width:100%;  
@@ -480,18 +470,14 @@ div::-webkit-scrollbar{
 
   <h3>Admin Panel</h3>
 
-  <input id="aName" placeholder="Product Name">  
-  <input id="aPrice" placeholder="Price">  
+  <label>Product Name</label>
+  <input id="aName" placeholder="Enter product name">  
 
-  <select id="aCategory">  
-    <option value="shadda">SHADDA</option>  
-    <option value="shoes">SHOES</option>  
-    <option value="abayas">ABAYAS</option>  
-    <option value="yard">YARD</option> 
-    <option value="bags">BAGS</option>
-    <option value="caps">CAPS</option>  
-    <option value="vail">VAIL</option>  
-  </select>  
+  <label>Price</label>
+  <input id="aPrice" placeholder="Enter price">  
+
+  <label>Category</label>
+  <select id="aCategory"></select>  
 
   <button class="btn" onclick="uploadImage()">Upload Images</button>
   <button class="btn" onclick="addProduct()">Save Product</button>
@@ -513,24 +499,20 @@ div::-webkit-scrollbar{
   <h3>Testimonials</h3>  
   <button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>  
 
-  <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
-
   <hr>
 
-  <h3>Manage Testimonials (Delete)</h3>
+  <h3>Manage Testimonials</h3>
   <div id="testimonialList"></div>
 
   <hr>
 
-  <!-- ✅ ADD CATEGORY MOVED INSIDE ADMIN -->
-  <h3>Product Name</h3>
-<input id="aName" placeholder="Enter product name">
+  <h3>Add Category</h3>
+  <input id="newCat" placeholder="New category name">
+  <button class="btn" onclick="addCategory()">Add Category</button>
 
-<h3>Price</h3>
-<input id="aPrice" placeholder="Enter price">
+  <hr>
 
-<h3>Category</h3>
-<select id="aCategory"></select>
+  <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
 </div>
   
@@ -648,11 +630,7 @@ function deleteCategory(){
 
   loadCategories();
 }
- 
-/* VIEW */  
-  document.querySelectorAll(".view").forEach(v=>{
-  v.classList.remove("active-view");
-});
+
   
 function showView(type, el){
   // remove active class from all buttons
@@ -718,6 +696,7 @@ view.innerHTML = html;
 view.classList.add("active-view");
 
 list.forEach((p,i)=>setupCarousel(type,i));
+showView(aCategory.value, document.querySelector(".category-btn.active"));
   }
 /* BUY NOW */  
 function buyNow(i,type){  
@@ -779,7 +758,7 @@ function openAdmin(){
 }  
   
 function closeAdmin(){  
-  adminPanel.style.display="none";  
+  adminPanel.style.display="flex"; 
 } 
   
 /* UPLOAD */  
@@ -811,26 +790,20 @@ function loadDelete(){
   let cat = delCat.value;
   let html = "";
 
-  products.forEach((p,i)=>{
-    if(p.category === cat){
-      html += `
+  let filtered = products.filter(p => p.category === cat);
+
+  filtered.forEach((p,i)=>{
+    html += `
       <div class="admin-item">
         <img src="${p.images[0]}" width="40">
         <div style="flex:1">${p.name}</div>
-        <button class="delete-btn" onclick="delProduct(${i})">Delete</button>
+        <button class="delete-btn" onclick="del(${i})">Delete</button>
       </div>`;
-    }
   });
 
   delList.innerHTML = html;
 }
-
-function delProduct(i){
-  products.splice(i, 1);
-  localStorage.setItem("products", JSON.stringify(products));
-  loadDelete();
-  showView(delCat.value, document.querySelector(".category-btn.active"));
-}
+ 
   
 function deleteTestimonial(i){
   let list = JSON.parse(localStorage.getItem("testimonials")) || [];
@@ -847,23 +820,18 @@ function deleteTestimonial(i){
   // refresh BOTH UI sections
   loadTestimonials();
   loadTestimonialAdmin();
-}
+} 
+  
 function del(i){
   let cat = delCat.value;
 
-  // find products in selected category
   let filtered = products.filter(p => p.category === cat);
-
-  // get the real product to delete
   let productToDelete = filtered[i];
 
-  // remove from main array
   products = products.filter(p => p !== productToDelete);
 
-  // save to storage
   localStorage.setItem("products", JSON.stringify(products));
 
-  // refresh UI
   loadDelete();
 }
 
