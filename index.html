@@ -457,13 +457,25 @@ div::-webkit-scrollbar{
 <h3>Manage Testimonials (Delete)</h3>
 <div id="testimonialList"></div>
 </div>    
+<hr>
+<h3>Add Category</h3>
 
+<input id="newCat" placeholder="New Category Name">
+<button class="btn" onclick="addCategory()">Add Category</button>
 
   
 <script>    
+
+let categories = JSON.parse(localStorage.getItem("categories")) || [
+  "shadda",
+  "shoes",
+  "abayas",
+  "yard",
+  "bags",
+  "caps",
+  "vail"
+];
 let products=JSON.parse(localStorage.getItem("products"))||[];  
-let categories = JSON.parse(localStorage.getItem("categories")) || 
-["about","shadda","shoes","abayas","yard","caps","vail","glass"];
 let uploadedImages=[];
 let adminPanel = document.getElementById("adminPanel");
 let delCat = document.getElementById("delCat");
@@ -475,9 +487,16 @@ let aboutView = document.getElementById("aboutView");
   
 function loadCategories(){
   let bar = document.getElementById("categoryBar");
+  let sel = document.getElementById("aCategory");
+  let delSel = document.getElementById("catDelete");
+
   bar.innerHTML = "";
+  sel.innerHTML = "";
+  delSel.innerHTML = "";
 
   categories.forEach(cat=>{
+
+    // CATEGORY BUTTON
     let btn = document.createElement("div");
     btn.className = "category-btn";
     btn.innerText = cat.toUpperCase();
@@ -488,38 +507,27 @@ function loadCategories(){
 
     bar.appendChild(btn);
 
-    // auto create view if not exist
+    // ADMIN SELECT
+    let opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat.toUpperCase();
+    sel.appendChild(opt);
+
+    // DELETE CATEGORY SELECT
+    let opt2 = document.createElement("option");
+    opt2.value = cat;
+    opt2.textContent = cat.toUpperCase();
+    delSel.appendChild(opt2);
+
+    // CREATE VIEW
     if(!document.getElementById(cat+"View")){
-      let v = document.createElement("div");
-      v.id = cat+"View";
-      v.className = "view";
-      document.body.appendChild(v);
+      let div = document.createElement("div");
+      div.id = cat+"View";
+      div.className = "view";
+      document.body.appendChild(div);
     }
   });
 }
-loadCategoryOptions();
-  
-function addCategory(){
-  let name = document.getElementById("newCat").value.toLowerCase().trim();
-
-  if(!name) return alert("Enter category name");
-
-  if(categories.includes(name)){
-    alert("Category already exists");
-    return;
-  }
-
-  categories.push(name);
-  localStorage.setItem("categories", JSON.stringify(categories));
-
-  document.getElementById("newCat").value="";
-  loadCategories();
-}
-  function loadCategoryOptions(){
-  let sel = document.getElementById("catDelete");
-  sel.innerHTML = categories.map(c=>`<option>${c}</option>`).join("");
-}
-
 function deleteCategory(){
   let cat = document.getElementById("catDelete").value;
 
@@ -666,48 +674,10 @@ function uploadImage(){
     }
   });
 }
-<hr>
-<h3>Add Category</h3>
-
-<input id="newCat" placeholder="New Category Name">
-<button class="btn" onclick="addCategory()">Add Category</button>
 
   
 /* SAVE */  
-function addProduct(){
-  if(uploadedImages.length === 0){
-    alert("Upload images first");
-    return;
-  }
 
-  products.unshift({
-    name:aName.value,
-    price:aPrice.value,
-    category:aCategory.value,
-    images:[...uploadedImages],
-    date:Date.now()
-  });
-
-  localStorage.setItem("products", JSON.stringify(products));
-
-  uploadedImages=[];
-
-  // ✅ CLEAR INPUTS
-  aName.value="";
-  aPrice.value="";
-
-  // ✅ RELOAD CURRENT VIEW
-  let activeType = localStorage.getItem("activeView") || "about";
-  let btn = [...document.querySelectorAll(".category-btn")]
-    .find(b => b.textContent.trim().toLowerCase() === activeType);
-
-  if(btn){
-    showView(activeType, btn);
-  }
-
-  // ✅ REFRESH DELETE LIST
-  loadDelete();
-}
   
 /* DELETE */  
 function loadDelete(){  
@@ -885,20 +855,65 @@ function uploadTestimonials(){
 }    
 
   function addProduct(){
+  if(uploadedImages.length === 0){
+    alert("Upload images first");
+    return;
+  }
+
   products.unshift({
-    name:aName.value,
-    price:aPrice.value,
-    category:aCategory.value.toLowerCase(),
-    images:[...uploadedImages],
-    date:Date.now()
+    name: aName.value,
+    price: aPrice.value,
+    category: aCategory.value.toLowerCase(),
+    images: [...uploadedImages],
+    date: Date.now()
   });
 
-  localStorage.setItem("products",JSON.stringify(products));
-  uploadedImages=[];
+  localStorage.setItem("products", JSON.stringify(products));
+
+  uploadedImages = [];
+  aName.value = "";
+  aPrice.value = "";
+
+  loadDelete();
 }
   let list = products.filter(p => p.category === type);
 
   
+function addCategory(){
+  let name = document.getElementById("newCat").value.toLowerCase().trim();
+
+  if(!name) return alert("Enter category name");
+
+  if(categories.includes(name)){
+    alert("Category already exists");
+    return;
+  }
+
+  categories.push(name);
+  localStorage.setItem("categories", JSON.stringify(categories));
+
+  document.getElementById("newCat").value = "";
+  loadCategories();
+}
+  function del(index){
+  products.splice(index,1);
+  localStorage.setItem("products", JSON.stringify(products));
+  loadDelete();
+}
+
+  function loadCategoryOptions(){
+  let sel = document.getElementById("catDelete");
+  if(!sel) return;
+
+  sel.innerHTML = categories
+    .map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
+    .join("");
+}
+
   
-</script>  </body>  
+  
+</script> 
+
+
+</body>  
 </html>
