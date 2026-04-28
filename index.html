@@ -366,12 +366,19 @@ display:none;
   margin:10px auto;
 }
 
+..admin .form-group{
+  width:100%;
+  max-width:300px;
+  margin-bottom:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
 .admin .form-group label{
-  display:block;
   font-size:13px;
   font-weight:bold;
-  margin-bottom:5px;
-  text-align:left;
+  margin-bottom:4px;
   color:#222;
 }
 
@@ -379,10 +386,9 @@ display:none;
 .admin .form-group select{
   width:100%;
   padding:8px;
-  font-size:14px;
+  font-size:13px;
   border-radius:8px;
   border:1px solid #ccc;
-  outline:none;
 }
 
 </style>    
@@ -475,6 +481,7 @@ display:none;
   <label>Category</label>
   <select id="aCategory"></select>
 </div>
+
 <button class="btn" onclick="uploadImage()">Upload Images</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
 
