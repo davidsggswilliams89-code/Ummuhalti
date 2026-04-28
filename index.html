@@ -479,10 +479,16 @@ display:none;
 <button class="btn" onclick="addProduct()">Save Product</button>
 
   <hr>   
-    <h3>Delete Category</h3>    
-<select id="catDelete"></select>    
+    <h3>Delete Category</h3>
+
+<div class="form-group">
+  <label>Select Category</label>
+  <select id="catDelete"></select>
+</div>
+
 <button class="btn" onclick="deleteCategory()">Delete Category</button>
-    <hr>      <h3>Delete Product</h3>      
+    <hr>  
+    <h3>Delete Product</h3>      
   <select id="delCat" onchange="loadDelete()"></select>      
   <div id="delList"></div>        <hr>      <h3>Testimonials</h3>      
   <button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>        <hr>      <h3>Manage Testimonials</h3>    
