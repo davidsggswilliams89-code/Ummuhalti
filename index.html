@@ -560,7 +560,7 @@ if (!document.getElementById(cat + "View")) {
 
 function fillCats(){
 let html = categories
-.map(c => <option value="${c}">${c.toUpperCase()}</option>)
+.map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
 .join("");
 
 delCat.innerHTML = html;
@@ -738,7 +738,12 @@ let html = "";
 
 products.forEach((p,i)=>{
 if(p.category === cat){
-html +=        <div class="admin-item">       <img src="${p.images[0]}" width="40">       <div style="flex:1">${p.name}</div>       <button class="delete-btn" onclick="delProduct(${i})">Delete</button>       </div>;
+html += `
+<div class="admin-item">
+  <img src="${p.images[0]}" width="40">
+  <div style="flex:1">${p.name}</div>
+  <button class="delete-btn" onclick="delProduct(${i})">Delete</button>
+</div>`;
 }
 });
 
@@ -746,10 +751,17 @@ delList.innerHTML = html;
 }
 
 function delProduct(i){
-products.splice(i, 1);
-localStorage.setItem("products", JSON.stringify(products));
-loadDelete();
-showView(delCat.value, document.querySelector(".category-btn.active"));
+  let cat = delCat.value;
+
+  let filtered = products.filter(p => p.category === cat);
+  let productToDelete = filtered[i];
+
+  products = products.filter(p => p !== productToDelete);
+
+  localStorage.setItem("products", JSON.stringify(products));
+
+  loadDelete();
+  showView(cat, document.querySelector(".category-btn.active"));
 }
 
 function deleteTestimonial(i){
@@ -800,12 +812,12 @@ box.innerHTML = "";
 dots.innerHTML = "";
 
 if (testimonials.length === 0) {
-box.innerHTML = <p style="text-align:center;color:#777;">No testimonials yet</p>;
+box.innerHTML = `<p style="text-align:center;color:#777;">No testimonials yet</p>`;
 return;
 }
 
 testimonials.forEach((img, i) => {
-box.innerHTML += <img src="${img}">;
+box.innerHTML += `<img src="${img}">`;
 
 let dot = document.createElement("span");      
 dot.className = "dot" + (i === 0 ? " active" : "");      
@@ -890,11 +902,18 @@ let box = document.getElementById("testimonialList");
 let html = "";
 
 list.forEach((img,i)=>{
-html +=       <div class="testimonial-item">       <img src="${img}">       <div style="flex:1">Testimonial ${i+1}</div>       <button class="delete-btn" onclick="deleteTestimonial(${i})">Delete</button>       </div>      ;
-});
+html += `
+<div class="testimonial-item">
+  <img src="${img}">
+  <div style="flex:1">Testimonial ${i+1}</div>
+  <button class="delete-btn" onclick="deleteTestimonial(${i})">Delete</button>
+</div>`;
+             
+    });
 
 box.innerHTML = html;
 }
+    
 function uploadTestimonials(){
 cloudinary.openUploadWidget({
 cloudName:"db92r6j9z",
@@ -956,6 +975,11 @@ function addProduct(){
     showView(aCategory.value.toLowerCase(), activeBtn);
   }
 }
+
+    <div style="flex:1">
+  ${p.name}<br>
+  <small>₦${p.price}</small>
+</div>
 
 </script> 
 </body>
