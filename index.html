@@ -50,7 +50,7 @@ margin-left:120px;
 }
 
 /* 🔧 ADMIN INPUT SIZE FIX */
-..admin{
+.admin{
 display:none;
 position:fixed;
 top:0;
@@ -360,22 +360,23 @@ border-radius:5px;
 div::-webkit-scrollbar{
 display:none;
 } 
-    .form-group{
+.admin .form-group{
   width:100%;
   max-width:300px;
-  margin:8px auto;
+  margin:10px auto;
 }
 
-.form-group label{
+.admin .form-group label{
   display:block;
   font-size:13px;
   font-weight:bold;
-  margin-bottom:4px;
+  margin-bottom:5px;
   text-align:left;
+  color:#222;
 }
 
-.form-group input,
-.form-group select{
+.admin .form-group input,
+.admin .form-group select{
   width:100%;
   padding:8px;
   font-size:14px;
@@ -478,9 +479,16 @@ display:none;
 <button class="btn" onclick="addProduct()">Save Product</button>
 
   <hr>   
-    <h3>Delete Category</h3>    
-  <select id="catDelete"></select>    
-  <button class="btn" onclick="deleteCategory()">Delete Category</button>        <hr>      <h3>Delete Product</h3>      
+    <h3>Delete Category</h3>
+
+<div class="form-group">
+  <label>Select Category</label>
+  <select id="catDelete"></select>
+</div>
+
+<button class="btn" onclick="deleteCategory()">Delete Category</button>
+    
+    <hr>      <h3>Delete Product</h3>      
   <select id="delCat" onchange="loadDelete()"></select>      
   <div id="delList"></div>        <hr>      <h3>Testimonials</h3>      
   <button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>        <hr>      <h3>Manage Testimonials</h3>    
