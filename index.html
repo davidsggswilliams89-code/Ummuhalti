@@ -360,30 +360,6 @@ border-radius:5px;
 div::-webkit-scrollbar{
 display:none;
 } 
-.admin .form-group{
-  width:100%;
-  max-width:300px;
-  margin:10px auto;
-}
-
-.admin .form-group label{
-  display:block;
-  font-size:13px;
-  font-weight:bold;
-  margin-bottom:5px;
-  text-align:left;
-  color:#222;
-}
-
-.admin .form-group input,
-.admin .form-group select{
-  width:100%;
-  padding:8px;
-  font-size:14px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  outline:none;
-}
 
 </style>    
 </head>  <body>  <!-- HEADER -->  <div class="top-marquee">      
@@ -479,15 +455,9 @@ display:none;
 <button class="btn" onclick="addProduct()">Save Product</button>
 
   <hr>   
-    <h3>Delete Category</h3>
-
-<div class="form-group">
-  <label>Select Category</label>
-  <select id="catDelete"></select>
-</div>
-
+    <h3>Delete Category</h3>    
+<select id="catDelete"></select>    
 <button class="btn" onclick="deleteCategory()">Delete Category</button>
-    
     <hr>      <h3>Delete Product</h3>      
   <select id="delCat" onchange="loadDelete()"></select>      
   <div id="delList"></div>        <hr>      <h3>Testimonials</h3>      
