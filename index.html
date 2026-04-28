@@ -431,38 +431,58 @@ div::-webkit-scrollbar{
   
   
 <!-- ADMIN --> 
-  <div class="admin" id="adminPanel">  <h3>Admin Panel</h3>  <input id="aName" placeholder="Product Name">  
-<input id="aPrice" placeholder="Price">  <select id="aCategory">  
-  <option value="shadda">SHADDA</option>  
-  <option value="shoes">SHOES</option>  
-  <option value="abayas">ABAYAS</option>  
-  <option value="yard">YARD</option> 
-  <option value="bags">BAGS</option>
-  <option value="caps">CAPS</option>  
-  <option value="vail">VAIL</option>  
-</select>  <button class="btn" onclick="uploadImage()">Upload Images</button>
-<button class="btn" onclick="addProduct()">Save Product</button>
+<div class="admin" id="adminPanel">
 
- <h3>Delete Category</h3>
-<select id="catDelete"></select>
-<button class="btn" onclick="deleteCategory()">Delete Category</button>  
+  <h3>Admin Panel</h3>
 
-    
-<hr>  <h3>Delete Product</h3>  
-<select id="delCat" onchange="loadDelete()"></select>  
-<div id="delList"></div>  <hr>  <h3>Testimonials</h3>  
-<button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>  <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
-<hr>
+  <input id="aName" placeholder="Product Name">  
+  <input id="aPrice" placeholder="Price">  
 
-<h3>Manage Testimonials (Delete)</h3>
-<div id="testimonialList"></div>
-</div>    
-<hr>
-<h3>Add Category</h3>
+  <select id="aCategory">  
+    <option value="shadda">SHADDA</option>  
+    <option value="shoes">SHOES</option>  
+    <option value="abayas">ABAYAS</option>  
+    <option value="yard">YARD</option> 
+    <option value="bags">BAGS</option>
+    <option value="caps">CAPS</option>  
+    <option value="vail">VAIL</option>  
+  </select>  
 
-<input id="newCat" placeholder="New Category Name">
-<button class="btn" onclick="addCategory()">Add Category</button>
+  <button class="btn" onclick="uploadImage()">Upload Images</button>
+  <button class="btn" onclick="addProduct()">Save Product</button>
 
+  <hr>
+
+  <h3>Delete Category</h3>
+  <select id="catDelete"></select>
+  <button class="btn" onclick="deleteCategory()">Delete Category</button>  
+
+  <hr>
+
+  <h3>Delete Product</h3>  
+  <select id="delCat" onchange="loadDelete()"></select>  
+  <div id="delList"></div>  
+
+  <hr>
+
+  <h3>Testimonials</h3>  
+  <button class="btn" onclick="uploadTestimonials()">Upload Testimonials</button>  
+
+  <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
+
+  <hr>
+
+  <h3>Manage Testimonials (Delete)</h3>
+  <div id="testimonialList"></div>
+
+  <hr>
+
+  <!-- ✅ ADD CATEGORY MOVED INSIDE ADMIN -->
+  <h3>Add Category</h3>
+  <input id="newCat" placeholder="New Category Name">
+  <button class="btn" onclick="addCategory()">Add Category</button>
+
+</div>
   
 <script>    
 
@@ -485,7 +505,7 @@ let aPrice = document.getElementById("aPrice");
 let aCategory = document.getElementById("aCategory");
 let aboutView = document.getElementById("aboutView");
   
-/* add category */
+  /* add category */
   function addCategory(){
   let newCat = document.getElementById("newCat").value.trim().toLowerCase();
 
@@ -504,6 +524,7 @@ let aboutView = document.getElementById("aboutView");
   loadCategories();
   fillCats();
   }
+
   
   function loadCategories(){
   let bar = document.getElementById("categoryBar");
