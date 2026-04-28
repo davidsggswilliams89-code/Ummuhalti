@@ -359,9 +359,33 @@ border-radius:5px;
 
 div::-webkit-scrollbar{
 display:none;
+} 
+    .form-group{
+  width:100%;
+  max-width:300px;
+  margin:8px auto;
 }
 
-</style>     </head>  <body>  <!-- HEADER -->  <div class="top-marquee">      
+.form-group label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:4px;
+  text-align:left;
+}
+
+.form-group input,
+.form-group select{
+  width:100%;
+  padding:8px;
+  font-size:14px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  outline:none;
+}
+
+</style>    
+</head>  <body>  <!-- HEADER -->  <div class="top-marquee">      
   <img src="logo.jpeg" class="logo">    <div class="marquee-wrapper">      
     <div class="marquee-text">      
       ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨      
@@ -430,19 +454,31 @@ display:none;
 <div id="yardView" class="view"></div>    
 <div id="bagsView" class="view"></div>    
 <div id="capsView" class="view"></div>      
-<div id="vailView" class="view"></div>     <!-- ADMIN -->     <div class="admin" id="adminPanel">      <h3>Admin Panel</h3>    <label>Product Name</label>
-<input id="aName" placeholder="Enter product name">
+<div id="vailView" class="view"></div>   
+  
+  <!-- ADMIN -->  
+  
+  <div class="admin" id="adminPanel">   
+    <h3>Admin Panel</h3>   
+    <div class="form-group">
+  <label>Product Name</label>
+  <input id="aName" placeholder="Enter product name">
+</div>
 
-<label>Price</label>
-<input id="aPrice" placeholder="Enter price">
+<div class="form-group">
+  <label>Price</label>
+  <input id="aPrice" placeholder="Enter price">
+</div>
 
-<label>Category</label>
-<select id="aCategory"></select>
-
+<div class="form-group">
+  <label>Category</label>
+  <select id="aCategory"></select>
+</div>
 <button class="btn" onclick="uploadImage()">Upload Images</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
 
-  <hr>      <h3>Delete Category</h3>    
+  <hr>   
+    <h3>Delete Category</h3>    
   <select id="catDelete"></select>    
   <button class="btn" onclick="deleteCategory()">Delete Category</button>        <hr>      <h3>Delete Product</h3>      
   <select id="delCat" onchange="loadDelete()"></select>      
@@ -452,7 +488,8 @@ display:none;
   <input id="newCat" placeholder="New category name">    
   <button class="btn" onclick="addCategory()">Add Category</button>      <hr>    <button class="btn" onclick="closeAdmin()" style="background:red;">Close</button>
 
-</div>    <script>        
+</div>   
+  <script>        
     
 let categories = JSON.parse(localStorage.getItem("categories")) || [    
   "shadda",    
