@@ -50,6 +50,9 @@ margin-left:120px;
 }
 
 /* 🔧 ADMIN INPUT SIZE FIX */
+  .admin *{
+  box-sizing:border-box;
+}  
 .admin{
   display:none;
   position:fixed;
@@ -59,21 +62,22 @@ margin-left:120px;
   height:100%;
   background:white;
   z-index:5000;
-  padding:15px 10px;   /* smaller side padding */
+  padding:20px;
   overflow:auto;
 
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
-  /* IMPORTANT FIX */
+  align-items:center;
 }
 
-/* ALIGN INPUTS + BUTTONS */
-.admin h3{
-width:100%;
-max-width:320px;
-text-align:left;
-margin:12px 0 5px;
+/* FIXED COLUMN WIDTH */
+.admin .form-group,
+.admin h3,
+.admin input,
+.admin select,
+.admin .btn{
+  width:100%;
+  max-width:320px;
 }
 
 .admin input,
@@ -84,15 +88,6 @@ padding:8px;
 font-size:14px;
 border-radius:8px;
 margin-bottom:8px;
-}
-
-.admin .btn{
-width:100%;
-max-width:320px;
-padding:8px;
-font-size:14px;
-border-radius:8px;
-margin-bottom:10px;
 }
 
 
@@ -107,10 +102,15 @@ margin-bottom:10px;
 }
 
 .admin label{
-font-size:13px;
-font-weight:bold;
+  display:block;
+  text-align:left;
+  font-size:13px;
+  font-weight:bold;
+  margin:10px 0 5px;
+  width:100%;
+  max-width:320px;
 }
-
+    
 /* ADMIN ICON */
 .admin-icon{
 position:absolute;
