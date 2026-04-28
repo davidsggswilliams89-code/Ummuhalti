@@ -770,7 +770,24 @@ function deleteTestimonial(i){
   loadTestimonials();
   loadTestimonialAdmin();
 }
+function del(i){
+  let cat = delCat.value;
 
+  // find products in selected category
+  let filtered = products.filter(p => p.category === cat);
+
+  // get the real product to delete
+  let productToDelete = filtered[i];
+
+  // remove from main array
+  products = products.filter(p => p !== productToDelete);
+
+  // save to storage
+  localStorage.setItem("products", JSON.stringify(products));
+
+  // refresh UI
+  loadDelete();
+}
 
   
 let testimonials = JSON.parse(localStorage.getItem("testimonials")) || [];
