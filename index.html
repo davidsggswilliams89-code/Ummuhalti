@@ -697,11 +697,11 @@ if(dots[index])dots[index].classList.add("active");
 
 /* ADMIN */
 function openAdmin(){
-if(prompt("Password")==="1234"){
-adminPanel.style.display="block";
-fillCats();
-loadTestimonialAdmin();
-}
+  if(prompt("Password")==="1234"){
+    adminPanel.style.display="flex"; // show as flex only when opened
+    fillCats();
+    loadTestimonialAdmin();
+  }
 }
 
 function closeAdmin(){
