@@ -50,22 +50,22 @@ margin-left:120px;
 }
 
 .admin{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-z-index:5000;
-padding:20px;
-overflow:auto;
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  z-index:5000;
+  padding:10px; /* reduced */
+  overflow:auto;
 
-display:flex;
-flex-direction:column;
-align-items:center;
-}
-
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+} 
+    
 /* FIXED COLUMN WIDTH */
 .admin .form-group,
 .admin h3,
@@ -261,19 +261,6 @@ height:20px;
 display:block;
 }
 
-/* ADMIN PANEL */
-.admin{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-z-index:5000;
-padding:15px;
-overflow:auto;
-}
 
 input,select{
 width:100%;
@@ -360,9 +347,9 @@ margin:10px auto;
 }
 
 .admin .form-group{
-width:100%;
-max-width:320px;
-margin:10px 0;   /* remove auto centering */
+  width:100%;
+  max-width:320px;
+  margin:8px 0;
 }
 
 .admin .form-group label{
@@ -888,10 +875,14 @@ restoreActiveView();
 fillCats();
 }
 
-document.addEventListener("DOMContentLoaded", ()=>{
-loadCategories();
-loadTestimonials();
-restoreActiveView();
+document.addEventListener("DOMContentLoaded", ()=>{    
+  loadCategories();    
+  fillCats();    
+  loadTestimonials();    
+
+  setTimeout(() => {
+    restoreActiveView();   // delay ensures categories exist
+  }, 100);
 });
 
 function loadTestimonialAdmin(){
@@ -940,26 +931,32 @@ if(result && result.event === "success"){
 }
 
 function addProduct(){
-if(uploadedImages.length === 0){
-alert("Upload images first");
-return;
-}
+  if(uploadedImages.length === 0){
+    alert("Upload images first");
+    return;
+  }
 
-products.unshift({
-name: aName.value,
-price: aPrice.value,
-category: aCategory.value.toLowerCase(),
-images: [...uploadedImages],
-date: Date.now()
-});
+  products.unshift({
+    name: aName.value,
+    price: aPrice.value,
+    category: aCategory.value.toLowerCase(),
+    images: [...uploadedImages],
+    date: Date.now()
+  });
 
-localStorage.setItem("products", JSON.stringify(products));
+  localStorage.setItem("products", JSON.stringify(products));
 
-uploadedImages = [];
-aName.value = "";
-aPrice.value = "";
+  uploadedImages = [];
+  aName.value = "";
+  aPrice.value = "";
 
-loadDelete();
+  loadDelete();
+
+  // ✅ IMPORTANT: refresh current category view
+  let activeBtn = document.querySelector(".category-btn.active");
+  if(activeBtn){
+    showView(aCategory.value.toLowerCase(), activeBtn);
+  }
 }
 
 </script> 
