@@ -384,8 +384,34 @@ display:none;
   font-size:13px;
   border-radius:8px;
   border:1px solid #ccc;
-}
+} 
+    function showNotify(msg, color="#111"){
+  let box = document.getElementById("notify");
+  box.innerText = msg;
+  box.style.background = color;
+  box.style.display = "block";
 
+  setTimeout(()=>{
+    box.style.display = "none";
+  }, 2500);
+}
+    
+.notify{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111;
+  color:white;
+  padding:10px 15px;
+  border-radius:8px;
+  font-size:13px;
+  display:none;
+  z-index:9999;
+  max-width:90%;
+  text-align:center;
+}
+    
 </style>    
 </head>  <body>  <!-- HEADER -->  <div class="top-marquee">      
   <img src="logo.jpeg" class="logo">    <div class="marquee-wrapper">      
@@ -998,5 +1024,8 @@ function uploadTestimonials(){
   loadDelete();    
  }      
       
-</script>     </body>      
+</script>     
+<div id="notify" class="notify"></div>
+  
+</body>      
 </html>    
