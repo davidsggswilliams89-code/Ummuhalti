@@ -485,7 +485,27 @@ let aPrice = document.getElementById("aPrice");
 let aCategory = document.getElementById("aCategory");
 let aboutView = document.getElementById("aboutView");
   
-function loadCategories(){
+/* add category */
+  function addCategory(){
+  let newCat = document.getElementById("newCat").value.trim().toLowerCase();
+
+  if(!newCat) return;
+
+  if(categories.includes(newCat)){
+    alert("Category already exists");
+    return;
+  }
+
+  categories.push(newCat);
+  localStorage.setItem("categories", JSON.stringify(categories));
+
+  document.getElementById("newCat").value = "";
+
+  loadCategories();
+  fillCats();
+  }
+  
+  function loadCategories(){
   let bar = document.getElementById("categoryBar");
   let sel = document.getElementById("aCategory");
   let delSel = document.getElementById("catDelete");
@@ -617,7 +637,7 @@ view.innerHTML = html;
 view.classList.add("active-view");
 
 list.forEach((p,i)=>setupCarousel(type,i));
-  
+  }
 /* BUY NOW */  
 function buyNow(i,type){  
   let list=products.filter(p=>p.category===type);  
@@ -681,10 +701,9 @@ function closeAdmin(){
   adminPanel.style.display="none";  
 }  
   
-function fillCats(){  
-  let cats=["shadda","shoes","abayas","yard","bags","caps","vail"];  
-  delCat.innerHTML=cats.map(c=>`<option>${c}</option>`).join("");  
-}  
+function fillCats(){
+  delCat.innerHTML = categories.map(c=>`<option value="${c}">${c.toUpperCase()}</option>`).join("");
+}
   
 /* UPLOAD */  
 function uploadImage(){
@@ -711,23 +730,23 @@ function uploadImage(){
 
   
 /* DELETE */  
-function loadDelete(){  
-  let cat=delCat.value;  
-  let html="";  
-  
-  products.forEach((p,i)=>{  
-    if(p.category===cat){  
-      html+=`  
-      <div class="admin-item">  
-        <img src="${p.images[0]}" width="40">  
-        <div style="flex:1">${p.name}</div>  
-        <button class="delete-btn" onclick="del(${i})">Delete</button>  
-      </div>`;  
-    }  
-  });  
-  
-  delList.innerHTML=html;  
-}  
+function loadDelete(){
+  let cat = delCat.value;
+  let html = "";
+
+  products.forEach((p,i)=>{
+    if(p.category === cat){
+      html += `
+      <div class="admin-item">
+        <img src="${p.images[0]}" width="40">
+        <div style="flex:1">${p.name}</div>
+        <button class="delete-btn" onclick="del(${i})">Delete</button>
+      </div>`;
+    }
+  });
+
+  delList.innerHTML = html;
+}
   
 function deleteTestimonial(i){
   let list = JSON.parse(localStorage.getItem("testimonials")) || [];
