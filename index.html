@@ -51,7 +51,50 @@ body{
   0%{transform:translateX(100%);}  
   100%{transform:translateX(-100%);}  
 }  
-  
+
+/* 🔧 ADMIN INPUT SIZE FIX */
+.admin input,
+.admin select {
+  width: 100%;
+  max-width: 320px;   /* limits length */
+  padding: 8px;
+  font-size: 14px;
+  margin: 5px 0;
+  border-radius: 8px;
+}
+
+/* 🔧 BUTTON SIZE FIX */
+.admin .btn {
+  width: 100%;
+  max-width: 320px;   /* same alignment as inputs */
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+/* 🔧 ADMIN PANEL CENTER LOOK */
+.admin {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  z-index: 5000;
+  padding: 20px;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* centers everything */
+}
+
+/* optional spacing for headings */
+.admin h3 {
+  margin-top: 15px;
+}
+    
 /* ADMIN ICON */  
 .admin-icon{  
   position:absolute;  
