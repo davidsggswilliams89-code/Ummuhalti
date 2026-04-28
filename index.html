@@ -437,7 +437,7 @@ div::-webkit-scrollbar{
   <option value="shoes">SHOES</option>  
   <option value="abayas">ABAYAS</option>  
   <option value="yard">YARD</option> 
-  <option value="yard">BAGS</option>  
+  <option value="bags">BAGS</option>
   <option value="caps">CAPS</option>  
   <option value="vail">VAIL</option>  
 </select>  <button class="btn" onclick="uploadImage()">Upload Images</button>
@@ -558,6 +558,17 @@ let aboutView = document.getElementById("aboutView");
     }
   });
 }
+
+  function fillCats(){
+  let html = categories
+    .map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
+    .join("");
+
+  delCat.innerHTML = html;
+
+  document.getElementById("catDelete").innerHTML = html;
+}
+  
 function deleteCategory(){
   let cat = document.getElementById("catDelete").value;
 
@@ -699,17 +710,7 @@ function openAdmin(){
   
 function closeAdmin(){  
   adminPanel.style.display="none";  
-}  
-  
-function fillCats(){
-  let html = categories
-    .map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
-    .join("");
-
-  delCat.innerHTML = html;
-
-  document.getElementById("catDelete").innerHTML = html;
-}
+} 
   
 /* UPLOAD */  
 function uploadImage(){
@@ -937,23 +938,7 @@ function uploadTestimonials(){
   aPrice.value = "";
 
   loadDelete();
-}
-
-  function del(index){
-  products.splice(index,1);
-  localStorage.setItem("products", JSON.stringify(products));
-  loadDelete();
-}
-
-  function loadCategoryOptions(){
-  let sel = document.getElementById("catDelete");
-  if(!sel) return;
-
-  sel.innerHTML = categories
-    .map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
-    .join("");
-  }
-  
+ }  
   
 </script> 
 
