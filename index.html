@@ -310,17 +310,18 @@ div::-webkit-scrollbar{
       ✨ BOB TEXTILE ✨ Premium Fashion Store ✨ Quality Fabrics ✨  
     </div>  
   </div>    <div class="admin-icon" onclick="openAdmin()">🔒</div>  
-</div>  <!-- CATEGORY -->  <div class="category-bar">  
-  <div class="category-btn" onclick="showView('about',this)">ABOUT</div>  
-  <div class="category-btn" onclick="showView('shadda',this)">SHADDA</div>
-  <div class="category-btn" onclick="showView('shoes',this)">SHOES</div>  
-  <div class="category-btn" onclick="showView('abayas',this)">ABAYAS</div>  
-  <div class="category-btn" onclick="showView('yard',this)">YARD</div>  
-  <div class="category-btn" onclick="showView('bags',this)">BAGS</div>  
-  <div class="category-btn" onclick="showView('caps',this)">CAPS</div>  
-  <div class="category-btn" onclick="showView('vail',this)">VAIL</div>  
-</div>  <!-- VIEWS -->  <div id="aboutView" class="view active-view">  
-  <div class="card">  <!-- TESTIMONIAL -->  
+</div>  
+  
+  
+  <!-- CATEGORY -->  
+  <div class="category-bar" id="categoryBar"></div>  
+  
+  <!-- VIEWS --> 
+  <div id="aboutView" class="view active-view">  
+  <div class="card"> 
+   
+    
+ <!-- TESTIMONIAL -->      
 <h3 style="text-align:center;">What Our Customers Say 💬</h3>  
 <div class="carousel testimonial-carousel" id="testimonialCarousel"></div>
 <div class="dots" id="testimonialDots"></div>
@@ -428,9 +429,8 @@ div::-webkit-scrollbar{
 <div id="capsView" class="view"></div>  
 <div id="vailView" class="view"></div> 
   
+  
 <!-- ADMIN --> 
-  
-  
   <div class="admin" id="adminPanel">  <h3>Admin Panel</h3>  <input id="aName" placeholder="Product Name">  
 <input id="aPrice" placeholder="Price">  <select id="aCategory">  
   <option value="shadda">SHADDA</option>  
@@ -443,6 +443,11 @@ div::-webkit-scrollbar{
 </select>  <button class="btn" onclick="uploadImage()">Upload Images</button>
 <button class="btn" onclick="addProduct()">Save Product</button>
 
+ <h3>Delete Category</h3>
+<select id="catDelete"></select>
+<button class="btn" onclick="deleteCategory()">Delete Category</button>  
+
+    
 <hr>  <h3>Delete Product</h3>  
 <select id="delCat" onchange="loadDelete()"></select>  
 <div id="delList"></div>  <hr>  <h3>Testimonials</h3>  
@@ -453,9 +458,12 @@ div::-webkit-scrollbar{
 <div id="testimonialList"></div>
 </div>    
 
-<script>  
+
   
+<script>    
 let products=JSON.parse(localStorage.getItem("products"))||[];  
+let categories = JSON.parse(localStorage.getItem("categories")) || 
+["about","shadda","shoes","abayas","yard","caps","vail","glass"];
 let uploadedImages=[];
 let adminPanel = document.getElementById("adminPanel");
 let delCat = document.getElementById("delCat");
@@ -465,6 +473,62 @@ let aPrice = document.getElementById("aPrice");
 let aCategory = document.getElementById("aCategory");
 let aboutView = document.getElementById("aboutView");
   
+function loadCategories(){
+  let bar = document.getElementById("categoryBar");
+  bar.innerHTML = "";
+
+  categories.forEach(cat=>{
+    let btn = document.createElement("div");
+    btn.className = "category-btn";
+    btn.innerText = cat.toUpperCase();
+
+    btn.onclick = function(){
+      showView(cat, btn);
+    };
+
+    bar.appendChild(btn);
+
+    // auto create view if not exist
+    if(!document.getElementById(cat+"View")){
+      let v = document.createElement("div");
+      v.id = cat+"View";
+      v.className = "view";
+      document.body.appendChild(v);
+    }
+  });
+}
+loadCategoryOptions();
+  
+function addCategory(){
+  let name = document.getElementById("newCat").value.toLowerCase().trim();
+
+  if(!name) return alert("Enter category name");
+
+  if(categories.includes(name)){
+    alert("Category already exists");
+    return;
+  }
+
+  categories.push(name);
+  localStorage.setItem("categories", JSON.stringify(categories));
+
+  document.getElementById("newCat").value="";
+  loadCategories();
+}
+  function loadCategoryOptions(){
+  let sel = document.getElementById("catDelete");
+  sel.innerHTML = categories.map(c=>`<option>${c}</option>`).join("");
+}
+
+function deleteCategory(){
+  let cat = document.getElementById("catDelete").value;
+
+  categories = categories.filter(c=>c!==cat);
+  localStorage.setItem("categories", JSON.stringify(categories));
+
+  loadCategories();
+  loadCategoryOptions();
+}
  
 /* VIEW */  
 function showView(type,el){  
@@ -602,6 +666,12 @@ function uploadImage(){
     }
   });
 }
+<hr>
+<h3>Add Category</h3>
+
+<input id="newCat" placeholder="New Category Name">
+<button class="btn" onclick="addCategory()">Add Category</button>
+
   
 /* SAVE */  
 function addProduct(){
@@ -756,7 +826,12 @@ function initApp(){
   fillCats();  
 }  
   
-document.addEventListener("DOMContentLoaded", initApp);  
+document.addEventListener("DOMContentLoaded", ()=>{
+  loadCategories();
+  loadTestimonials();
+  restoreActiveView();
+  loadCategoryOptions();
+});  
 
 function loadTestimonialAdmin(){
   let list = JSON.parse(localStorage.getItem("testimonials")) || [];
@@ -807,7 +882,23 @@ function uploadTestimonials(){
     }
 
   });
-}      
+}    
+
+  function addProduct(){
+  products.unshift({
+    name:aName.value,
+    price:aPrice.value,
+    category:aCategory.value.toLowerCase(),
+    images:[...uploadedImages],
+    date:Date.now()
+  });
+
+  localStorage.setItem("products",JSON.stringify(products));
+  uploadedImages=[];
+}
+  let list = products.filter(p => p.category === type);
+
+  
   
 </script>  </body>  
 </html>
