@@ -547,6 +547,9 @@ function deleteCategory(){
 }
  
 /* VIEW */  
+  document.querySelectorAll(".view").forEach(v=>{
+  v.classList.remove("active-view");
+});
   
 function showView(type, el){
   // remove active class from all buttons
@@ -570,40 +573,48 @@ function showView(type, el){
     return;
   }
 
-  // SHOW PRODUCT CATEGORY
-  let list = products.filter(p => p.category === type);
-  let html = "";
+// SHOW PRODUCT CATEGORY
+let view = document.getElementById(type + "View");
 
-  list.forEach((p,i)=>{
-    let isNew = (Date.now() - p.date) < 86400000;
-
-    html += `
-    <div class="card">
-      <div class="img-wrap">
-        ${isNew ? '<div class="new-badge">NEW</div>' : ''}
-
-        <div class="carousel car${type}${i}">
-          ${p.images.map(img=>`<img src="${img}">`).join('')}
-        </div>
-      </div>
-
-      <div class="dots dots${type}${i}"></div>
-
-      <div class="price">₦ ${p.price}</div>
-
-      <button class="buy-btn" onclick="buyNow(${i},'${type}')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-        BUY NOW
-      </button>
-    </div>`;
-  });
-
-  let view = document.getElementById(type + "View");
-  view.innerHTML = html;
-  view.classList.add("active-view");
-
-  list.forEach((p,i)=>setupCarousel(type,i));
+// ALWAYS ensure view exists
+if(!view){
+  view = document.createElement("div");
+  view.id = type + "View";
+  view.className = "view";
+  document.body.appendChild(view);
 }
+
+let list = products.filter(p => p.category === type);
+let html = "";
+
+list.forEach((p,i)=>{
+  let isNew = (Date.now() - p.date) < 86400000;
+
+  html += `
+  <div class="card">
+    <div class="img-wrap">
+      ${isNew ? '<div class="new-badge">NEW</div>' : ''}
+
+      <div class="carousel car${type}${i}">
+        ${p.images.map(img=>`<img src="${img}">`).join('')}
+      </div>
+    </div>
+
+    <div class="dots dots${type}${i}"></div>
+
+    <div class="price">₦ ${p.price}</div>
+
+    <button class="buy-btn" onclick="buyNow(${i},'${type}')">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+      BUY NOW
+    </button>
+  </div>`;
+});
+
+view.innerHTML = html;
+view.classList.add("active-view");
+
+list.forEach((p,i)=>setupCarousel(type,i));
   
 /* BUY NOW */  
 function buyNow(i,type){  
@@ -900,9 +911,7 @@ function uploadTestimonials(){
 
   loadDelete();
 }
-  let list = products.filter(p => p.category === type);
 
- 
   function del(index){
   products.splice(index,1);
   localStorage.setItem("products", JSON.stringify(products));
@@ -916,6 +925,10 @@ function uploadTestimonials(){
   sel.innerHTML = categories
     .map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
     .join("");
+
+    btn.onclick = function(){
+  showView(cat, btn);
+};
 }
 
   
