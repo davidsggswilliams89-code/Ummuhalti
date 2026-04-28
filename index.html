@@ -496,15 +496,13 @@ function loadCategories(){
   
 // ABOUT BUTTON
 let aboutBtn = document.createElement("div");
-aboutBtn.className = "category-btn active";
+aboutBtn.className = "category-btn";
 aboutBtn.innerText = "ABOUT";
 
-aboutBtn.onclick = function(){
+aboutBtn.onclick = function () {
   showView("about", aboutBtn);
 };
-
 bar.appendChild(aboutBtn);
-  categories.forEach(cat=>{
 
     // CATEGORY BUTTON
     let btn = document.createElement("div");
@@ -549,56 +547,63 @@ function deleteCategory(){
 }
  
 /* VIEW */  
-function showView(type,el){  
+  
+function showView(type, el){
+  // remove active class from all buttons
   document.querySelectorAll(".category-btn").forEach(b=>{
-  if(b.innerText.toLowerCase() !== type){
     b.classList.remove("active");
+  });
+
+  // set active button
+  el.classList.add("active");
+
+  localStorage.setItem("activeView", type);
+
+  // HIDE ALL VIEWS FIRST
+  document.querySelectorAll(".view").forEach(v=>{
+    v.classList.remove("active-view");
+  });
+
+  // SHOW ABOUT
+  if(type === "about"){
+    aboutView.classList.add("active-view");
+    return;
   }
-});
-  
-  el.classList.add("active");  
-  localStorage.setItem("activeView",type);  
-  console.log("Showing category:", type);
-  
-  if(type==="about"){  
-    aboutView.classList.add("active-view");  
-    return;  
-  }  
-  
-  let list=products.filter(p=>p.category===type);  
-  let html="";  
-  
-  list.forEach((p,i)=>{  
-    let isNew=(Date.now()-p.date)<86400000;  
-  
-    html+=`  
-    <div class="card">  
-  
-      <div class="img-wrap">  
-        ${isNew?'<div class="new-badge">NEW</div>':''}  
-  
-        <div class="carousel car${type}${i}">  
-          ${p.images.map(img=>`<img src="${img}">`).join('')}  
-        </div>  
-      </div>  
-  
-      <div class="dots dots${type}${i}"></div>  
-  
-      <div class="price">₦ ${p.price}</div>  
-  
-      <button class="buy-btn" onclick="buyNow(${i},'${type}')">  
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">  
-        BUY NOW  
-      </button>  
-  
-    </div>`;  
-  });  
-  
-  document.getElementById(type+"View").innerHTML=html;  
-  document.getElementById(type+"View").classList.add("active-view");  
-  
-  list.forEach((p,i)=>setupCarousel(type,i));  
-}  
+
+  // SHOW PRODUCT CATEGORY
+  let list = products.filter(p => p.category === type);
+  let html = "";
+
+  list.forEach((p,i)=>{
+    let isNew = (Date.now() - p.date) < 86400000;
+
+    html += `
+    <div class="card">
+      <div class="img-wrap">
+        ${isNew ? '<div class="new-badge">NEW</div>' : ''}
+
+        <div class="carousel car${type}${i}">
+          ${p.images.map(img=>`<img src="${img}">`).join('')}
+        </div>
+      </div>
+
+      <div class="dots dots${type}${i}"></div>
+
+      <div class="price">₦ ${p.price}</div>
+
+      <button class="buy-btn" onclick="buyNow(${i},'${type}')">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+        BUY NOW
+      </button>
+    </div>`;
+  });
+
+  let view = document.getElementById(type + "View");
+  view.innerHTML = html;
+  view.classList.add("active-view");
+
+  list.forEach((p,i)=>setupCarousel(type,i));
+}
   
 /* BUY NOW */  
 function buyNow(i,type){  
