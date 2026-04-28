@@ -493,23 +493,25 @@ function loadCategories(){
   bar.innerHTML = "";
   sel.innerHTML = "";
   delSel.innerHTML = "";
-  
-// ABOUT BUTTON
-let aboutBtn = document.createElement("div");
-aboutBtn.className = "category-btn";
-aboutBtn.innerText = "ABOUT";
 
-aboutBtn.onclick = function () {
-  showView("about", aboutBtn);
-};
-bar.appendChild(aboutBtn);
+  // ABOUT BUTTON
+  let aboutBtn = document.createElement("div");
+  aboutBtn.className = "category-btn active";
+  aboutBtn.innerText = "ABOUT";
+  aboutBtn.onclick = function () {
+    showView("about", aboutBtn);
+  };
+  bar.appendChild(aboutBtn);
+
+  // LOOP CATEGORIES PROPERLY
+  categories.forEach(cat => {
 
     // CATEGORY BUTTON
     let btn = document.createElement("div");
     btn.className = "category-btn";
     btn.innerText = cat.toUpperCase();
 
-    btn.onclick = function(){
+    btn.onclick = function () {
       showView(cat, btn);
     };
 
@@ -521,16 +523,16 @@ bar.appendChild(aboutBtn);
     opt.textContent = cat.toUpperCase();
     sel.appendChild(opt);
 
-    // DELETE CATEGORY SELECT
+    // DELETE SELECT
     let opt2 = document.createElement("option");
     opt2.value = cat;
     opt2.textContent = cat.toUpperCase();
     delSel.appendChild(opt2);
 
     // CREATE VIEW
-    if(!document.getElementById(cat+"View")){
+    if (!document.getElementById(cat + "View")) {
       let div = document.createElement("div");
-      div.id = cat+"View";
+      div.id = cat + "View";
       div.className = "view";
       document.body.appendChild(div);
     }
@@ -925,12 +927,7 @@ function uploadTestimonials(){
   sel.innerHTML = categories
     .map(c => `<option value="${c}">${c.toUpperCase()}</option>`)
     .join("");
-
-    btn.onclick = function(){
-  showView(cat, btn);
-};
-}
-
+  }
   
   
 </script> 
